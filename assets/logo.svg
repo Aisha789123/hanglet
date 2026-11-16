@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 236 48" role="img" aria-label="Hanglet">
+  <rect width="48" height="48" rx="13" fill="#1d63d8"/>
+  <path d="M11 38h13M15.5 38V11h14.5v5" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="22" y="18.5" width="16" height="16" rx="3.5" fill="#fff"/>
+  <path d="M26.5 29.5h7" stroke="#1d63d8" stroke-width="3" stroke-linecap="round"/>
+  <text x="60" y="35" font-family="Nunito, 'Arial Rounded MT Bold', 'Segoe UI', sans-serif" font-size="32" font-weight="800" letter-spacing="-0.6" fill="#17202b">Hanglet</text>
+</svg>
