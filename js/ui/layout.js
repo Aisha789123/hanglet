@@ -1,33 +1,38 @@
-// The shared parts of every page: header, mobile tab bar and footer.
-import { data } from "../core/storage.js";
+// The shared parts of every page: header, mobile tab bar, footer,
+// translations, the welcome dialog and the service worker.
+import { data, save } from "../core/storage.js";
 import { currentDailyStreak } from "../core/progress.js";
+import { LANGUAGES, language, t, translatePage } from "../core/i18n.js";
 import { icon, logoMark } from "./icons.js";
 import { applyAppearance, watchSystemChanges } from "./appearance.js";
+import { showWelcome } from "./welcome.js";
+import { startAnalytics } from "../analytics.js";
 
 const NAV_ITEMS = [
-  { id: "home", label: "Play", href: "./index.html", icon: "home" },
-  { id: "levels", label: "Levels", href: "./levels.html", icon: "path" },
-  { id: "stats", label: "Stats", href: "./stats.html", icon: "chart" },
-  { id: "settings", label: "Settings", href: "./settings.html", icon: "sliders" },
+  { id: "home", label: "nav.play", href: "./index.html", icon: "home" },
+  { id: "levels", label: "nav.levels", href: "./levels.html", icon: "path" },
+  { id: "dictionary", label: "nav.words", href: "./dictionary.html", icon: "book" },
+  { id: "stats", label: "nav.stats", href: "./stats.html", icon: "chart" },
+  { id: "settings", label: "nav.settings", href: "./settings.html", icon: "sliders" },
 ];
 
 function navLinks(activePage, withIcons) {
   return NAV_ITEMS.map((item) => {
     const current = item.id === activePage ? ' aria-current="page"' : "";
     const iconHtml = withIcons ? icon(item.icon) : "";
-    return `<a href="${item.href}"${current}>${iconHtml}<span>${item.label}</span></a>`;
+    return `<a href="${item.href}"${current}>${iconHtml}<span>${t(item.label)}</span></a>`;
   }).join("");
 }
 
 function headerHtml(activePage) {
   return `
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main">${t("nav.skip")}</a>
     <header class="site-header">
       <div class="container header-inner">
-        <a class="brand" href="./index.html" aria-label="Hanglet, home">
+        <a class="brand" href="./index.html" aria-label="${t("nav.homeLabel")}">
           ${logoMark()}<span class="brand-name">Hanglet</span>
         </a>
-        <nav class="main-nav" aria-label="Main">${navLinks(activePage, false)}</nav>
+        <nav class="main-nav" aria-label="${t("nav.main")}">${navLinks(activePage, false)}</nav>
         <div class="header-stats">
           <a class="pill pill-streak" href="./stats.html" id="header-streak"></a>
           <span class="pill pill-coins" id="header-coins"></span>
@@ -36,8 +41,11 @@ function headerHtml(activePage) {
     </header>`;
 }
 
-function footerHtml() {
+function footerHtml(activePage) {
   const year = new Date().getFullYear();
+  const languageButtons = LANGUAGES.map((item) =>
+    `<button type="button" data-language="${item.id}" lang="${item.id}" aria-pressed="${item.id === language}">${item.name}</button>`
+  ).join("");
   return `
     <footer class="site-footer">
       <div class="container footer-inner">
@@ -45,18 +53,26 @@ function footerHtml() {
           ${logoMark("logo-mark logo-mark-small")}
           <div>
             <strong>Hanglet</strong>
-            <p>A calm word game. One letter at a time.</p>
+            <p>${t("footer.tagline")}</p>
           </div>
         </div>
-        <nav class="footer-links" aria-label="Footer">
-          <a href="./how-to-play.html">How to play</a>
-          <a href="./about.html">About</a>
-          <a href="./privacy.html">Privacy</a>
+        <nav class="footer-links" aria-label="${t("nav.footer")}">
+          <a href="./how-to-play.html">${t("nav.howToPlay")}</a>
+          <a href="./about.html">${t("nav.about")}</a>
+          <a href="./privacy.html">${t("nav.privacy")}</a>
         </nav>
-        <p class="footer-note">&copy; ${year} Hanglet. Your progress stays on this device.</p>
+        <div class="language-switch" role="group" aria-label="${t("settings.language")}">${icon("globe")}${languageButtons}</div>
+        <p class="footer-note">&copy; ${year} Hanglet. ${t("footer.note")}</p>
       </div>
     </footer>
-    <nav class="tab-bar" aria-label="App">${navLinks(null, true)}</nav>`;
+    <nav class="tab-bar" aria-label="${t("nav.app")}">${navLinks(activePage, true)}</nav>`;
+}
+
+// Change the language and reload the page in that language
+export function setLanguage(id) {
+  data.settings.language = id;
+  save();
+  location.reload();
 }
 
 // Update the streak and coin counters in the header
@@ -67,12 +83,12 @@ export function refreshHeader() {
   const coinsPill = document.getElementById("header-coins");
   if (streakLink) {
     streakLink.innerHTML = `${icon("flame")}<span>${streak}</span>`;
-    streakLink.setAttribute("aria-label", `Daily streak: ${streak} days. Open stats`);
+    streakLink.setAttribute("aria-label", t("header.streak", { count: streak }));
     streakLink.classList.toggle("is-active", streak > 0);
   }
   if (coinsPill) {
     coinsPill.innerHTML = `${icon("coin")}<span>${coins}</span>`;
-    coinsPill.setAttribute("aria-label", `${coins} coins`);
+    coinsPill.setAttribute("aria-label", t("header.coins", { count: coins }));
   }
 }
 
@@ -82,14 +98,23 @@ export function initPage(activePage) {
   watchSystemChanges();
 
   document.body.insertAdjacentHTML("afterbegin", headerHtml(activePage));
-  document.body.insertAdjacentHTML("beforeend", footerHtml());
+  document.body.insertAdjacentHTML("beforeend", footerHtml(activePage));
+  translatePage();
+  delete document.documentElement.dataset.translating;
 
-  // Mark the active tab in the mobile tab bar
-  const tab = document.querySelector(`.tab-bar a[href="${NAV_ITEMS.find((i) => i.id === activePage)?.href}"]`);
-  if (tab) tab.setAttribute("aria-current", "page");
+  document.querySelectorAll("[data-language]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (button.dataset.language !== language) setLanguage(button.dataset.language);
+    });
+  });
 
   refreshHeader();
   registerServiceWorker();
+  startAnalytics();
+
+  if (!data.welcomeDone) {
+    showWelcome();
+  }
 }
 
 function registerServiceWorker() {

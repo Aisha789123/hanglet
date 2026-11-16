@@ -1,0 +1,535 @@
+/* =========================================================
+   Figures: classic, balloon, flower, snowman, rocket
+   ========================================================= */
+
+.figure {
+  --wood: #b5815a;
+  --wood-dark: #8d5f3d;
+  --skin: var(--surface);
+  --line: var(--text);
+  --balloon: #e5484d;
+  --balloon-dark: #b8343a;
+  --petal: #f07aa5;
+  --leaf: #3bb273;
+  --snow: #ffffff;
+  --snow-edge: #c9d6e3;
+  --rocket-red: #e5484d;
+  --fuel: #3bb273;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+[data-color="dark"] .figure {
+  --snow: #e8eef5;
+  --snow-edge: #9fb0c2;
+}
+
+.figure .ground,
+.figure .snow-ground {
+  fill: var(--surface-2);
+}
+
+/* ---------- Classic ---------- */
+.figure-classic .wood {
+  fill: var(--wood);
+  stroke: var(--wood-dark);
+  stroke-width: 2;
+}
+
+.figure-classic .wood-line {
+  fill: none;
+  stroke: var(--wood);
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.figure-classic .rope {
+  fill: none;
+  stroke: #c9a36b;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.figure-classic .head {
+  fill: var(--skin);
+  stroke: var(--line);
+  stroke-width: 4;
+}
+
+.figure-classic .face circle {
+  fill: var(--line);
+}
+
+.figure-classic .face path {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.figure-classic .face-happy,
+.figure-classic .face-lost,
+.figure-classic.is-won .face-normal,
+.figure-classic.is-lost .face-normal {
+  display: none;
+}
+
+.figure-classic.is-won .face-happy,
+.figure-classic.is-lost .face-lost {
+  display: inline;
+}
+
+.figure-classic .limb {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Parts pop in one by one */
+.figure-classic .part {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.92);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 300ms var(--ease), transform 400ms var(--ease);
+}
+
+.figure-classic .part.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.figure-classic .person {
+  transform-origin: 134px 30px;
+}
+
+.figure-classic.is-lost .person {
+  animation: swing 1.6s ease-in-out infinite;
+}
+
+.figure-classic.is-won .rope {
+  opacity: 0;
+}
+
+.figure-classic.is-won .person {
+  animation: hop 600ms var(--ease) 2;
+}
+
+/* ---------- Balloon ---------- */
+.figure-balloon .sky path {
+  fill: var(--surface-2);
+}
+
+.figure-balloon .balloon {
+  transform-origin: 100px 134px;
+  transition: transform 500ms var(--ease);
+}
+
+.figure-balloon .balloon-body {
+  fill: var(--balloon);
+}
+
+.figure-balloon .balloon-shine {
+  fill: #ffffff;
+  opacity: 0.35;
+}
+
+.figure-balloon .balloon-knot {
+  fill: var(--balloon-dark);
+}
+
+.figure-balloon .string {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 2;
+}
+
+.figure-balloon .puff path,
+.figure-balloon .burst path {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.figure-balloon .puff,
+.figure-balloon .burst {
+  opacity: 0;
+}
+
+.figure-balloon.is-leaking .puff {
+  animation: puff 600ms ease-out;
+}
+
+.figure-balloon.is-leaking .balloon-flyer {
+  animation: wobble 500ms ease-in-out;
+  transform-origin: 100px 186px;
+}
+
+.figure-balloon.is-lost .balloon {
+  transform: scale(0) !important;
+  transition-duration: 150ms;
+}
+
+.figure-balloon.is-lost .burst {
+  animation: burst 500ms ease-out forwards;
+}
+
+.figure-balloon.is-lost .string {
+  transform: translateY(20px) rotate(10deg);
+  transform-origin: 100px 186px;
+  transition: transform 600ms var(--ease);
+}
+
+.figure-balloon.is-won .balloon-flyer {
+  animation: float-away 2.4s ease-in forwards;
+}
+
+/* ---------- Flower ---------- */
+.figure-flower .stem {
+  fill: none;
+  stroke: var(--leaf);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.figure-flower .leaf {
+  fill: var(--leaf);
+}
+
+.figure-flower .petal {
+  fill: var(--petal);
+  stroke: #ffffff;
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  transition: transform 700ms var(--ease), opacity 700ms;
+}
+
+.figure-flower .petal.is-fallen {
+  opacity: 0;
+  transform: translateY(-34px) rotate(50deg) scale(0.6);
+}
+
+.figure-flower .flower-center {
+  fill: #f7c331;
+}
+
+.figure-flower .flower-face circle {
+  fill: #5b3a1e;
+}
+
+.figure-flower .flower-face path {
+  fill: none;
+  stroke: #5b3a1e;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.figure-flower .pot {
+  fill: #c8754a;
+}
+
+.figure-flower .pot-rim {
+  fill: #b3653d;
+}
+
+.figure-flower .plant {
+  transform-origin: 100px 166px;
+  transition: transform 900ms var(--ease), filter 900ms;
+}
+
+.figure-flower.is-lost .plant {
+  transform: rotate(16deg);
+  filter: grayscale(0.8);
+}
+
+.figure-flower.is-won .flower-head {
+  transform-origin: 100px 70px;
+  animation: bloom 1s var(--ease) 2;
+}
+
+/* ---------- Snowman ---------- */
+.figure-snowman .sun circle {
+  fill: #f7b731;
+}
+
+.figure-snowman .sun path {
+  stroke: #f7b731;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.figure-snowman .sun {
+  transition: opacity 600ms;
+}
+
+.figure-snowman .puddle {
+  fill: #b9dcf5;
+  transition: rx 600ms var(--ease);
+}
+
+.figure-snowman .snowman {
+  transform-origin: 100px 184px;
+  transition: transform 600ms var(--ease), opacity 600ms;
+}
+
+.figure-snowman .snow {
+  fill: var(--snow);
+  stroke: var(--snow-edge);
+  stroke-width: 2.5;
+}
+
+.figure-snowman .coal {
+  fill: #2b3440;
+}
+
+.figure-snowman .mouth {
+  fill: none;
+  stroke: #2b3440;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.figure-snowman .scarf {
+  fill: var(--accent);
+}
+
+.figure-snowman .arm {
+  fill: none;
+  stroke: #8d5f3d;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.figure-snowman .hat {
+  fill: #2b3440;
+}
+
+.figure-snowman .hat-band {
+  fill: #e5484d;
+}
+
+.figure-snowman .nose {
+  fill: #f08a3c;
+}
+
+.figure-snowman .drop {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 700ms cubic-bezier(0.5, 0, 0.8, 0.5), opacity 700ms;
+}
+
+.figure-snowman .drop.is-dropped {
+  opacity: 0;
+  transform: translateY(70px) rotate(40deg);
+}
+
+.figure-snowman.is-lost .snowman {
+  transform: scale(1.4, 0.15) !important;
+  opacity: 0.5;
+}
+
+.figure-snowman.is-won .sun {
+  opacity: 0 !important;
+}
+
+.figure-snowman.is-won .snowman {
+  transform: none !important;
+  animation: hop 600ms var(--ease) 2;
+}
+
+.figure-snowman.is-won .drop {
+  opacity: 1;
+  transform: none;
+}
+
+.figure-snowman.is-won .drop-arm-right {
+  animation: wave 500ms ease-in-out 3;
+  transform-origin: left bottom;
+}
+
+/* ---------- Rocket ---------- */
+.figure-rocket .space circle {
+  fill: var(--text-muted);
+  opacity: 0.4;
+}
+
+.figure-rocket .outline {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+}
+
+.figure-rocket .part {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 350ms var(--ease), transform 450ms var(--ease);
+}
+
+.figure-rocket .part.is-on {
+  opacity: 1;
+  transform: none;
+}
+
+.figure-rocket .body {
+  fill: #eef2f7;
+  stroke: #b9c4d1;
+  stroke-width: 2;
+}
+
+.figure-rocket .nose,
+.figure-rocket .fin {
+  fill: var(--rocket-red);
+}
+
+.figure-rocket .window {
+  fill: #8ec5f5;
+  stroke: #4a6a8a;
+  stroke-width: 3;
+}
+
+.figure-rocket .stripe {
+  fill: var(--accent);
+}
+
+.figure-rocket .flame {
+  fill: #f7a531;
+  opacity: 0;
+  transform-origin: 100px 156px;
+}
+
+.figure-rocket .pad {
+  fill: var(--surface-3);
+}
+
+.figure-rocket .smoke circle {
+  fill: var(--surface-3);
+  opacity: 0;
+}
+
+.figure-rocket .fuel-frame {
+  fill: var(--surface-2);
+  stroke: var(--border);
+  stroke-width: 2;
+}
+
+.figure-rocket .fuel-cell {
+  fill: var(--fuel);
+  transition: fill 400ms, opacity 400ms;
+}
+
+.figure-rocket .fuel-cell.is-empty {
+  fill: var(--surface-3);
+  opacity: 0.6;
+}
+
+.figure-rocket .rocket {
+  transform-origin: 100px 156px;
+}
+
+.figure-rocket.is-shaking .rocket {
+  animation: rumble 300ms linear;
+}
+
+.figure-rocket.is-won .outline {
+  opacity: 0;
+}
+
+.figure-rocket.is-won .flame {
+  animation: flame 150ms linear infinite alternate;
+  opacity: 1;
+}
+
+.figure-rocket.is-won .rocket {
+  animation: launch 1.6s cubic-bezier(0.5, 0, 0.9, 0.4) 300ms forwards;
+}
+
+.figure-rocket.is-won .smoke circle,
+.figure-rocket.is-lost .smoke circle {
+  animation: smoke 1.4s ease-out forwards;
+}
+
+.figure-rocket.is-lost .rocket {
+  transform: rotate(-14deg) translate(-6px, 6px);
+  filter: grayscale(0.7);
+  transition: transform 700ms var(--ease), filter 700ms;
+}
+
+/* ---------- Animations ---------- */
+@keyframes swing {
+  0%, 100% { transform: rotate(4deg); }
+  50% { transform: rotate(-4deg); }
+}
+
+@keyframes hop {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-14px); }
+}
+
+@keyframes wobble {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+@keyframes puff {
+  0% { opacity: 0; transform: translateY(0); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+
+@keyframes burst {
+  0% { opacity: 1; transform: scale(0.6); }
+  100% { opacity: 0; transform: scale(1.2); }
+}
+
+@keyframes float-away {
+  0% { transform: translate(0, 0); }
+  30% { transform: translate(6px, -30px) rotate(3deg); }
+  100% { transform: translate(-10px, -260px) rotate(-4deg); }
+}
+
+@keyframes bloom {
+  0%, 100% { transform: scale(1) rotate(0); }
+  50% { transform: scale(1.12) rotate(12deg); }
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0); }
+  50% { transform: rotate(-22deg); }
+}
+
+@keyframes rumble {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+@keyframes flame {
+  from { transform: scaleY(0.8); }
+  to { transform: scaleY(1.2); }
+}
+
+@keyframes launch {
+  0% { transform: translateY(0); }
+  10% { transform: translateY(2px); }
+  100% { transform: translateY(-280px); }
+}
+
+@keyframes smoke {
+  0% { opacity: 0.9; transform: scale(0.4); }
+  100% { opacity: 0; transform: scale(1.8) translateY(-10px); }
+}
+
+/* Shapes that grow and shrink around their own center */
+.figure-rocket .smoke circle,
+.figure-balloon .puff,
+.figure-balloon .burst {
+  transform-box: fill-box;
+  transform-origin: center;
+}

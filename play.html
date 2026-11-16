@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Play – Hanglet</title>
-  <meta name="description" content="Play Hanglet: guess the word one letter at a time before the drawing is finished.">
+  <meta name="description" content="Play Hanglet: guess the word one letter at a time before the figure is finished.">
   <meta name="theme-color" content="#f6f7f9">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hanglet">
-  <meta property="og:title" content="Play Hanglet">
-  <meta property="og:description" content="Guess the word one letter at a time. Daily challenge, levels, Time Attack and more.">
+  <meta property="og:title" content="Play – Hanglet">
+  <meta property="og:description" content="Play Hanglet: guess the word one letter at a time before the figure is finished.">
   <meta property="og:image" content="assets/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -25,18 +25,17 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/figures.css">
 
+  <!-- Visitor statistics (GoatCounter) are set up in js/analytics.js -->
   <script src="js/theme-init.js"></script>
   <script type="module" src="js/pages/play.js"></script>
 </head>
 <body class="page-play">
   <main id="main" class="container play-page">
 
-    <!-- Title bar with back button and hint -->
     <div class="play-top">
-      <a class="icon-button" href="index.html" aria-label="Back to home">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-      </a>
+      <a class="icon-button" href="index.html" data-i18n-attr="aria-label: common.backHome"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
       <div class="play-title">
         <h1 id="mode-title">Hanglet</h1>
         <p id="mode-subtitle"></p>
@@ -44,32 +43,29 @@
       <button class="hint-button" id="hint-button" type="button" hidden></button>
     </div>
 
-    <!-- Options before a game, or the Daily summary -->
     <section class="setup card" id="setup" hidden></section>
 
-    <!-- The game board -->
-    <section class="board" id="board" hidden aria-label="Game board">
+    <section class="board" id="board" hidden data-i18n-attr="aria-label: play.board">
       <div class="board-status">
-        <span class="chip" id="category-chip"></span>
+        <span class="chip chip-category" id="category-chip"></span>
         <div id="status-area"></div>
         <div class="lives" id="lives" role="img"></div>
       </div>
       <div class="board-main">
-        <div class="hangman-box" id="hangman"></div>
+        <div class="figure-box" id="figure"></div>
         <div class="board-play">
+          <div class="clue" id="clue" hidden aria-live="polite"></div>
           <div class="word" id="word" role="img"></div>
-          <div class="keyboard" id="keyboard" role="group" aria-label="Letters"></div>
+          <div class="keyboard" id="keyboard" role="group" data-i18n-attr="aria-label: keyboard.label"></div>
         </div>
       </div>
     </section>
 
-    <!-- Screen reader messages -->
     <div class="visually-hidden" id="announcer" aria-live="assertive"></div>
-
     <noscript><p>Hanglet needs JavaScript to run.</p></noscript>
   </main>
 
-  <!-- Win / lose screen, filled by js/pages/play.js -->
   <dialog class="dialog result" id="result-dialog" aria-labelledby="result-title"></dialog>
+  <dialog class="dialog sheet" id="hint-sheet" aria-labelledby="hint-title"></dialog>
 </body>
 </html>

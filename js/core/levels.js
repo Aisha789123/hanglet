@@ -1,5 +1,5 @@
 // The level path: 40 levels that get harder step by step.
-import { CATEGORIES } from "./words.js";
+import { CATEGORY_IDS } from "./words.js";
 
 export const LEVEL_COUNT = 40;
 
@@ -8,13 +8,13 @@ export function getLevel(number) {
   const tier = Math.floor((number - 1) / 10);
   const lengths = ["short", "medium", "long", "long"];
   const lives = [8, 7, 6, 5];
-  const category = CATEGORIES[(number - 1) % CATEGORIES.length];
+  const category = CATEGORY_IDS[(number - 1) % CATEGORY_IDS.length];
   return {
     number,
     length: lengths[tier],
     lives: lives[tier],
-    category: category.id,
-    stage: ["Warm-up", "Climb", "Expert", "Summit"][tier],
+    category,
+    stage: ["warmup", "climb", "expert", "summit"][tier],
   };
 }
 

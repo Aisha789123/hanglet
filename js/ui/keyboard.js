@@ -1,4 +1,5 @@
 // On-screen A-Z keyboard. The real keyboard works too (see the play page).
+import { t } from "../core/i18n.js";
 
 export const ALPHABET = "abcdefghijklmnopqrstuvwxyz".split("");
 
@@ -11,19 +12,19 @@ export function createKeyboard(container, onPress) {
     button.type = "button";
     button.className = "key";
     button.textContent = letter;
-    button.setAttribute("aria-label", `Letter ${letter.toUpperCase()}`);
+    button.setAttribute("aria-label", t("keyboard.letter", { letter: letter.toUpperCase() }));
     button.addEventListener("click", () => onPress(letter));
     container.appendChild(button);
     buttons[letter] = button;
   }
 
-  // state is "correct" or "wrong"
+  // state is "correct", "wrong" or "removed" (taken away by a hint)
   function mark(letter, state) {
     const button = buttons[letter];
+    if (!button || state === "ignored") return;
     button.classList.add(`is-${state}`);
     button.disabled = true;
-    const result = state === "correct" ? "in the word" : "not in the word";
-    button.setAttribute("aria-label", `Letter ${letter.toUpperCase()}, ${result}`);
+    button.setAttribute("aria-label", t(`keyboard.${state}`, { letter: letter.toUpperCase() }));
   }
 
   function reset() {
@@ -31,7 +32,7 @@ export function createKeyboard(container, onPress) {
       const button = buttons[letter];
       button.className = "key";
       button.disabled = false;
-      button.setAttribute("aria-label", `Letter ${letter.toUpperCase()}`);
+      button.setAttribute("aria-label", t("keyboard.letter", { letter: letter.toUpperCase() }));
     }
   }
 

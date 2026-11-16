@@ -26,15 +26,24 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/figures.css">
 
+  <!-- Visitor statistics (GoatCounter) are set up in js/analytics.js -->
   <script src="js/theme-init.js"></script>
   <script type="module" src="js/pages/static.js"></script>
 </head>
-<body class="page-text">
+<body class="page-text" data-page="text">
   <main id="main" class="container not-found">
-    <h1 class="page-title">Page not found</h1>
-    <p class="page-intro">This word is not in our list. Let's get you back to the game.</p>
-    <a class="button button-primary" href="index.html">Go to home</a>
+    <div lang="en" data-lang="en">
+      <h1 class="page-title">Page not found</h1>
+      <p class="page-intro">This word is not in our list. Let's get you back to the game.</p>
+      <a class="button button-primary" href="index.html">Go to home</a>
+    </div>
+    <div lang="nl" data-lang="nl">
+      <h1 class="page-title">Pagina niet gevonden</h1>
+      <p class="page-intro">Dit woord staat niet in onze lijst. We brengen je terug naar het spel.</p>
+      <a class="button button-primary" href="index.html">Naar de startpagina</a>
+    </div>
   </main>
 </body>
 </html>

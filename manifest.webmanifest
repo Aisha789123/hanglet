@@ -1,7 +1,7 @@
 {
   "name": "Hanglet – Word Game",
   "short_name": "Hanglet",
-  "description": "A calm word guessing game. Daily challenge, Classic, 40 levels and Time Attack.",
+  "description": "A calm word game for all ages, in English and Dutch. Daily challenge, Classic, 40 levels, Time Attack and a Kids mode.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
@@ -17,6 +17,7 @@
   ],
   "shortcuts": [
     { "name": "Daily", "url": "./play.html?mode=daily", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Classic", "url": "./play.html?mode=classic", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] }
+    { "name": "Classic", "url": "./play.html?mode=classic", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Kids", "url": "./play.html?mode=kids", "icons": [{ "src": "assets/icon-192.png", "sizes": "192x192" }] }
   ]
 }

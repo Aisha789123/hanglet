@@ -6,11 +6,16 @@ export const STORAGE_KEY = "hanglet-data-v1";
 function createDefaultData() {
   return {
     settings: {
+      language: null, // null = follow the browser
       colorMode: "system", // "system", "light" or "dark"
       theme: "ocean",
+      figure: "classic",
+      textSize: "normal", // "normal" or "large"
+      contrast: "normal", // "normal" or "high"
       sound: true,
       vibration: true,
       reduceMotion: null, // null = follow the device setting
+      kidsFirst: false, // show Kids mode first on the home page
       options: { category: "mixed", length: "medium", difficulty: "normal" },
     },
     player: { xp: 0, coins: 40 },
@@ -24,6 +29,7 @@ function createDefaultData() {
       missesInWins: [0, 0, 0, 0, 0, 0, 0, 0],
       flawless: 0,
       hardWins: 0,
+      kidsWins: 0,
       longestWord: 0,
       hintsUsed: 0,
       categoriesWon: {},
@@ -40,6 +46,10 @@ function createDefaultData() {
     timed: { best: 0, sessions: 0, totalWords: 0 },
     achievements: {}, // { "first-win": "2026-11-16" }
     seenThemes: ["ocean"],
+    figures: ["classic", "balloon"], // figures the player owns
+    dictionary: { en: {}, nl: {} }, // solved words per language
+    welcomeDone: false,
+    tutorialDone: false,
   };
 }
 
@@ -56,9 +66,15 @@ function mergeWithDefaults(saved) {
       data[key] = Array.isArray(value) ? value : data[key];
     } else if (typeof data[key] === "object" && data[key] !== null) {
       data[key] = { ...data[key], ...value };
+    } else {
+      data[key] = value;
     }
   }
   data.settings.options = { ...createDefaultData().settings.options, ...data.settings.options };
+  // Players from version 1 already know the game
+  if (saved.stats && saved.stats.played > 0 && saved.tutorialDone === undefined) {
+    data.tutorialDone = true;
+  }
   return data;
 }
 

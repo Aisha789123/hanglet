@@ -1,16 +1,24 @@
 // Everything that changes the player's progress: stats, streaks, XP, coins,
-// achievements and unlocked themes. Every function saves the data at the end.
+// the dictionary, achievements, figures and themes. Every function saves at the end.
 import { data, save } from "./storage.js";
+import { language } from "./i18n.js";
 import { ACHIEVEMENTS, ACHIEVEMENT_COINS } from "./achievements.js";
 import { getUnlockedThemes } from "./themes.js";
+import { FIGURES, isFigureOwned } from "./figures.js";
 import { getLevelInfo } from "./xp.js";
 import { addDays, toDateKey } from "./dates.js";
 
-export const HINT_COST = 20;
+// The three kinds of hints and what they cost (free in Kids mode)
+export const HINTS = [
+  { id: "description", cost: 10, icon: "quote" },
+  { id: "letter", cost: 20, icon: "bulb" },
+  { id: "remove", cost: 15, icon: "eraser" },
+];
 
 // Rewards for one word. Hard games and games without misses give a bonus.
-export function rewardForWord(won, misses, lives) {
+export function rewardForWord(won, misses, lives, isKids = false) {
   if (!won) return { xp: 5, coins: 0 };
+  if (isKids) return { xp: 15, coins: 5 };
   const hard = lives <= 4;
   return {
     xp: 20 + (lives - misses) * 5 + (hard ? 15 : 0),
@@ -18,11 +26,10 @@ export function rewardForWord(won, misses, lives) {
   };
 }
 
-// Save the result of one word (Daily, Classic and Levels). Returns the rewards.
-export function recordWord({ won, misses, lives, word, category, hintsUsed }) {
+// Save the result of one word (Daily, Classic, Levels and Kids). Returns the rewards.
+export function recordWord({ won, misses, lives, word, category, picture = null, isKids = false }) {
   const stats = data.stats;
   stats.played++;
-  stats.hintsUsed += hintsUsed;
   stats.recentWords = [word, ...stats.recentWords].slice(0, 40);
 
   if (won) {
@@ -33,14 +40,33 @@ export function recordWord({ won, misses, lives, word, category, hintsUsed }) {
     stats.missesInWins[index]++;
     if (misses === 0) stats.flawless++;
     if (lives <= 4) stats.hardWins++;
+    if (isKids) stats.kidsWins++;
     stats.longestWord = Math.max(stats.longestWord, word.length);
     stats.categoriesWon[category] = (stats.categoriesWon[category] || 0) + 1;
+    addToDictionary(word, category, picture);
   } else {
     stats.losses++;
     stats.winStreak = 0;
   }
 
-  return giveRewards(rewardForWord(won, misses, lives));
+  return giveRewards(rewardForWord(won, misses, lives, isKids));
+}
+
+// Remember a solved word in "My dictionary"
+export function addToDictionary(word, category, picture = null) {
+  if (!data.dictionary[language]) data.dictionary[language] = {};
+  const words = data.dictionary[language];
+  const entry = words[word];
+  if (entry) {
+    entry.count++;
+  } else {
+    words[word] = { category, picture, first: toDateKey(), count: 1 };
+  }
+}
+
+export function countHint() {
+  data.stats.hintsUsed++;
+  save();
 }
 
 // Save a finished Daily and update the Daily streak
@@ -87,6 +113,16 @@ export function recordTimed(score) {
 export function spendCoins(amount) {
   if (data.player.coins < amount) return false;
   data.player.coins -= amount;
+  save();
+  return true;
+}
+
+// Buy a figure with coins. Returns true when it worked.
+export function buyFigure(id) {
+  const figure = FIGURES.find((item) => item.id === id);
+  if (!figure || isFigureOwned(figure, data) || !figure.price) return false;
+  if (!spendCoins(figure.price)) return false;
+  data.figures.push(id);
   save();
   return true;
 }

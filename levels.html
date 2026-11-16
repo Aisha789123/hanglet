@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Levels – Hanglet</title>
-  <meta name="description" content="Climb 40 Hanglet levels, from short easy words to long words with only a few lives. Earn up to three stars per level.">
+  <meta name="description" content="Follow the Hanglet level map: 40 levels from short easy words to long words with only a few lives. Earn up to three stars per level.">
   <meta name="theme-color" content="#f6f7f9">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hanglet">
   <meta property="og:title" content="Levels – Hanglet">
-  <meta property="og:description" content="Climb 40 Hanglet levels, from short easy words to long words with only a few lives. Earn up to three stars per level.">
+  <meta property="og:description" content="Follow the Hanglet level map: 40 levels from short easy words to long words with only a few lives. Earn up to three stars per level.">
   <meta property="og:image" content="assets/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -25,15 +25,17 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/figures.css">
 
+  <!-- Visitor statistics (GoatCounter) are set up in js/analytics.js -->
   <script src="js/theme-init.js"></script>
   <script type="module" src="js/pages/levels.js"></script>
 </head>
 <body class="page-levels">
-  <main id="main" class="container">
-    <h1 class="page-title">Level path</h1>
-    <p class="page-intro"><span id="levels-progress"></span>. Win a level to unlock the next one. Fewer misses means more stars.</p>
-    <div id="level-path"></div>
+  <main id="main" class="container levels-page">
+    <h1 class="page-title" data-i18n="levels.title"></h1>
+    <p class="page-intro"><span id="levels-progress"></span> <span data-i18n="levels.intro"></span></p>
+    <div class="level-map" id="level-map"></div>
   </main>
 </body>
 </html>

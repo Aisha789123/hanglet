@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>My dictionary – Hanglet</title>
+  <meta name="description" content="All the words you solved in Hanglet, with a short description of each word.">
+  <meta name="theme-color" content="#f6f7f9">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hanglet">
+  <meta property="og:title" content="My dictionary – Hanglet">
+  <meta property="og:description" content="All the words you solved in Hanglet, with a short description of each word.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="assets/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/figures.css">
+
+  <!-- Visitor statistics (GoatCounter) are set up in js/analytics.js -->
+  <script src="js/theme-init.js"></script>
+  <script type="module" src="js/pages/dictionary.js"></script>
+</head>
+<body class="page-dictionary">
+  <main id="main" class="container">
+    <h1 class="page-title" data-i18n="dictionary.title"></h1>
+    <p class="page-intro" data-i18n="dictionary.intro"></p>
+
+    <div class="card dictionary-tools">
+      <div class="dictionary-count" id="dictionary-count"></div>
+      <label class="search-field">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        <span class="visually-hidden" data-i18n="dictionary.search"></span>
+        <input type="search" id="word-search" autocomplete="off" data-i18n-attr="placeholder: dictionary.searchPlaceholder">
+      </label>
+      <div class="segments category-filter" id="category-filter" role="radiogroup" data-i18n-attr="aria-label: setup.category"></div>
+    </div>
+
+    <ul class="word-list" id="word-list" aria-live="polite"></ul>
+  </main>
+</body>
+</html>

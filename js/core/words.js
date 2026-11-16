@@ -1,29 +1,51 @@
-// Picking words based on the player's options.
-import { CATEGORIES, WORDS } from "../../data/words.js";
+// Picking words based on the language and the player's options.
+import EN_WORDS from "../../data/words/en.js";
+import NL_WORDS from "../../data/words/nl.js";
+import KIDS from "../../data/kids.js";
+import { language, t } from "./i18n.js";
 import { pickRandom } from "./random.js";
 
-export { CATEGORIES };
+const WORD_LISTS = { en: EN_WORDS, nl: NL_WORDS };
+
+export const CATEGORY_IDS = ["animals", "food", "countries", "sports", "nature", "jobs", "science", "music"];
 
 export const LENGTHS = [
-  { id: "short", name: "Short", detail: "4–5 letters", min: 4, max: 5 },
-  { id: "medium", name: "Medium", detail: "6–7 letters", min: 6, max: 7 },
-  { id: "long", name: "Long", detail: "8+ letters", min: 8, max: 99 },
+  { id: "short", min: 4, max: 5 },
+  { id: "medium", min: 6, max: 7 },
+  { id: "long", min: 8, max: 99 },
 ];
 
 export const DIFFICULTIES = [
-  { id: "easy", name: "Easy", lives: 8 },
-  { id: "normal", name: "Normal", lives: 6 },
-  { id: "hard", name: "Hard", lives: 4 },
+  { id: "easy", lives: 8 },
+  { id: "normal", lives: 6 },
+  { id: "hard", lives: 4 },
 ];
 
-// Every word together with its category, e.g. { word: "tiger", category: "animals" }
-export const ALL_WORDS = CATEGORIES.flatMap((category) =>
-  WORDS[category.id].map((word) => ({ word, category: category.id }))
-);
+export const KIDS_LIVES = 10;
+
+// Every word of a language with its category and description
+export function getAllWords(lang = language) {
+  const list = WORD_LISTS[lang] || WORD_LISTS.en;
+  return CATEGORY_IDS.flatMap((category) =>
+    list[category].map(([word, description]) => ({ word, description, category }))
+  );
+}
+
+// Kids words: short words with a picture
+export function getKidsWords(lang = language) {
+  return KIDS.map((item) => ({
+    word: item[lang][0],
+    description: item[lang][1],
+    category: item.category,
+    picture: item.picture,
+  }));
+}
+
+export const ALL_WORDS = getAllWords();
+export const KIDS_WORDS = getKidsWords();
 
 export function getCategoryName(id) {
-  const category = CATEGORIES.find((item) => item.id === id);
-  return category ? category.name : "Mixed";
+  return t(`categories.${id}`);
 }
 
 export function getLives(difficultyId) {
@@ -46,7 +68,19 @@ export function getWordPool(categoryId, lengthId) {
 
 // Pick a random word, but not one of the recently played words
 export function pickWord(categoryId, lengthId, recentWords = []) {
-  const pool = getWordPool(categoryId, lengthId);
+  return pickFresh(getWordPool(categoryId, lengthId), recentWords);
+}
+
+export function pickKidsWord(recentWords = []) {
+  return pickFresh(KIDS_WORDS, recentWords);
+}
+
+function pickFresh(pool, recentWords) {
   const fresh = pool.filter((item) => !recentWords.includes(item.word));
   return pickRandom(fresh.length > 0 ? fresh : pool);
+}
+
+// Find the description and picture of a word (used by the dictionary)
+export function findWord(word) {
+  return ALL_WORDS.find((item) => item.word === word) || KIDS_WORDS.find((item) => item.word === word);
 }

@@ -25,50 +25,52 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/figures.css">
 
+  <!-- Visitor statistics (GoatCounter) are set up in js/analytics.js -->
   <script src="js/theme-init.js"></script>
   <script type="module" src="js/pages/stats.js"></script>
 </head>
 <body class="page-stats">
   <main id="main" class="container">
-    <h1 class="page-title">Statistics</h1>
-    <p class="page-intro">Everything you have done so far. Saved on this device only.</p>
+    <h1 class="page-title" data-i18n="stats.title"></h1>
+    <p class="page-intro" data-i18n="stats.intro"></p>
 
     <div class="stats-layout">
       <section class="card stats-wide" aria-labelledby="overview-title">
-        <h2 class="visually-hidden" id="overview-title">Overview</h2>
+        <h2 class="visually-hidden" id="overview-title" data-i18n="stats.overview"></h2>
         <div class="stat-tiles" id="stat-tiles"></div>
       </section>
 
       <section class="card" aria-labelledby="chart-title">
-        <div class="card-header"><h2 id="chart-title">Misses per game</h2></div>
+        <div class="card-header"><h2 id="chart-title" data-i18n="stats.chartTitle"></h2></div>
         <div class="bar-chart" id="misses-chart" role="img"></div>
       </section>
 
       <section class="card" aria-labelledby="progress-title">
-        <div class="card-header"><h2 id="progress-title">Progress</h2></div>
+        <div class="card-header"><h2 id="progress-title" data-i18n="stats.progress"></h2></div>
         <ul class="progress-list" id="progress-list"></ul>
       </section>
 
       <section class="card" aria-labelledby="calendar-title">
         <div class="card-header">
-          <h2 id="calendar-title">Daily calendar</h2>
+          <h2 id="calendar-title" data-i18n="stats.calendar"></h2>
           <div class="calendar-nav">
-            <button class="icon-button" id="calendar-prev" type="button" aria-label="Previous month"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button class="icon-button" id="calendar-prev" type="button" data-i18n-attr="aria-label: stats.previousMonth"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
             <span id="calendar-month" aria-live="polite"></span>
-            <button class="icon-button" id="calendar-next" type="button" aria-label="Next month"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+            <button class="icon-button" id="calendar-next" type="button" data-i18n-attr="aria-label: stats.nextMonth"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
           </div>
         </div>
         <div class="calendar" id="calendar"></div>
         <div class="legend" aria-hidden="true">
-          <span><i class="legend-perfect"></i>All solved</span>
-          <span><i class="legend-played"></i>Some solved</span>
-          <span><i class="legend-missed"></i>None solved</span>
+          <span><i class="legend-perfect"></i><span data-i18n="stats.legendAll"></span></span>
+          <span><i class="legend-played"></i><span data-i18n="stats.legendSome"></span></span>
+          <span><i class="legend-missed"></i><span data-i18n="stats.legendNone"></span></span>
         </div>
       </section>
 
       <section class="card stats-wide" aria-labelledby="badges-title">
-        <div class="card-header"><h2 id="badges-title">Badges</h2><span class="chip" id="badge-count"></span></div>
+        <div class="card-header"><h2 id="badges-title" data-i18n="stats.badges"></h2><span class="chip" id="badge-count"></span></div>
         <ul class="badges" id="badges"></ul>
       </section>
     </div>

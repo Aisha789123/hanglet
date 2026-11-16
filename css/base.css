@@ -357,7 +357,7 @@ main {
   bottom: 0;
   z-index: 20;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   height: calc(var(--tab-height) + env(safe-area-inset-bottom));
   padding-bottom: env(safe-area-inset-bottom);
   background: var(--surface);
@@ -479,4 +479,164 @@ body.page-play .site-footer {
   main {
     padding-top: var(--space-7);
   }
+}
+
+/* =========================================================
+   Version 2: color palette, new themes, accessibility
+   ========================================================= */
+
+/* ---------- A richer palette for modes, categories and stats ---------- */
+:root {
+  --blue: #2f6fe0;
+  --blue-soft: #e7effd;
+  --green: #1d8f55;
+  --green-soft: #e1f4e9;
+  --orange: #d26a12;
+  --orange-soft: #fdeedf;
+  --pink: #c93d77;
+  --pink-soft: #fbe6ef;
+  --teal: #0f857f;
+  --teal-soft: #ddf3f1;
+  --yellow: #b07c00;
+  --yellow-soft: #fdf3d6;
+  --tone: var(--accent);
+  --tone-soft: var(--accent-soft);
+}
+
+[data-color="dark"] {
+  --blue: #7aa7f5;
+  --blue-soft: #1c2a44;
+  --green: #5ccf8f;
+  --green-soft: #16301f;
+  --orange: #f3a35a;
+  --orange-soft: #3a2614;
+  --pink: #ef87b3;
+  --pink-soft: #3a1b2a;
+  --teal: #4fd0c6;
+  --teal-soft: #123331;
+  --yellow: #f0c75a;
+  --yellow-soft: #352a12;
+}
+
+.tone-blue { --tone: var(--blue); --tone-soft: var(--blue-soft); }
+.tone-green { --tone: var(--green); --tone-soft: var(--green-soft); }
+.tone-orange { --tone: var(--orange); --tone-soft: var(--orange-soft); }
+.tone-pink { --tone: var(--pink); --tone-soft: var(--pink-soft); }
+.tone-teal { --tone: var(--teal); --tone-soft: var(--teal-soft); }
+.tone-yellow { --tone: var(--yellow); --tone-soft: var(--yellow-soft); }
+
+/* Every category has its own color */
+[data-category="animals"] { --tone: var(--orange); --tone-soft: var(--orange-soft); }
+[data-category="food"] { --tone: var(--pink); --tone-soft: var(--pink-soft); }
+[data-category="countries"] { --tone: var(--blue); --tone-soft: var(--blue-soft); }
+[data-category="sports"] { --tone: var(--green); --tone-soft: var(--green-soft); }
+[data-category="nature"] { --tone: var(--teal); --tone-soft: var(--teal-soft); }
+[data-category="jobs"] { --tone: var(--yellow); --tone-soft: var(--yellow-soft); }
+[data-category="science"] { --tone: var(--blue); --tone-soft: var(--blue-soft); }
+[data-category="music"] { --tone: var(--pink); --tone-soft: var(--pink-soft); }
+[data-category="things"] { --tone: var(--teal); --tone-soft: var(--teal-soft); }
+[data-category="mixed"], [data-category="all"] { --tone: var(--accent); --tone-soft: var(--accent-soft); }
+
+/* ---------- Two new themes ---------- */
+[data-theme="lagoon"] { --accent: #0d7c83; --accent-strong: #09626a; --accent-soft: #dcf1f1; }
+[data-theme="coral"]  { --accent: #c8452f; --accent-strong: #a63622; --accent-soft: #fce7e2; }
+[data-color="dark"][data-theme="lagoon"],
+[data-color="dark"] [data-theme="lagoon"] { --accent: #52c7c9; --accent-strong: #86dadb; --accent-soft: #123334; }
+[data-color="dark"][data-theme="coral"],
+[data-color="dark"] [data-theme="coral"] { --accent: #f38b76; --accent-strong: #f7ad9e; --accent-soft: #3a1f19; }
+
+/* ---------- Large text ---------- */
+[data-text="large"] {
+  font-size: 118.75%;
+  --header-height: 70px;
+  --tab-height: 72px;
+}
+
+[data-text="large"] .key {
+  height: 60px;
+  font-size: 1.4rem;
+}
+
+[data-text="large"] .button {
+  min-height: 54px;
+}
+
+/* ---------- High contrast ---------- */
+[data-contrast="high"] {
+  --text: #000000;
+  --text-muted: #2a2f36;
+  --border: #59606b;
+  --surface-2: #e9ecf1;
+  --surface-3: #c9cfd8;
+  --ghost: #d3d8df;
+  --success: #0b6b38;
+  --danger: #b01f1f;
+  --accent-strong: #0b3a8c;
+  --shadow-sm: none;
+}
+
+[data-contrast="high"][data-color="dark"] {
+  --bg: #000000;
+  --surface: #0d0f12;
+  --surface-2: #1b1f25;
+  --surface-3: #39404a;
+  --text: #ffffff;
+  --text-muted: #dde3ea;
+  --border: #8d97a5;
+  --success: #6fe0a0;
+  --danger: #ff8f8f;
+}
+
+[data-contrast="high"] .card,
+[data-contrast="high"] .key,
+[data-contrast="high"] .tile,
+[data-contrast="high"] .mode-card,
+[data-contrast="high"] .segment span {
+  border: 2px solid var(--border);
+}
+
+[data-contrast="high"] :focus-visible {
+  outline-width: 4px;
+}
+
+/* ---------- Languages ---------- */
+/* Pages with long text have an English and a Dutch part; show the right one */
+html[lang="nl"] [data-lang="en"],
+html[lang="en"] [data-lang="nl"] {
+  display: none !important;
+}
+
+/* Hide untranslated text for a moment while the Dutch texts load */
+html[data-translating] [data-i18n],
+html[data-translating] main {
+  visibility: hidden;
+}
+
+.language-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.language-switch .icon {
+  color: var(--text-muted);
+}
+
+.language-switch button {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  font-weight: 700;
+  font-size: var(--text-sm);
+}
+
+.language-switch button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.tab-bar a {
+  font-size: 0.7rem;
 }

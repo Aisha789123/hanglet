@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>About – Hanglet</title>
-  <meta name="description" content="About Hanglet, a calm and free word guessing game made with plain HTML, CSS and JavaScript.">
+  <meta name="description" content="About Hanglet, a calm and free word game for all ages in English and Dutch, made with plain HTML, CSS and JavaScript.">
   <meta name="theme-color" content="#f6f7f9">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hanglet">
   <meta property="og:title" content="About – Hanglet">
-  <meta property="og:description" content="About Hanglet, a calm and free word guessing game made with plain HTML, CSS and JavaScript.">
+  <meta property="og:description" content="About Hanglet, a calm and free word game for all ages in English and Dutch, made with plain HTML, CSS and JavaScript.">
   <meta property="og:image" content="assets/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -25,24 +25,40 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/figures.css">
 
+  <!-- Visitor statistics (GoatCounter) are set up in js/analytics.js -->
   <script src="js/theme-init.js"></script>
   <script type="module" src="js/pages/static.js"></script>
 </head>
-<body class="page-text">
+<body class="page-text" data-page="text">
   <main id="main" class="container prose">
-    <h1>About Hanglet</h1>
-    <p class="lead">Hanglet is a calm word game for a few minutes a day.</p>
-    <p>The idea is simple and old: guess a word one letter at a time before a drawing is finished. Hanglet adds a Daily challenge that is the same for everyone, a level path, a race against the clock and small rewards that make it nice to come back.</p>
-
-    <h2>Made to be light</h2>
-    <p>Hanglet is built with plain HTML, CSS and JavaScript. No frameworks, no trackers, no ads and no account. It loads fast, works offline once you have visited it, and you can install it on your phone like an app.</p>
-
-    <h2>The words</h2>
-    <p>There are 480 English words in eight categories: animals, food, countries, sports, nature, jobs, science and music. Every word was picked to be friendly for all ages.</p>
-
-    <h2>Where it comes from</h2>
-    <p>Hanglet started as a small Python terminal game made while following the Codédex Python tutorial, and was rebuilt from the ground up as a full web game.</p>
+    <div lang="en" data-lang="en">
+      <h1>About Hanglet</h1>
+      <p class="lead">Hanglet is a calm word game for a few minutes a day, for kids, adults and grandparents.</p>
+      <p>The idea is simple and old: guess a word one letter at a time. Hanglet adds a Daily challenge, a level map, a race against the clock, a Kids mode with pictures, friendly figures and small rewards that make it nice to come back.</p>
+      <h2>Two languages, two word lists</h2>
+      <p>Hanglet speaks English and Dutch. Each language has its own list of real words, not translations, with a short description for every word. Over 330 words per language, plus picture words for kids.</p>
+      <h2>Made to be light</h2>
+      <p>Built with plain HTML, CSS and JavaScript. No frameworks, no ads, no account. It loads fast, works offline and you can install it like an app.</p>
+      <h2>For everyone</h2>
+      <p>Large text, high contrast, reduced motion, full keyboard control and screen reader support are built in.</p>
+      <h2>Where it comes from</h2>
+      <p>Hanglet started as a small Python terminal game made while following the Codédex Python tutorial, and was rebuilt as a full web game.</p>
+    </div>
+    <div lang="nl" data-lang="nl">
+      <h1>Over Hanglet</h1>
+      <p class="lead">Hanglet is een rustig woordspel voor een paar minuten per dag, voor kinderen, volwassenen en opa's en oma's.</p>
+      <p>Het idee is simpel en oud: raad een woord, letter voor letter. Hanglet voegt daar een dagwoord aan toe, een levelkaart, een race tegen de klok, een Kids-modus met plaatjes, vrolijke figuren en kleine beloningen waardoor je graag terugkomt.</p>
+      <h2>Twee talen, twee woordenlijsten</h2>
+      <p>Hanglet spreekt Nederlands en Engels. Elke taal heeft een eigen lijst met echte woorden, geen vertalingen, met een korte omschrijving bij elk woord. Meer dan 330 woorden per taal, plus plaatjeswoorden voor kinderen.</p>
+      <h2>Licht gebouwd</h2>
+      <p>Gemaakt met gewone HTML, CSS en JavaScript. Geen frameworks, geen reclame, geen account. Het laadt snel, werkt offline en je kunt het als app installeren.</p>
+      <h2>Voor iedereen</h2>
+      <p>Grote tekst, hoog contrast, minder beweging, volledige bediening met het toetsenbord en ondersteuning voor schermlezers zitten erin.</p>
+      <h2>Waar het vandaan komt</h2>
+      <p>Hanglet begon als een klein Python-spel in de terminal, gemaakt tijdens de Codédex Python-tutorial, en is opnieuw gebouwd als volledig webspel.</p>
+    </div>
   </main>
 </body>
 </html>

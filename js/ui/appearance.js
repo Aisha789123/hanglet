@@ -1,4 +1,4 @@
-// Applies color mode, theme and motion settings to the page.
+// Applies color mode, theme, text size, contrast and motion settings to the page.
 import { data } from "../core/storage.js";
 
 const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -6,10 +6,12 @@ const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 export function applyAppearance() {
   const root = document.documentElement;
-  const { colorMode, theme } = data.settings;
+  const { colorMode, theme, textSize, contrast } = data.settings;
   const isDark = colorMode === "system" ? darkQuery.matches : colorMode === "dark";
   root.dataset.color = isDark ? "dark" : "light";
   root.dataset.theme = theme;
+  root.dataset.text = textSize;
+  root.dataset.contrast = contrast;
   root.dataset.motion = isReducedMotion() ? "reduce" : "full";
 
   // Match the browser bar color with the page background
