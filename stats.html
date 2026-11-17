@@ -43,16 +43,6 @@
         <div class="stat-tiles" id="stat-tiles"></div>
       </section>
 
-      <section class="card" aria-labelledby="chart-title">
-        <div class="card-header"><h2 id="chart-title" data-i18n="stats.chartTitle"></h2></div>
-        <div class="bar-chart" id="misses-chart" role="img"></div>
-      </section>
-
-      <section class="card" aria-labelledby="progress-title">
-        <div class="card-header"><h2 id="progress-title" data-i18n="stats.progress"></h2></div>
-        <ul class="progress-list" id="progress-list"></ul>
-      </section>
-
       <section class="card" aria-labelledby="calendar-title">
         <div class="card-header">
           <h2 id="calendar-title" data-i18n="stats.calendar"></h2>
@@ -70,10 +60,23 @@
         </div>
       </section>
 
-      <section class="card stats-wide badge-link-card" aria-labelledby="badges-title">
-        <div class="card-header"><h2 id="badges-title" data-i18n="stats.badges"></h2><span class="chip" id="badge-count"></span></div>
-        <a class="button button-sun" href="badges.html" data-i18n="badges.open"></a>
+      <div class="stats-side">
+        <section class="card" aria-labelledby="progress-title">
+          <div class="card-header"><h2 id="progress-title" data-i18n="stats.progress"></h2></div>
+          <ul class="progress-list" id="progress-list"></ul>
+        </section>
+
+        <section class="card badge-link-card" aria-labelledby="badges-title">
+          <div class="card-header"><h2 id="badges-title" data-i18n="stats.badges"></h2><span class="chip" id="badge-count"></span></div>
+          <a class="button button-sun" href="badges.html" data-i18n="badges.open"></a>
+        </section>
+      </div>
+
+      <section class="card stats-wide" aria-labelledby="chart-title">
+        <div class="card-header"><h2 id="chart-title" data-i18n="stats.chartTitle"></h2></div>
+        <div class="bar-chart" id="misses-chart" role="img"></div>
       </section>
+
     </div>
   </main>
 </body>

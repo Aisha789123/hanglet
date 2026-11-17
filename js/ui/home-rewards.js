@@ -1,4 +1,5 @@
-// Daily treasure chest and daily missions on the home page.
+// Daily treasure chest, daily missions and the "play offline" tip on the home page.
+// On wide screens the chest and the offline tip sit next to the missions.
 import { t } from "../core/i18n.js";
 import { canOpenChest, openChest } from "../core/chest.js";
 import { claimMission, getTodayMissions } from "../core/missions.js";
@@ -8,13 +9,20 @@ import { flyCoins } from "./effects.js";
 import { playSound } from "./feedback.js";
 import { refreshHeader } from "./layout.js";
 import { startCountdown } from "./countdown.js";
+import { setupInstallButton } from "./install.js";
 
 export function renderHomeRewards(container) {
   container.innerHTML = `
     <section class="chest-card card" aria-labelledby="chest-title"></section>
-    <section class="missions-card card" aria-labelledby="missions-title"></section>`;
+    <section class="missions-card card" aria-labelledby="missions-title"></section>
+    <section class="offline-strip" aria-label="${t("home.offlineTitle")}">
+      <span class="offline-icon">${icon("download")}</span>
+      <p>${t("home.offlineShort")}</p>
+      <button class="button button-secondary" id="install-button" type="button" hidden>${t("settings.install")}</button>
+    </section>`;
   renderChest(container.querySelector(".chest-card"));
   renderMissions(container.querySelector(".missions-card"));
+  setupInstallButton(container.querySelector("#install-button"));
 }
 
 // ---------- Treasure chest ----------

@@ -1,7 +1,7 @@
 {
   "name": "Hanglet – Word Game",
   "short_name": "Hanglet",
-  "description": "A calm word game for all ages, in English and Dutch. Daily challenge, Classic, 40 levels, Time Attack and a Kids mode.",
+  "description": "A cheerful riddle word game for everyone from 8, in English and Dutch. Daily challenge, Classic, 40 levels, Time Attack and a Kids world for ages 6 to 9.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

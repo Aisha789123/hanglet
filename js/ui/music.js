@@ -1,8 +1,8 @@
-// Calm background music, made live with the Web Audio API (no audio files).
-// A soft chord pad and a slow, random melody from a friendly scale.
+// Cheerful background music, made live with the Web Audio API (no audio files).
+// A soft chord pad and a bouncy, random melody from a friendly scale.
 // It is off by default and can be turned on in Settings or on the game screen.
 
-const TEMPO = 76; // beats per minute
+const TEMPO = 104; // beats per minute: bouncy, not hectic
 const BEAT = 60 / TEMPO;
 
 // Four gentle chords (C, A minor, F, G) and the notes that fit them

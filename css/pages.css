@@ -20,10 +20,6 @@
 
 /* =================== Home =================== */
 
-.install-title {
-  margin-bottom: var(--space-1);
-}
-
 /* Player summary */
 .player-card {
   display: grid;
@@ -96,18 +92,6 @@
 /* Mode cards */
 
 /* How it works */
-
-.install-card {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-}
-
-.install-card p {
-  color: var(--text-muted);
-}
 
 /* =================== Game =================== */
 .play-page {
@@ -205,10 +189,6 @@
   display: none;
 }
 
-.board.is-shaking .board-main {
-  animation: shake 360ms var(--ease);
-}
-
 .board-status {
   display: flex;
   flex-wrap: wrap;
@@ -222,53 +202,6 @@
   gap: var(--space-3);
   flex: 1;
   min-width: 0;
-}
-
-.lives {
-  display: flex;
-  gap: 5px;
-  margin-left: auto;
-}
-
-.life {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--danger);
-  transition: transform 300ms var(--ease), background 300ms;
-}
-
-.life.is-lost {
-  background: var(--surface-3);
-  transform: scale(0.7);
-}
-
-.board-main {
-  display: grid;
-  gap: var(--space-4);
-}
-
-.figure-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: clamp(110px, 21vh, 240px);
-  padding: var(--space-2);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  overflow: hidden;
-}
-
-.figure-box .figure {
-  max-width: 100%;
-  max-height: 100%;
-}
-
-.board-play {
-  display: grid;
-  gap: var(--space-4);
-  align-content: center;
 }
 
 /* Word tiles */
@@ -582,16 +515,6 @@
 }
 
 @media (min-width: 900px) {
-  .board-main {
-    grid-template-columns: 300px 1fr;
-    align-items: stretch;
-  }
-
-  .figure-box {
-    height: 100%;
-    min-height: 300px;
-  }
-
   .tile {
     font-size: clamp(1rem, calc(36vw / var(--letters)), 1.75rem);
   }
@@ -992,38 +915,7 @@
   }
 }
 
-/* ---------- Game: clue and removed keys ---------- */
-.clue {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--yellow-soft);
-  animation: tile-reveal 380ms var(--ease) both;
-}
-
-.clue[hidden] {
-  display: none;
-}
-
-.clue-picture .picture {
-  width: 72px;
-  height: 72px;
-}
-
-.clue-text {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-2);
-  font-weight: 700;
-}
-
-.clue-text .icon {
-  margin-top: 2px;
-  color: var(--yellow);
-}
-
+/* ---------- Game: removed keys ---------- */
 .key.is-removed {
   background: transparent;
   box-shadow: none;
@@ -1048,45 +940,6 @@ body.is-kids {
   --accent-strong: #f8b88c;
   --accent-soft: #3a2416;
   --bg: #17130f;
-}
-
-body.is-kids .key {
-  height: 56px;
-  border-radius: 16px;
-  font-size: 1.5rem;
-}
-
-body.is-kids .key.is-correct {
-  background: var(--green);
-}
-
-body.is-kids .tile {
-  border-radius: 14px;
-  font-size: clamp(1.4rem, calc(70vw / var(--letters)), 2.4rem);
-}
-
-body.is-kids .word {
-  grid-template-columns: repeat(var(--letters), minmax(0, 64px));
-}
-
-body.is-kids .clue-picture .picture {
-  width: 64px;
-  height: 64px;
-}
-
-body.is-kids .clue {
-  padding: var(--space-2) var(--space-3);
-}
-
-@media (min-width: 900px) {
-  body.is-kids .clue-picture .picture {
-    width: 96px;
-    height: 96px;
-  }
-}
-
-body.is-kids .clue-text {
-  font-size: var(--text-lg);
 }
 
 /* ---------- Result screen ---------- */
@@ -1203,33 +1056,6 @@ body.is-kids .clue-text {
   stroke: var(--accent);
   stroke-width: 6;
   stroke-dasharray: 2 12;
-}
-
-.map-deco {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  opacity: 0.55;
-}
-
-.deco-tree {
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  background: var(--green);
-}
-
-.deco-rock {
-  width: 16px;
-  height: 11px;
-  border-radius: 50%;
-  background: var(--text-muted);
-  opacity: 0.3;
-}
-
-.deco-spark {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--yellow);
 }
 
 .map-levels {

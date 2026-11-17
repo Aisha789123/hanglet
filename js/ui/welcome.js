@@ -52,8 +52,13 @@ export function showWelcome() {
     data.settings.textSize = form.get("large-text") ? "large" : "normal";
     data.welcomeDone = true;
     save();
-    // Reload so every text uses the chosen language and settings
-    location.reload();
+    // Kids go straight to their own world. Everyone else reloads, so every
+    // text uses the chosen language and settings.
+    if (data.settings.kidsFirst && !location.pathname.endsWith("kids.html")) {
+      location.href = "./kids.html";
+    } else {
+      location.reload();
+    }
   });
 
   // The choice is needed, so Escape does not close it

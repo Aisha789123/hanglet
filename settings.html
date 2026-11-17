@@ -56,6 +56,21 @@
         </label>
       </section>
 
+      <section class="card" aria-labelledby="difficulty-title">
+        <div class="card-header"><h2 id="difficulty-title" data-i18n="settings.difficulty"></h2></div>
+        <p class="muted card-text" data-i18n="settings.difficultyHelp"></p>
+        <form id="difficulty-choice">
+          <fieldset class="option-group">
+            <legend class="visually-hidden" data-i18n="settings.difficulty"></legend>
+            <div class="segments">
+              <label class="segment"><input type="radio" name="difficulty" value="easy"><span><span data-i18n="difficulty.easy"></span><small data-i18n="difficulty.easyDetail"></small></span></label>
+              <label class="segment"><input type="radio" name="difficulty" value="normal"><span><span data-i18n="difficulty.normal"></span><small data-i18n="difficulty.normalDetail"></small></span></label>
+              <label class="segment"><input type="radio" name="difficulty" value="hard"><span><span data-i18n="difficulty.hard"></span><small data-i18n="difficulty.hardDetail"></small></span></label>
+            </div>
+          </fieldset>
+        </form>
+      </section>
+
       <section class="card" aria-labelledby="look-title">
         <div class="card-header"><h2 id="look-title" data-i18n="settings.appearance"></h2></div>
         <form id="color-mode">

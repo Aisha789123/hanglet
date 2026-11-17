@@ -16,7 +16,7 @@
     "badges": "Badges"
   },
   "footer": {
-    "tagline": "A calm word game, one letter at a time.",
+    "tagline": "A cheerful word game, one riddle at a time.",
     "note": "Your progress stays on this device."
   },
   "header": {
@@ -40,11 +40,11 @@
   },
   "welcome": {
     "title": "Welcome to Hanglet",
-    "text": "A calm word game for every day. Let's set it up for you.",
+    "text": "A playful word game for everyone from 8 years old. Let's set it up for you.",
     "language": "Language",
     "who": "Who is playing?",
-    "everyone": "Everyone",
-    "kids": "Kids (6+)",
+    "everyone": "Everyone (8+)",
+    "kids": "Kids (6–9)",
     "start": "Let's play"
   },
   "tour": {
@@ -55,13 +55,15 @@
     "step": "Step {step} of {total}",
     "word": "This is the hidden word. Every tile is one letter.",
     "category": "The category is your first clue.",
-    "picture": "Look at the picture and the clue. They help you find the word!",
+    "picture": "Look at the picture and read the riddle. They help you find the word!",
     "keyboard": "Tap a letter to guess. Try one now!",
     "goodGuess": "Nice! That letter is in the word.",
     "wrongGuess": "That letter is not in the word. No problem, keep trying!",
-    "figure": "Every wrong letter changes the figure. Find the word before it is finished.",
-    "hints": "Stuck? Use a hint: show a description, reveal a letter or remove wrong letters.",
-    "hintsFree": "Stuck? Tap Hint. In Kids mode hints are free!"
+    "figure": "Every wrong letter costs a heart. Find the word before your hearts run out!",
+    "hints": "Stuck? Use a hint: reveal a letter or remove wrong letters.",
+    "hintsFree": "Stuck? Tap Help and Tilo will help you.",
+    "riddle": "This is Tilo's riddle. It tells you what the word is!",
+    "kidsKeyboard": "Only these letters! Tap one to try."
   },
   "keyboard": {
     "label": "Letters",
@@ -97,7 +99,10 @@
   "difficulty": {
     "easy": "Easy",
     "normal": "Normal",
-    "hard": "Hard"
+    "hard": "Hard",
+    "easyDetail": "Riddle + first letter free · 8 lives",
+    "normalDetail": "Riddle on screen · 7 lives",
+    "hardDetail": "Only the category · 6 lives"
   },
   "setup": {
     "category": "Category",
@@ -115,7 +120,15 @@
     "letterWrong": "{letter} is not in the word. {count} lives left.",
     "blank": "blank",
     "wordLabel": "Word with {count} letters: {letters}",
-    "livesLabel": "{left} of {total} lives left"
+    "livesLabel": "{left} of {total} lives left",
+    "lives": {
+      "one": "{count} life left",
+      "other": "{count} lives left"
+    },
+    "riddle": "Riddle",
+    "noRiddle": "No riddle on Hard, only the category. Stuck? You can buy the riddle as a hint.",
+    "freeLetter": "Easy: the first letter is a gift.",
+    "noChallengeRiddle": "Your friend did not add a riddle. Good luck!"
   },
   "hints": {
     "button": "Hint",
@@ -127,7 +140,7 @@
     "letterShown": "Hint: {letter} is in the word.",
     "lettersRemoved": "Hint: {letters} are not in the word.",
     "description": {
-      "title": "Show the description",
+      "title": "Show the riddle",
       "text": "A short sentence about the word"
     },
     "letter": {
@@ -185,9 +198,9 @@
       "timeUp": "Time is up!"
     },
     "kids": {
-      "title": "Kids",
-      "subtitle": "Easy words with a picture",
-      "text": "Short, easy words with a picture. Big buttons and free hints."
+      "title": "Kids world",
+      "subtitle": "Short words with a picture",
+      "text": "Short words with a picture. You can't lose, and you collect stickers."
     },
     "challenge": {
       "title": "Challenge a friend",
@@ -196,11 +209,27 @@
   },
   "kids": {
     "pictureLabel": "Picture hint",
-    "eyebrowWin": "Well done!",
-    "eyebrowLose": "Good try!",
     "win": "You found it!",
-    "lose": "Almost! Let's try another one",
-    "next": "Next word"
+    "next": "Next word",
+    "world": "Kids world",
+    "intro": "Short words with a picture. Tilo helps you, and every word gives you a sticker!",
+    "play": "Let's play!",
+    "hello": "Hi! Shall we find some words together?",
+    "stickers": "My stickers",
+    "stickerCount": "{count} of {total} stickers",
+    "stickerBook": "Sticker book",
+    "newSticker": "New sticker!",
+    "stickerAgain": "You have this sticker {count} times now",
+    "notFound": "Not found yet",
+    "compliments": "Super!|Well done!|You're a star!|Fantastic!|Hooray!|Brilliant!",
+    "together": "We did it together!",
+    "tryOther": "Not in this word. Try another letter!",
+    "glow": "Psst… try the glowing letter!",
+    "fill": "I'll help you: here comes the {letter}!",
+    "help": "Help",
+    "helpLabel": "Ask Tilo for help",
+    "forParents": "For parents: no coins, no clock and you can't lose. Words have 3 to 5 letters and always come with a picture and a short sentence.",
+    "backToHanglet": "Back to Hanglet"
   },
   "result": {
     "solved": "Solved!",
@@ -258,8 +287,8 @@
     "summit": "Summit"
   },
   "home": {
-    "title": "Guess the word, one letter at a time.",
-    "intro": "Hanglet is a calm word game for all ages. Pick a letter, fill in the word and save your figure. New Daily words every day.",
+    "title": "Solve the riddle, letter by letter.",
+    "intro": "Tilo gives you a riddle, you find the letters. A cheerful word game for everyone from 8, with three new Daily words every day.",
     "playDaily": "Play today's Daily",
     "progressLabel": "Your progress",
     "chooseMode": "Choose a mode",
@@ -273,7 +302,7 @@
     "levelsAllDone": "All levels complete",
     "timedBest": "Best: {count} words",
     "timedNew": "2 minutes on the clock",
-    "kidsStatus": "For ages 6 and up",
+    "kidsStatus": "For ages 6 to 9",
     "dictionaryTitle": "My dictionary",
     "dictionaryCount": "You collected {count} words.",
     "dictionaryEmpty": "Every word you solve is saved here, with its meaning.",
@@ -295,7 +324,12 @@
     "newWordsIn": "New words in",
     "classicStatus": "Pick your own category",
     "levelsNext": "Next: level {next}",
-    "challengeStatus": "Pick a word, send a link"
+    "challengeStatus": "Pick a word, send a link",
+    "kidsTitle": "Kids world",
+    "kidsText": "Short words with a picture. Tilo helps, you can't lose and you collect stickers.",
+    "kidsButton": "Go to the Kids world",
+    "kidsStickers": "{count} stickers collected",
+    "offlineShort": "Play offline: add Hanglet to your home screen."
   },
   "dictionary": {
     "title": "My dictionary",
@@ -351,8 +385,8 @@
     "title": "Settings",
     "intro": "Make Hanglet look, sound and feel the way you like.",
     "language": "Language",
-    "kidsFirst": "Show Kids mode first",
-    "kidsFirstHelp": "Puts the Kids mode at the top of the home page",
+    "kidsFirst": "Show the Kids world first",
+    "kidsFirstHelp": "Puts the Kids world at the top of the home page",
     "appearance": "Appearance",
     "colorMode": "Color mode",
     "system": "System",
@@ -395,7 +429,9 @@
     "resetConfirm": "Yes, reset",
     "resetDone": "Your progress has been reset.",
     "music": "Background music",
-    "musicHelp": "Calm, soft music while you play"
+    "musicHelp": "Cheerful, bouncy music while you play",
+    "difficulty": "Difficulty",
+    "difficultyHelp": "For the Daily, Classic, Levels and Time Attack. New players start on Easy."
   },
   "themes": {
     "ocean": "Ocean",
@@ -500,7 +536,7 @@
     },
     "kids-win": {
       "name": "Young star",
-      "description": "Win a game in Kids mode"
+      "description": "Solve a word in the Kids world"
     },
     "dictionary-25": {
       "name": "Collector",
@@ -595,13 +631,17 @@
     "play": "Play"
   },
   "seo": {
+    "404": {
+      "title": "Page not found – Hanglet",
+      "description": "This page does not exist."
+    },
     "index": {
       "title": "Hanglet – A playful word game for every day",
-      "description": "Guess the word letter by letter with Tilo. Daily challenge, 40 levels, Time Attack, Kids mode and challenges for friends. Free, in English and Dutch."
+      "description": "Solve Tilo's riddles letter by letter. Daily challenge, 40 levels, Time Attack, a Kids world for ages 6 to 9 and challenges for friends. Free, in English and Dutch."
     },
     "play": {
       "title": "Play – Hanglet",
-      "description": "Guess the word one letter at a time before your figure is finished."
+      "description": "Read the riddle and find the word, letter by letter, before your hearts run out."
     },
     "levels": {
       "title": "Level map – Hanglet",
@@ -633,15 +673,24 @@
     },
     "about": {
       "title": "About – Hanglet",
-      "description": "About Hanglet, a playful word game for all ages made with plain HTML, CSS and JavaScript."
+      "description": "About Hanglet, a cheerful riddle word game for everyone from 8, with a Kids world for ages 6 to 9."
     },
     "privacy": {
       "title": "Privacy – Hanglet",
       "description": "No account and no cookies. Your progress stays on your device."
     },
-    "404": {
-      "title": "Page not found – Hanglet",
-      "description": "This page does not exist."
+    "kids": {
+      "title": "Kids world – Hanglet",
+      "description": "The Hanglet Kids world for ages 6 to 9: short words with a picture, help from Tilo, no losing and stickers to collect."
     }
+  },
+  "adapt": {
+    "title": "Shall we make it a bit easier?",
+    "text": "Two in a row that didn't work out. That happens to everyone! On {level} you get {extra}.",
+    "easyExtra": "the first letter for free and 8 lives",
+    "normalExtra": "the riddle on screen and 7 lives",
+    "yes": "Yes, make it easier",
+    "no": "No thanks",
+    "done": "Done! You now play on {level}."
   }
 }

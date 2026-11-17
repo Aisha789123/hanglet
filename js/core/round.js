@@ -30,6 +30,15 @@ export class Round {
     return "wrong";
   }
 
+  // Fill in a letter for free: the first letter on Easy, or Tilo's help in Kids.
+  // It is not a hint and not a miss. The last hidden letter is never given away.
+  giveLetter(letter) {
+    if (this.isOver() || this.guessed.includes(letter) || !this.word.includes(letter)) return false;
+    if (this.hiddenLetters().length < 2) return false;
+    this.guessed.push(letter);
+    return true;
+  }
+
   // ---------- Hints ----------
 
   canRevealLetter() {

@@ -1,0 +1,9 @@
+{
+  "name": "hanglet",
+  "private": true,
+  "type": "module",
+  "description": "Hanglet, a playful word game. No build step: this file is only here for the tests.",
+  "scripts": {
+    "test": "node --test \"tests/*.test.js\""
+  }
+}

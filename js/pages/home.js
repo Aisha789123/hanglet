@@ -13,7 +13,7 @@ import { createMascot, mascotSvg } from "../ui/mascot.js";
 import { illustration } from "../ui/illustrations.js";
 import { isReducedMotion } from "../ui/appearance.js";
 import { startCountdown } from "../ui/countdown.js";
-import { setupInstallButton } from "../ui/install.js";
+import { pictureSvg } from "../ui/pictures.js";
 import { renderHomeRewards } from "../ui/home-rewards.js";
 
 initPage("home");
@@ -132,12 +132,8 @@ const modes = [
     status: levelsDone >= LEVEL_COUNT ? t("home.levelsAllDone") : t("home.levelsNext", { next: nextLevel }) },
   { id: "timed", href: "./play.html?mode=timed", color: "berry",
     status: data.timed.best > 0 ? t("home.timedBest", { count: data.timed.best }) : t("home.timedNew") },
-  { id: "kids", href: "./play.html?mode=kids", color: "sun", status: t("home.kidsStatus") },
   { id: "challenge", href: "./challenge.html", color: "sky", status: t("home.challengeStatus") },
 ];
-if (data.settings.kidsFirst) {
-  modes.unshift(...modes.splice(modes.findIndex((mode) => mode.id === "kids"), 1));
-}
 document.getElementById("mode-tiles").innerHTML = modes.map((mode) => `
   <a class="mode-tile tile-${mode.color}" href="${mode.href}" id="tile-${mode.id}">
     ${illustration(mode.id === "challenge" ? "challenge" : mode.id, "mode-art")}
@@ -182,4 +178,13 @@ if (words.length > 0) {
   dictionaryEl.innerHTML = `<p class="teaser-description">${t("home.dictionaryEmpty")}</p>`;
 }
 
-setupInstallButton(document.getElementById("install-button"));
+// ---------- Kids world banner (its own world with its own start button) ----------
+const kidsBanner = document.getElementById("kids-banner");
+document.getElementById("kids-banner-art").innerHTML = ["cat", "sun", "apple", "boat"]
+  .map((name) => `<span class="sticker">${pictureSvg(name)}</span>`).join("");
+const stickerCount = Object.keys(data.kids.stickers).length;
+document.getElementById("kids-banner-stickers").textContent = stickerCount > 0 ? t("home.kidsStickers", { count: stickerCount }) : "";
+// "Show the Kids world first" puts the banner right under the hero
+if (data.settings.kidsFirst) {
+  document.querySelector(".hero-card").after(kidsBanner);
+}

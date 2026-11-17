@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Hanglet – A playful word game for every day</title>
-  <meta name="description" content="Guess the word letter by letter with Tilo. Daily challenge, 40 levels, Time Attack, Kids mode and challenges for friends. Free, in English and Dutch.">
+  <meta name="description" content="Solve the riddles of Tilo letter by letter. Daily challenge, 40 levels, Time Attack, a Kids world for ages 6 to 9 and challenges for friends. Free, in English and Dutch.">
   <meta name="theme-color" content="#f6f7f9">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hanglet">
   <meta property="og:title" content="Hanglet – A playful word game for every day">
-  <meta property="og:description" content="Guess the word letter by letter with Tilo. Daily challenge, 40 levels, Time Attack, Kids mode and challenges for friends. Free, in English and Dutch.">
+  <meta property="og:description" content="Solve the riddles of Tilo letter by letter. Daily challenge, 40 levels, Time Attack, a Kids world for ages 6 to 9 and challenges for friends. Free, in English and Dutch.">
   <meta property="og:image" content="assets/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -65,6 +65,17 @@
 
     <div class="home-rewards" id="home-rewards"></div>
 
+    <section class="kids-banner" id="kids-banner" aria-labelledby="kids-banner-title">
+      <div class="kids-banner-art" id="kids-banner-art" aria-hidden="true"></div>
+      <div class="kids-banner-text">
+        <p class="eyebrow" data-i18n="home.kidsStatus"></p>
+        <h2 id="kids-banner-title" data-i18n="home.kidsTitle"></h2>
+        <p data-i18n="home.kidsText"></p>
+        <p class="kids-banner-stickers" id="kids-banner-stickers"></p>
+      </div>
+      <a class="button button-sun button-large" href="kids.html"><span data-i18n="home.kidsButton"></span></a>
+    </section>
+
     <section aria-labelledby="modes-title">
       <h2 class="section-title" id="modes-title" data-i18n="home.chooseMode"></h2>
       <div class="mode-tiles" id="mode-tiles"></div>
@@ -80,14 +91,6 @@
         </div>
         <a class="button button-secondary" href="dictionary.html" data-i18n="home.openDictionary"></a>
       </div>
-    </section>
-
-    <section class="card install-card">
-      <div>
-        <h2 class="section-title install-title" data-i18n="home.offlineTitle"></h2>
-        <p data-i18n="home.offlineText"></p>
-      </div>
-      <button class="button button-secondary" id="install-button" type="button" hidden data-i18n="settings.install"></button>
     </section>
 
   </main>

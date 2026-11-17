@@ -1,6 +1,6 @@
 // Service worker: saves all game files so Hanglet works offline.
 // Change the version number after updating files, so players get the new ones.
-const CACHE_NAME = "hanglet-v3";
+const CACHE_NAME = "hanglet-v4";
 
 const FILES = [
   "./",
@@ -11,6 +11,7 @@ const FILES = [
   "./challenge.html",
   "./dictionary.html",
   "./how-to-play.html",
+  "./kids.html",
   "./levels.html",
   "./play.html",
   "./privacy.html",
@@ -34,8 +35,10 @@ const FILES = [
   "./js/core/chest.js",
   "./js/core/daily.js",
   "./js/core/dates.js",
+  "./js/core/difficulty.js",
   "./js/core/figures.js",
   "./js/core/i18n.js",
+  "./js/core/kids.js",
   "./js/core/levels.js",
   "./js/core/missions.js",
   "./js/core/progress.js",
@@ -50,6 +53,7 @@ const FILES = [
   "./js/pages/challenge.js",
   "./js/pages/dictionary.js",
   "./js/pages/home.js",
+  "./js/pages/kids.js",
   "./js/pages/levels.js",
   "./js/pages/play.js",
   "./js/pages/settings.js",
@@ -67,6 +71,7 @@ const FILES = [
   "./js/ui/install.js",
   "./js/ui/keyboard.js",
   "./js/ui/layout.js",
+  "./js/ui/map-scenery.js",
   "./js/ui/mascot.js",
   "./js/ui/music.js",
   "./js/ui/pictures.js",

@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Play – Hanglet</title>
-  <meta name="description" content="Play Hanglet: guess the word one letter at a time before the figure is finished.">
+  <meta name="description" content="Play Hanglet: read the riddle and find the word, letter by letter.">
   <meta name="theme-color" content="#f6f7f9">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hanglet">
   <meta property="og:title" content="Play – Hanglet">
-  <meta property="og:description" content="Play Hanglet: guess the word one letter at a time before the figure is finished.">
+  <meta property="og:description" content="Play Hanglet: read the riddle and find the word, letter by letter.">
   <meta property="og:image" content="assets/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -36,7 +36,7 @@
   <main id="main" class="container play-page">
 
     <div class="play-top">
-      <a class="icon-button" href="index.html" data-i18n-attr="aria-label: common.backHome"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
+      <a class="icon-button" id="back-link" href="index.html" data-i18n-attr="aria-label: common.backHome"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></a>
       <div class="play-title">
         <h1 id="mode-title">Hanglet</h1>
         <p id="mode-subtitle"></p>
@@ -54,16 +54,16 @@
         <div class="lives" id="lives" role="img"></div>
       </div>
       <div class="board-main">
-        <div class="figure-stage">
-          <div class="figure-box" id="figure"></div>
-          <div class="stage-mascot" id="stage-mascot"></div>
+        <div class="stage-card" id="stage-card">
+          <div class="figure-stage">
+            <div class="figure-box" id="figure"></div>
+            <div class="stage-mascot" id="stage-mascot"></div>
+          </div>
+          <div class="riddle" id="clue" aria-live="polite"></div>
           <div class="combo-area" id="combo" aria-hidden="true"></div>
         </div>
-        <div class="board-play">
-          <div class="clue" id="clue" hidden aria-live="polite"></div>
-          <div class="word" id="word" role="img"></div>
-          <div class="keyboard" id="keyboard" role="group" data-i18n-attr="aria-label: keyboard.label"></div>
-        </div>
+        <div class="word" id="word" role="img"></div>
+        <div class="keyboard" id="keyboard" role="group" data-i18n-attr="aria-label: keyboard.label"></div>
       </div>
     </section>
 

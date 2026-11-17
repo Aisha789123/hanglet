@@ -3,9 +3,9 @@ import { data } from "../core/storage.js";
 import { t } from "../core/i18n.js";
 import { LEVEL_COUNT, getLevel, highestUnlocked, completedLevels } from "../core/levels.js";
 import { getCategoryName } from "../core/words.js";
-import { seededRandom } from "../core/random.js";
 import { initPage } from "../ui/layout.js";
 import { icon } from "../ui/icons.js";
+import { stageBackdrop, stageScenery } from "../ui/map-scenery.js";
 
 initPage("levels");
 
@@ -45,8 +45,9 @@ function pathThrough(numbers) {
 const allLevels = Array.from({ length: LEVEL_COUNT }, (_, i) => i + 1);
 const reached = allLevels.filter((number) => number <= unlocked);
 
-// Four stages, each with its own soft background color
+// Four worlds, each with its own landscape (see js/ui/map-scenery.js)
 let html = "";
+let scenery = "";
 for (let start = 1; start <= LEVEL_COUNT; start += 10) {
   const level = getLevel(start);
   // Each stage band starts with room for its label above the top level
@@ -56,23 +57,17 @@ for (let start = 1; start <= LEVEL_COUNT; start += 10) {
   const bottom = isFirst ? mapHeight : position(start).y + STEP / 2;
   html += `
     <div class="map-stage stage-${level.stage}" style="top:${top}px;height:${bottom - top}px">
+      ${stageBackdrop(level.stage)}
       <span class="stage-label">${t(`stages.${level.stage}`)} · ${t("levels.wordsShort", { count: level.wordCount })} · ${t(`lengths.${level.length}`)}</span>
     </div>`;
+  scenery += stageScenery(level.stage, top, bottom, start * 97);
 }
+html += scenery;
 
-// Small decorations on the sides, always in the same place
-const random = seededRandom(42);
-for (let i = 0; i < 26; i++) {
-  const y = TOP_SPACE + random() * (mapHeight - TOP_SPACE - BOTTOM_SPACE);
-  const left = random() < 0.5;
-  const x = left ? 3 + random() * 10 : 87 + random() * 10;
-  const kind = ["tree", "rock", "spark"][Math.floor(random() * 3)];
-  html += `<span class="map-deco deco-${kind}" style="top:${y.toFixed(0)}px;left:${x.toFixed(1)}%" aria-hidden="true"></span>`;
-}
-
-// The path: the whole road dashed, the part you reached in color
+// The path: a sandy road, the part you reached gets colored footsteps
 html += `
   <svg class="map-path" viewBox="0 0 100 ${mapHeight}" preserveAspectRatio="none" aria-hidden="true">
+    <path class="road-edge" d="${pathThrough(allLevels)}"/>
     <path class="road" d="${pathThrough(allLevels)}"/>
     <path class="road-done" d="${pathThrough(reached)}"/>
   </svg>`;

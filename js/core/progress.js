@@ -9,7 +9,8 @@ import { getLevelInfo } from "./xp.js";
 import { addDays, toDateKey } from "./dates.js";
 import { trackMission } from "./missions.js";
 
-// The three kinds of hints and what they cost (free in Kids mode)
+// The three kinds of hints and what they cost. The description hint is only
+// offered on Hard: on Easy and Normal the riddle is always on screen for free.
 export const HINTS = [
   { id: "description", cost: 10, icon: "quote" },
   { id: "letter", cost: 20, icon: "bulb" },
@@ -17,18 +18,17 @@ export const HINTS = [
 ];
 
 // Rewards for one word. Hard games and games without misses give a bonus.
-export function rewardForWord(won, misses, lives, isKids = false) {
+export function rewardForWord(won, misses, lives, difficulty = "normal") {
   if (!won) return { xp: 5, coins: 0 };
-  if (isKids) return { xp: 15, coins: 5 };
-  const hard = lives <= 4;
+  const hard = difficulty === "hard";
   return {
     xp: 20 + (lives - misses) * 5 + (hard ? 15 : 0),
     coins: 10 + (hard ? 5 : 0) + (misses === 0 ? 5 : 0),
   };
 }
 
-// Save the result of one word (Daily, Classic, Levels and Kids). Returns the rewards.
-export function recordWord({ won, misses, lives, word, category, picture = null, isKids = false, hintsUsed = 0 }) {
+// Save the result of one word (Daily, Classic, Levels). Returns the rewards.
+export function recordWord({ won, misses, lives, word, category, difficulty = "normal", hintsUsed = 0 }) {
   const stats = data.stats;
   stats.played++;
   stats.recentWords = [word, ...stats.recentWords].slice(0, 40);
@@ -36,22 +36,45 @@ export function recordWord({ won, misses, lives, word, category, picture = null,
   if (won) {
     stats.wins++;
     stats.winStreak++;
+    stats.lossStreak = 0;
     stats.bestWinStreak = Math.max(stats.bestWinStreak, stats.winStreak);
     const index = Math.min(misses, stats.missesInWins.length - 1);
     stats.missesInWins[index]++;
     if (misses === 0) stats.flawless++;
-    if (lives <= 4) stats.hardWins++;
-    if (isKids) stats.kidsWins++;
+    if (difficulty === "hard") stats.hardWins++;
     stats.longestWord = Math.max(stats.longestWord, word.length);
     stats.categoriesWon[category] = (stats.categoriesWon[category] || 0) + 1;
-    addToDictionary(word, category, picture);
+    addToDictionary(word, category);
   } else {
     stats.losses++;
     stats.winStreak = 0;
+    stats.lossStreak = (stats.lossStreak || 0) + 1;
   }
 
   const missionsDone = trackMission({ type: "word", won, misses, length: word.length, category, hintsUsed });
-  return { ...giveRewards(rewardForWord(won, misses, lives, isKids)), missionsDone };
+  return { ...giveRewards(rewardForWord(won, misses, lives, difficulty)), missionsDone };
+}
+
+// The player said yes to "make it easier?" or changed the difficulty
+export function setDifficulty(id) {
+  data.settings.options.difficulty = id;
+  data.stats.lossStreak = 0;
+  save();
+}
+
+// Kids world: every word is solved (together with Tilo). No XP or coins,
+// but a sticker of the picture. Returns true when the sticker is new.
+export function recordKidsWord({ word, category, picture }) {
+  const kids = data.kids;
+  const isNew = !kids.stickers[picture];
+  kids.stickers[picture] = (kids.stickers[picture] || 0) + 1;
+  kids.solved++;
+  data.stats.kidsWins++;
+  data.stats.recentWords = [word, ...data.stats.recentWords].slice(0, 40);
+  addToDictionary(word, category, picture);
+  // Only badges (like "first Kids word") are checked, no rewards are shown
+  giveRewards({ xp: 0, coins: 0 });
+  return isNew;
 }
 
 // Remember a solved word in "My dictionary"

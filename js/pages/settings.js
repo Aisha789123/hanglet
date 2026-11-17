@@ -1,10 +1,10 @@
-// Settings page: language, appearance, accessibility, themes, figures,
+// Settings page: language, difficulty, appearance, accessibility, themes, figures,
 // sound and feel, the tutorial and resetting progress.
 import { data, save, resetAll } from "../core/storage.js";
 import { language, t } from "../core/i18n.js";
 import { THEMES, isThemeUnlocked } from "../core/themes.js";
 import { FIGURES, isFigureOwned } from "../core/figures.js";
-import { buyFigure } from "../core/progress.js";
+import { buyFigure, setDifficulty } from "../core/progress.js";
 import { initPage, refreshHeader, setLanguage } from "../ui/layout.js";
 import { applyAppearance, isReducedMotion } from "../ui/appearance.js";
 import { icon } from "../ui/icons.js";
@@ -27,6 +27,7 @@ function setupRadios(formId, current, onChange) {
 }
 
 setupRadios("language-choice", language, (value) => setLanguage(value));
+setupRadios("difficulty-choice", settings.options.difficulty, (value) => setDifficulty(value));
 setupRadios("color-mode", settings.colorMode, (value) => {
   settings.colorMode = value;
   save();

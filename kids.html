@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kids world – Hanglet</title>
+  <meta name="description" content="The Hanglet Kids world for ages 6 to 9: short words with a picture, help from Tilo, no losing and stickers to collect.">
+  <meta name="theme-color" content="#f6f7f9">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hanglet">
+  <meta property="og:title" content="Kids world – Hanglet">
+  <meta property="og:description" content="The Hanglet Kids world for ages 6 to 9: short words with a picture, help from Tilo, no losing and stickers to collect.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="assets/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/figures.css">
+  <link rel="stylesheet" href="css/game.css">
+
+  <!-- Visitor statistics (GoatCounter) are set up in js/analytics.js -->
+  <script src="js/theme-init.js"></script>
+  <script type="module" src="js/pages/kids.js"></script>
+</head>
+<body class="page-kids is-kids">
+  <main id="main" class="container kids-page">
+
+    <section class="kids-hero" aria-labelledby="kids-title">
+      <div class="kids-hero-mascot">
+        <p class="speech" id="kids-speech"></p>
+        <div class="mascot-big" id="kids-mascot"></div>
+      </div>
+      <div class="kids-hero-content">
+        <h1 id="kids-title" data-i18n="kids.world"></h1>
+        <p class="kids-intro" data-i18n="kids.intro"></p>
+        <a class="button button-play" href="play.html?mode=kids">
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <span data-i18n="kids.play"></span>
+        </a>
+      </div>
+    </section>
+
+    <section class="card sticker-book" id="stickers" aria-labelledby="stickers-title">
+      <div class="sticker-book-top">
+        <h2 class="section-title" id="stickers-title" data-i18n="kids.stickerBook"></h2>
+        <span class="pill" id="sticker-count"></span>
+      </div>
+      <ul class="sticker-grid" id="sticker-grid"></ul>
+    </section>
+
+    <section class="kids-parents">
+      <p data-i18n="kids.forParents"></p>
+      <a class="button button-secondary" href="index.html" data-i18n="kids.backToHanglet"></a>
+    </section>
+
+  </main>
+</body>
+</html>

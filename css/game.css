@@ -272,7 +272,6 @@ body::before {
 
 /* ---------- Cards with depth ---------- */
 .card,
-.figure-box,
 .word-card,
 .dialog {
   border: 2px solid var(--border);
@@ -1022,39 +1021,6 @@ main {
   max-width: 760px;
 }
 
-/* One centered column: figure on top, then word, then keyboard */
-.board-main {
-  grid-template-columns: 1fr !important;
-}
-
-.figure-stage {
-  position: relative;
-}
-
-.figure-box {
-  height: clamp(170px, 30vh, 330px) !important;
-  min-height: 0 !important;
-  border-radius: 28px;
-  background:
-    radial-gradient(ellipse 60% 26% at 50% 100%, var(--accent-soft) 0 98%, transparent 100%),
-    var(--surface);
-  overflow: hidden;
-}
-
-.figure-box .figure {
-  height: 100%;
-  width: auto;
-}
-
-.stage-mascot {
-  position: absolute;
-  left: 10px;
-  bottom: 8px;
-  width: 64px;
-  height: 70px;
-  pointer-events: none;
-}
-
 .combo-area {
   position: absolute;
   inset: 0;
@@ -1078,23 +1044,10 @@ main {
 .float-coral { background: var(--c-coral); color: #fff; box-shadow: 0 4px 0 var(--c-coral-edge); }
 .float-mint { background: var(--c-mint); color: #fff; box-shadow: 0 4px 0 var(--c-mint-edge); }
 
-/* Bigger letter tiles that flip in */
-.word {
-  grid-template-columns: repeat(var(--letters), minmax(0, 54px));
-  perspective: 600px;
-}
-
-.tile {
-  font-size: clamp(1.1rem, calc(70vw / var(--letters)), 2rem);
-}
-
+/* Letter tiles flip in */
 .tile.is-revealed,
 .tile.is-missed {
   animation: tile-flip 520ms cubic-bezier(0.3, 1.5, 0.5, 1) both;
-}
-
-.board.is-shaking .board-main {
-  animation: none;
 }
 
 .board.is-shaking .word,
@@ -1190,17 +1143,6 @@ main {
 }
 
 @media (min-width: 900px) {
-  .figure-box {
-    height: 320px !important;
-  }
-
-  .stage-mascot {
-    width: 96px;
-    height: 104px;
-    left: 18px;
-    bottom: 12px;
-  }
-
   .key {
     height: 56px;
     font-size: 1.3rem;
@@ -1237,11 +1179,6 @@ main {
 
 @keyframes bump {
   50% { transform: scale(1.18); }
-}
-
-/* Kids: the picture clue needs room, so the figure is a bit smaller */
-body.is-kids .figure-box {
-  height: clamp(140px, 22vh, 300px) !important;
 }
 
 /* Keep the game title on one line */
@@ -1980,4 +1917,1001 @@ body.is-kids .figure-box {
 @keyframes snow {
   from { transform: translateY(0); }
   to { transform: translateY(100px); }
+}
+
+/* =========================================================
+   v4: the riddle game. Riddle and word in the middle,
+   a small figure, hearts with "5 lives left".
+   ========================================================= */
+.board-main {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* The stage card: small figure (with Tilo) on the left, the riddle on the right */
+.stage-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  padding: 12px 16px 12px 12px;
+  border: 2px solid var(--border);
+  border-radius: 26px;
+  background: var(--surface);
+  box-shadow: 0 5px 0 var(--card-edge);
+}
+
+.figure-stage {
+  position: relative;
+  align-self: stretch;
+  min-height: 108px;
+}
+
+.figure-box {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse 70% 24% at 50% 100%, var(--accent-soft) 0 98%, transparent 100%),
+    var(--surface-2);
+  overflow: hidden;
+}
+
+.figure-box .figure {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+}
+
+.stage-mascot {
+  position: absolute;
+  left: -8px;
+  bottom: -10px;
+  width: 40px;
+  height: 44px;
+  pointer-events: none;
+}
+
+/* The riddle itself: the most important text on the screen */
+.riddle {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.riddle-label {
+  display: inline-flex;
+  justify-self: start;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  background: var(--c-sun);
+  color: var(--c-ink);
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.riddle-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 5.2vw, 1.85rem);
+  font-weight: 600;
+  line-height: 1.22;
+  text-wrap: balance;
+}
+
+.riddle.is-hidden-riddle .riddle-label {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.riddle-note {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.tilo-says {
+  color: var(--accent-strong);
+  font-weight: 800;
+  font-size: var(--text-sm);
+}
+
+.tilo-says:empty {
+  display: none;
+}
+
+.tilo-says.is-new {
+  animation: pop-in 400ms var(--ease) both;
+}
+
+/* Hearts with a text: "5 lives left" */
+.lives {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.lives[hidden] {
+  display: none;
+}
+
+.hearts {
+  display: flex;
+  gap: 1px;
+}
+
+.heart {
+  display: grid;
+  color: #ff4d6d;
+  transition: transform 300ms var(--ease), color 300ms;
+}
+
+.heart .icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  stroke: none;
+}
+
+.heart.is-lost {
+  color: var(--text-muted);
+  opacity: 0.45;
+  transform: scale(0.8);
+}
+
+.heart.is-lost .icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.lives-text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.lives.is-low .lives-text {
+  color: var(--danger);
+}
+
+/* Big letter tiles in the middle */
+.word {
+  --letters: 6;
+  display: grid;
+  grid-template-columns: repeat(var(--letters), minmax(0, 64px));
+  justify-content: center;
+  gap: clamp(4px, 1.4vw, 10px);
+  perspective: 600px;
+}
+
+.tile {
+  aspect-ratio: 5 / 6;
+  font-size: clamp(1.3rem, calc(78vw / var(--letters)), 2.4rem);
+}
+
+/* Kids world: the big picture takes the place of the figure */
+.kids-picture {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.kids-picture .picture {
+  width: 88%;
+  height: 88%;
+}
+
+.kids-picture.is-won {
+  animation: bump 600ms var(--ease) 2;
+}
+
+/* The Kids world feels like its own place: no coins, streaks or main menu */
+body.is-kids .header-stats .pill,
+body.is-kids .main-nav,
+body.is-kids .tab-bar {
+  display: none;
+}
+
+body.is-kids .stage-card {
+  grid-template-columns: 132px minmax(0, 1fr);
+}
+
+body.is-kids .riddle-text {
+  font-size: clamp(1.2rem, 5vw, 1.9rem);
+}
+
+body.is-kids .word {
+  grid-template-columns: repeat(var(--letters), minmax(0, 76px));
+}
+
+body.is-kids .tile {
+  border-radius: 16px;
+  font-size: clamp(1.8rem, calc(60vw / var(--letters)), 3rem);
+}
+
+/* Kids keyboard: only a few big, colorful keys */
+.keyboard.is-small-set {
+  --key-size: 84px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: calc(var(--key-size) * 3 + 20px);
+  margin: 0 auto;
+}
+
+.keyboard.is-small-set .key {
+  flex: 0 0 var(--key-size);
+  height: 72px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-size: 2rem;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.keyboard.is-small-set .key[data-color="0"] { background: var(--c-sky); box-shadow: 0 5px 0 var(--c-sky-edge); }
+.keyboard.is-small-set .key[data-color="1"] { background: var(--c-coral); box-shadow: 0 5px 0 var(--c-coral-edge); }
+.keyboard.is-small-set .key[data-color="2"] { background: var(--c-sun); box-shadow: 0 5px 0 var(--c-sun-edge); color: var(--c-ink); text-shadow: none; }
+.keyboard.is-small-set .key[data-color="3"] { background: var(--c-berry); box-shadow: 0 5px 0 var(--c-berry-edge); }
+.keyboard.is-small-set .key[data-color="4"] { background: #ff9f1c; box-shadow: 0 5px 0 #d97f06; }
+.keyboard.is-small-set .key[data-color="5"] { background: #7b6cf6; box-shadow: 0 5px 0 #5a4bd1; }
+
+/* A found letter turns white with a green edge, so it looks "done" */
+.keyboard.is-small-set .key.is-correct {
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--c-mint) inset;
+  color: var(--c-mint-edge);
+  text-shadow: none;
+  transform: translateY(3px);
+}
+
+.keyboard.is-small-set .key.is-wrong {
+  background: var(--surface-3);
+  box-shadow: none;
+  color: var(--text-muted);
+  text-shadow: none;
+  opacity: 0.6;
+}
+
+.key.is-glowing {
+  outline: 4px solid var(--c-sun);
+  outline-offset: 3px;
+  animation: glow 1s ease-in-out infinite;
+}
+
+@keyframes glow {
+  50% { transform: translateY(-4px) scale(1.06); }
+}
+
+/* "Shall we make it easier?" card in the result */
+.adapt-card {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  margin: 0 var(--space-5) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--c-sun);
+  border-radius: 20px;
+  background: var(--yellow-soft);
+  text-align: left;
+  animation: pop-in 400ms var(--ease) both;
+}
+
+.adapt-mascot {
+  width: 64px;
+  height: 70px;
+}
+
+.adapt-body {
+  display: grid;
+  gap: 6px;
+}
+
+.adapt-body p {
+  font-size: var(--text-sm);
+}
+
+.adapt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: 4px;
+}
+
+.adapt-actions .button {
+  min-height: 40px;
+  padding: 0 14px;
+  font-size: var(--text-sm);
+}
+
+.adapt-card.is-done {
+  align-items: center;
+}
+
+/* Kids result: the new sticker */
+.sticker-reveal {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin-bottom: var(--space-3);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.sticker {
+  display: grid;
+  place-items: center;
+  width: 108px;
+  height: 108px;
+  border: 5px solid #ffffff;
+  border-radius: 50%;
+  background: var(--yellow-soft);
+  box-shadow: 0 4px 0 var(--card-edge), var(--shadow-md);
+  transform: rotate(-6deg);
+}
+
+.sticker .picture {
+  width: 76px;
+  height: 76px;
+}
+
+.sticker-reveal.is-new .sticker {
+  animation: sticker-in 700ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+
+@keyframes sticker-in {
+  0% { transform: scale(0.2) rotate(-40deg); opacity: 0; }
+  100% { transform: rotate(-6deg); opacity: 1; }
+}
+
+@media (min-width: 700px) {
+  .stage-card {
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: var(--space-5);
+    padding: 16px 24px 16px 16px;
+  }
+
+  .figure-stage {
+    min-height: 170px;
+  }
+
+  .stage-mascot {
+    width: 56px;
+    height: 62px;
+  }
+
+  .heart .icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  body.is-kids .stage-card {
+    grid-template-columns: 200px minmax(0, 1fr);
+  }
+
+  body.is-kids .figure-stage {
+    min-height: 200px;
+  }
+
+  .keyboard.is-small-set {
+    --key-size: 96px;
+    max-width: calc(var(--key-size) * 5 + 48px);
+    gap: 12px;
+  }
+
+  .keyboard.is-small-set .key {
+    height: 84px;
+    font-size: 2.3rem;
+  }
+}
+
+/* =========================================================
+   Kids world page: sunny hero with hills and the sticker book
+   ========================================================= */
+.kids-page {
+  display: grid;
+  gap: var(--space-5);
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-6);
+}
+
+.kids-hero {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+  justify-items: center;
+  padding: var(--space-5) var(--space-4) 88px;
+  border-radius: 32px;
+  background:
+    radial-gradient(ellipse 60% 70px at 20% 100%, #4cc27c 0 98%, transparent 100%),
+    radial-gradient(ellipse 70% 90px at 85% 100%, #2fae66 0 98%, transparent 100%),
+    radial-gradient(circle at 88% 18%, #fff3b0 0 34px, transparent 35px),
+    radial-gradient(circle at 88% 18%, rgba(255, 243, 176, 0.45) 0 54px, transparent 55px),
+    linear-gradient(180deg, #ffb347, #ff8a5c);
+  box-shadow: 0 6px 0 #d9693e, var(--shadow-md);
+  color: #ffffff;
+  text-align: center;
+  overflow: hidden;
+}
+
+[data-color="dark"] .kids-hero {
+  background:
+    radial-gradient(ellipse 60% 70px at 20% 100%, #1f6b45 0 98%, transparent 100%),
+    radial-gradient(ellipse 70% 90px at 85% 100%, #195a3a 0 98%, transparent 100%),
+    radial-gradient(circle at 88% 18%, #f4e3a0 0 30px, transparent 31px),
+    linear-gradient(180deg, #8a4a2a, #5b2f22);
+  box-shadow: 0 6px 0 #2c160f, var(--shadow-md);
+}
+
+.kids-hero-mascot {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+}
+
+.kids-hero-content {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+}
+
+.kids-hero h1 {
+  font-size: clamp(2.2rem, 9vw, 3.4rem);
+  line-height: 1.05;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+}
+
+.kids-intro {
+  max-width: 38ch;
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.sticker-book {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}
+
+.sticker-book-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.sticker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: var(--space-4) var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sticker-slot {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+}
+
+.sticker-slot .sticker {
+  width: 80px;
+  height: 80px;
+  transform: rotate(var(--tilt, -4deg));
+}
+
+.sticker-slot .sticker .picture {
+  width: 56px;
+  height: 56px;
+}
+
+.sticker-empty {
+  border: 3px dashed var(--border);
+  background: var(--surface-2);
+  box-shadow: none;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  transform: none !important;
+}
+
+.sticker-word {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.sticker-times {
+  position: absolute;
+  top: -4px;
+  right: calc(50% - 46px);
+  padding: 0 7px;
+  border-radius: var(--radius-full);
+  background: var(--c-coral);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.kids-parents {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: center;
+  max-width: 60ch;
+  margin: 0 auto;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .kids-hero {
+    grid-template-columns: auto 1fr;
+    justify-items: start;
+    align-items: center;
+    padding: var(--space-7) var(--space-8) 110px var(--space-7);
+    text-align: left;
+  }
+
+  .kids-hero-content {
+    justify-items: start;
+  }
+}
+
+@media (max-width: 899px) {
+  /* Phones: smaller stickers, five in a row, and the sun moves out of Tilo's way */
+  .sticker-grid {
+    grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+    gap: var(--space-3) var(--space-2);
+  }
+
+  .sticker-slot .sticker {
+    width: 56px;
+    height: 56px;
+    border-width: 3px;
+  }
+
+  .sticker-slot .sticker .picture {
+    width: 38px;
+    height: 38px;
+  }
+
+  .sticker-empty {
+    font-size: 1.2rem;
+  }
+
+  .sticker-word {
+    font-size: 0.75rem;
+  }
+
+  .sticker-times {
+    right: calc(50% - 34px);
+  }
+
+  .sticker-book {
+    padding: var(--space-4);
+  }
+
+  .kids-hero {
+    background:
+      radial-gradient(ellipse 60% 70px at 20% 100%, #4cc27c 0 98%, transparent 100%),
+      radial-gradient(ellipse 70% 90px at 85% 100%, #2fae66 0 98%, transparent 100%),
+      radial-gradient(circle at 92% 46%, #fff3b0 0 22px, transparent 23px),
+      linear-gradient(180deg, #ffb347, #ff8a5c);
+  }
+}
+
+/* =========================================================
+   v4 home: compact chest + offline tip next to the missions,
+   the Kids world banner and four mode tiles
+   ========================================================= */
+.home-rewards {
+  grid-template-areas: "chest" "missions" "offline";
+}
+
+.chest-card { grid-area: chest; }
+.missions-card { grid-area: missions; }
+.offline-strip { grid-area: offline; }
+
+.home-rewards .chest-card {
+  grid-template-columns: 72px 1fr auto;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+}
+
+.chest-card > .button {
+  grid-column: auto;
+}
+
+.home-rewards .chest-art .illustration {
+  width: 72px;
+  height: 60px;
+}
+
+.chest-text h2 {
+  font-size: var(--text-lg);
+}
+
+.chest-text p {
+  font-size: var(--text-sm);
+  line-height: 1.35;
+}
+
+.offline-strip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 2px dashed var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.offline-strip p {
+  flex: 1;
+}
+
+.offline-strip .button {
+  min-height: 38px;
+  padding: 0 14px;
+  font-size: var(--text-sm);
+}
+
+.offline-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+@media (max-width: 480px) {
+  .home-rewards .chest-card {
+    grid-template-columns: 60px 1fr;
+  }
+
+  .home-rewards .chest-card > .button {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 900px) {
+  .home-rewards {
+    grid-template-columns: 1fr 1.4fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "chest missions"
+      "chest missions"
+      "offline missions";
+  }
+
+  .home-rewards .chest-card {
+    grid-template-columns: 110px 1fr;
+    align-content: center;
+  }
+
+  .home-rewards .chest-card > .button {
+    grid-column: 1 / -1;
+  }
+
+  .home-rewards .chest-art .illustration {
+    width: 110px;
+    height: 92px;
+  }
+}
+
+/* Kids world banner: its own sunny world with its own button */
+.kids-banner {
+  position: relative;
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+  padding: var(--space-5) var(--space-5) 64px;
+  border-radius: 28px;
+  background:
+    radial-gradient(ellipse 55% 46px at 18% 100%, #4cc27c 0 98%, transparent 100%),
+    radial-gradient(ellipse 65% 60px at 88% 100%, #2fae66 0 98%, transparent 100%),
+    linear-gradient(180deg, #ffb347, #ff8a5c);
+  box-shadow: 0 6px 0 #d9693e;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+[data-color="dark"] .kids-banner {
+  background:
+    radial-gradient(ellipse 55% 46px at 18% 100%, #1f6b45 0 98%, transparent 100%),
+    radial-gradient(ellipse 65% 60px at 88% 100%, #195a3a 0 98%, transparent 100%),
+    linear-gradient(180deg, #8a4a2a, #5b2f22);
+  box-shadow: 0 6px 0 #2c160f;
+}
+
+.kids-banner h2 {
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+.kids-banner .eyebrow {
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.kids-banner-text {
+  display: grid;
+  gap: 4px;
+  max-width: 46ch;
+  font-weight: 700;
+}
+
+.kids-banner-stickers:empty {
+  display: none;
+}
+
+.kids-banner-art {
+  display: flex;
+  gap: 6px;
+}
+
+.kids-banner-art .sticker {
+  width: 58px;
+  height: 58px;
+  border-width: 3px;
+}
+
+.kids-banner-art .sticker:nth-child(even) {
+  transform: rotate(7deg) translateY(4px);
+}
+
+.kids-banner-art .picture {
+  width: 40px;
+  height: 40px;
+}
+
+@media (min-width: 768px) {
+  .kids-banner {
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-5);
+    padding: var(--space-5) var(--space-6) var(--space-7);
+  }
+
+  .kids-banner-art {
+    display: grid;
+    grid-template-columns: repeat(2, 64px);
+  }
+
+  .kids-banner-art .sticker {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+/* Four mode tiles: 2 x 2, and one row on wide screens */
+@media (min-width: 768px) {
+  .mode-tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mode-tile:last-child:nth-child(3n + 2) {
+    grid-column: auto;
+  }
+}
+
+@media (min-width: 1100px) {
+  .mode-tiles {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .mode-art {
+    width: 110px;
+    height: 92px;
+  }
+}
+
+/* Home bottom: the dictionary card stacks, so it fills its height without a gap */
+@media (min-width: 900px) {
+  .home-bottom .teaser-card {
+    grid-template-columns: auto 1fr;
+    align-content: space-between;
+  }
+
+  .home-bottom .teaser-card > .button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+/* =========================================================
+   v4 level map: an illustrated landscape per world
+   ========================================================= */
+.levels-page {
+  max-width: 760px;
+}
+
+.level-map {
+  --map-road: #f3dfb5;
+  --map-road-edge: #dcc08a;
+  --map-water: #6cc4f7;
+  border: 2px solid var(--border);
+  box-shadow: 0 6px 0 var(--card-edge);
+}
+
+.map-stage {
+  overflow: hidden;
+}
+
+.stage-warmup {
+  --map-hill-1: #7fd492;
+  --map-hill-2: #a9e4b2;
+  background: linear-gradient(180deg, #e3f7e6, #c8efcf);
+}
+
+.stage-climb {
+  --map-hill-1: #4fb07e;
+  --map-hill-2: #8fd1a8;
+  background: linear-gradient(180deg, #d9f1ea, #b4e3cc);
+}
+
+.stage-expert {
+  --map-hill-1: #f2c27a;
+  --map-hill-2: #e9976a;
+  background: linear-gradient(180deg, #ffe9c7, #fcd9a4);
+}
+
+.stage-summit {
+  --map-hill-1: #dbe8f7;
+  --map-hill-2: #9fb6d6;
+  background: linear-gradient(180deg, #cfe6ff, #eef6ff);
+}
+
+[data-color="dark"] .stage-warmup { --map-hill-1: #2c6b45; --map-hill-2: #22543a; background: linear-gradient(180deg, #16301f, #1c3d28); }
+[data-color="dark"] .stage-climb { --map-hill-1: #22644a; --map-hill-2: #1b4d3a; background: linear-gradient(180deg, #13302a, #183b31); }
+[data-color="dark"] .stage-expert { --map-hill-1: #7a5a2c; --map-hill-2: #6a3f2a; background: linear-gradient(180deg, #2e2214, #3a2a17); }
+[data-color="dark"] .stage-summit { --map-hill-1: #3a4d6e; --map-hill-2: #2b3b58; background: linear-gradient(180deg, #172540, #1d2d4d); }
+[data-color="dark"] .level-map { --map-road: #5b4c35; --map-road-edge: #43382a; --map-water: #2f6f9e; }
+
+.map-backdrop {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 46%;
+  max-height: 420px;
+}
+
+.stage-label {
+  z-index: 3;
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.map-path {
+  z-index: 1;
+}
+
+.map-path .road-edge {
+  stroke: var(--map-road-edge);
+  stroke-width: 30;
+}
+
+.map-path .road {
+  stroke: var(--map-road);
+  stroke-width: 22;
+}
+
+.map-path .road-done {
+  stroke: var(--accent);
+  stroke-width: 6;
+  stroke-dasharray: 2 12;
+}
+
+.map-deco {
+  position: absolute;
+  z-index: 1;
+  width: var(--size, 44px);
+  height: var(--size, 44px);
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+}
+
+.map-sprite {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.map-cloud-wrap {
+  position: absolute;
+  z-index: 1;
+  width: 96px;
+  pointer-events: none;
+  opacity: 0.85;
+  animation: cloud-drift var(--drift, 20s) ease-in-out infinite alternate;
+}
+
+[data-color="dark"] .map-cloud-wrap {
+  opacity: 0.18;
+}
+
+.map-cloud {
+  display: block;
+  width: 100%;
+  filter: drop-shadow(0 3px 0 rgba(31, 66, 128, 0.08));
+}
+
+.map-levels {
+  z-index: 2;
+}
+
+@keyframes cloud-drift {
+  from { transform: translateX(-24px); }
+  to { transform: translateX(24px); }
+}
+
+@media (min-width: 700px) {
+  .map-deco {
+    width: calc(var(--size, 44px) * 1.45);
+    height: calc(var(--size, 44px) * 1.45);
+  }
+
+  .map-cloud-wrap {
+    width: 130px;
+  }
+}
+
+@media (max-width: 480px) {
+  .adapt-card {
+    grid-template-columns: 44px minmax(0, 1fr);
+    margin: 0 var(--space-3) var(--space-4);
+    padding: var(--space-3);
+  }
+
+  .adapt-mascot {
+    width: 44px;
+    height: 48px;
+  }
+
+  .adapt-actions .button {
+    flex: 1 1 100%;
+    white-space: normal;
+  }
+}
+
+/* v4: no half-empty cards on the stats and dictionary pages */
+.stats-side {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.stats-side .card {
+  margin: 0;
+}
+
+.bar-chart .empty {
+  padding: var(--space-5) 0;
+  text-align: center;
+}
+
+.word-list .empty-state {
+  grid-column: 1 / -1;
 }

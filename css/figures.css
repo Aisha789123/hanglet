@@ -358,13 +358,6 @@
   opacity: 0.4;
 }
 
-.figure-rocket .outline {
-  fill: none;
-  stroke: var(--border);
-  stroke-width: 2;
-  stroke-dasharray: 5 5;
-}
-
 .figure-rocket .part {
   opacity: 0;
   transform: translateY(-10px);
@@ -434,10 +427,6 @@
 
 .figure-rocket.is-shaking .rocket {
   animation: rumble 300ms linear;
-}
-
-.figure-rocket.is-won .outline {
-  opacity: 0;
 }
 
 .figure-rocket.is-won .flame {
@@ -532,14 +521,4 @@
 .figure-balloon .burst {
   transform-box: fill-box;
   transform-origin: center;
-}
-
-/* Classic: a faint sketch of the whole figure, so the stage is never empty */
-.figure-classic .ghost {
-  fill: none;
-  stroke: var(--text-muted);
-  stroke-width: 3;
-  stroke-dasharray: 2 7;
-  stroke-linecap: round;
-  opacity: 0.35;
 }

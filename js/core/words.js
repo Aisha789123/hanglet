@@ -5,6 +5,7 @@ import KIDS from "../../data/kids.js";
 import { language, t } from "./i18n.js";
 import { pickRandom } from "./random.js";
 import { isWinterSeason } from "./season.js";
+import { isKidsLength } from "./kids.js";
 
 const WORD_LISTS = { en: EN_WORDS, nl: NL_WORDS };
 
@@ -20,14 +21,6 @@ export const LENGTHS = [
   { id: "long", min: 8, max: 99 },
 ];
 
-export const DIFFICULTIES = [
-  { id: "easy", lives: 8 },
-  { id: "normal", lives: 6 },
-  { id: "hard", lives: 4 },
-];
-
-export const KIDS_LIVES = 10;
-
 // Every word of a language with its category and description
 export function getAllWords(lang = language) {
   const list = WORD_LISTS[lang] || WORD_LISTS.en;
@@ -36,9 +29,10 @@ export function getAllWords(lang = language) {
   );
 }
 
-// Kids words: short words with a picture
+// Kids words: short words (3-5 letters) with a picture.
+// A picture without a word in this language is skipped.
 export function getKidsWords(lang = language) {
-  return KIDS.map((item) => ({
+  return KIDS.filter((item) => item[lang] && isKidsLength(item[lang][0])).map((item) => ({
     word: item[lang][0],
     description: item[lang][1],
     category: item.category,
@@ -51,11 +45,6 @@ export const KIDS_WORDS = getKidsWords();
 
 export function getCategoryName(id) {
   return t(`categories.${id}`);
-}
-
-export function getLives(difficultyId) {
-  const difficulty = DIFFICULTIES.find((item) => item.id === difficultyId);
-  return difficulty ? difficulty.lives : 6;
 }
 
 // All words that match a category ("mixed" = all) and a length id

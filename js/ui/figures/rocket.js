@@ -16,7 +16,6 @@ export function createRocket(container) {
         <path class="part fin" data-part="5" d="M82 128l-16 28h16z"/>
         <path class="part fin" data-part="6" d="M118 128l16 28h-16z"/>
         <rect class="part stripe" data-part="7" x="82" y="136" width="36" height="6"/>
-        <path class="outline" d="M82 156V84q18-48 36 0v72z"/>
       </g>
       <g class="smoke"><circle cx="78" cy="168" r="10"/><circle cx="100" cy="174" r="12"/><circle cx="122" cy="168" r="10"/></g>
       <rect class="pad" x="58" y="166" width="84" height="9" rx="4.5"/>

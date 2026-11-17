@@ -16,7 +16,7 @@
     "badges": "Badges"
   },
   "footer": {
-    "tagline": "Een rustig woordspel, letter voor letter.",
+    "tagline": "Een vrolijk woordspel, raadsel voor raadsel.",
     "note": "Je voortgang blijft op dit apparaat."
   },
   "header": {
@@ -40,11 +40,11 @@
   },
   "welcome": {
     "title": "Welkom bij Hanglet",
-    "text": "Een rustig woordspel voor elke dag. We zetten het even voor je klaar.",
+    "text": "Een vrolijk woordspel voor iedereen vanaf 8 jaar. We zetten het even voor je klaar.",
     "language": "Taal",
     "who": "Wie speelt er?",
-    "everyone": "Iedereen",
-    "kids": "Kinderen (6+)",
+    "everyone": "Iedereen (8+)",
+    "kids": "Kids (6–9)",
     "start": "Aan de slag"
   },
   "tour": {
@@ -55,13 +55,15 @@
     "step": "Stap {step} van {total}",
     "word": "Dit is het verborgen woord. Elk vakje is één letter.",
     "category": "De categorie is je eerste hint.",
-    "picture": "Kijk naar het plaatje en de hint. Die helpen je het woord te vinden!",
+    "picture": "Kijk naar het plaatje en lees het raadsel. Zo vind je het woord!",
     "keyboard": "Tik op een letter om te raden. Probeer het maar!",
     "goodGuess": "Goed zo! Die letter zit in het woord.",
     "wrongGuess": "Die letter zit niet in het woord. Geeft niks, probeer verder!",
-    "figure": "Elke foute letter verandert het figuur. Vind het woord voordat het af is.",
-    "hints": "Kom je er niet uit? Gebruik een hint: een omschrijving, een letter of foute letters wegstrepen.",
-    "hintsFree": "Kom je er niet uit? Tik op Hint. In de Kids-modus zijn hints gratis!"
+    "figure": "Elke foute letter kost een hartje. Vind het woord voordat je hartjes op zijn!",
+    "hints": "Kom je er niet uit? Gebruik een hint: laat een letter zien of haal foute letters weg.",
+    "hintsFree": "Kom je er niet uit? Tik op Help, dan helpt Tilo je.",
+    "riddle": "Dit is het raadsel van Tilo. Het vertelt je wat het woord is!",
+    "kidsKeyboard": "Alleen deze letters! Tik er een aan."
   },
   "keyboard": {
     "label": "Letters",
@@ -97,7 +99,10 @@
   "difficulty": {
     "easy": "Makkelijk",
     "normal": "Normaal",
-    "hard": "Moeilijk"
+    "hard": "Moeilijk",
+    "easyDetail": "Raadsel + eerste letter cadeau · 8 levens",
+    "normalDetail": "Raadsel in beeld · 7 levens",
+    "hardDetail": "Alleen de categorie · 6 levens"
   },
   "setup": {
     "category": "Categorie",
@@ -115,7 +120,15 @@
     "letterWrong": "{letter} zit niet in het woord. Nog {count} levens.",
     "blank": "leeg",
     "wordLabel": "Woord met {count} letters: {letters}",
-    "livesLabel": "Nog {left} van de {total} levens"
+    "livesLabel": "Nog {left} van de {total} levens",
+    "lives": {
+      "one": "{count} leven over",
+      "other": "{count} levens over"
+    },
+    "riddle": "Raadsel",
+    "noRiddle": "Op Moeilijk geen raadsel, alleen de categorie. Kom je er niet uit? Koop het raadsel als hint.",
+    "freeLetter": "Makkelijk: de eerste letter krijg je cadeau.",
+    "noChallengeRiddle": "Je vriend gaf geen raadsel mee. Succes!"
   },
   "hints": {
     "button": "Hint",
@@ -127,7 +140,7 @@
     "letterShown": "Hint: {letter} zit in het woord.",
     "lettersRemoved": "Hint: {letters} zitten niet in het woord.",
     "description": {
-      "title": "Omschrijving tonen",
+      "title": "Toon het raadsel",
       "text": "Een korte zin over het woord"
     },
     "letter": {
@@ -185,9 +198,9 @@
       "timeUp": "De tijd is om!"
     },
     "kids": {
-      "title": "Kids",
-      "subtitle": "Makkelijke woorden met een plaatje",
-      "text": "Korte, makkelijke woorden met een plaatje. Grote knoppen en gratis hints."
+      "title": "Kidswereld",
+      "subtitle": "Korte woorden met een plaatje",
+      "text": "Korte woorden met een plaatje. Je kunt niet verliezen en je spaart stickers."
     },
     "challenge": {
       "title": "Daag een vriend uit",
@@ -196,11 +209,27 @@
   },
   "kids": {
     "pictureLabel": "Plaatje als hint",
-    "eyebrowWin": "Goed gedaan!",
-    "eyebrowLose": "Goed geprobeerd!",
     "win": "Je hebt hem!",
-    "lose": "Bijna! We proberen een ander woord",
-    "next": "Volgend woord"
+    "next": "Volgend woord",
+    "world": "Kidswereld",
+    "intro": "Korte woorden met een plaatje. Tilo helpt je, en elk woord geeft een sticker!",
+    "play": "Spelen maar!",
+    "hello": "Hoi! Zullen we samen woorden zoeken?",
+    "stickers": "Mijn stickers",
+    "stickerCount": "{count} van {total} stickers",
+    "stickerBook": "Stickerboek",
+    "newSticker": "Nieuwe sticker!",
+    "stickerAgain": "Je hebt deze sticker nu {count} keer",
+    "notFound": "Nog niet gevonden",
+    "compliments": "Super!|Goed zo!|Jij bent een ster!|Fantastisch!|Hoera!|Knap hoor!",
+    "together": "Samen gelukt!",
+    "tryOther": "Die zit er niet in. Probeer een andere letter!",
+    "glow": "Psst… probeer de letter die licht geeft!",
+    "fill": "Ik help je: hier komt de {letter}!",
+    "help": "Help",
+    "helpLabel": "Vraag Tilo om hulp",
+    "forParents": "Voor ouders: geen munten, geen klok en je kunt niet verliezen. Woorden hebben 3 tot 5 letters en altijd een plaatje en een korte zin.",
+    "backToHanglet": "Terug naar Hanglet"
   },
   "result": {
     "solved": "Geraden!",
@@ -258,8 +287,8 @@
     "summit": "De top"
   },
   "home": {
-    "title": "Raad het woord, letter voor letter.",
-    "intro": "Hanglet is een rustig woordspel voor alle leeftijden. Kies een letter, vul het woord in en red je figuur. Elke dag nieuwe dagwoorden.",
+    "title": "Los het raadsel op, letter voor letter.",
+    "intro": "Tilo geeft je een raadsel, jij zoekt de letters. Een vrolijk woordspel voor iedereen vanaf 8 jaar, met elke dag drie nieuwe dagwoorden.",
     "playDaily": "Speel het dagwoord",
     "progressLabel": "Jouw voortgang",
     "chooseMode": "Kies een spel",
@@ -273,7 +302,7 @@
     "levelsAllDone": "Alle levels gehaald",
     "timedBest": "Record: {count} woorden",
     "timedNew": "2 minuten op de klok",
-    "kidsStatus": "Voor kinderen vanaf 6 jaar",
+    "kidsStatus": "Voor kinderen van 6 tot 9",
     "dictionaryTitle": "Mijn woordenboek",
     "dictionaryCount": "Je hebt {count} woorden verzameld.",
     "dictionaryEmpty": "Elk woord dat je raadt komt hier, met de betekenis erbij.",
@@ -295,7 +324,12 @@
     "newWordsIn": "Nieuwe woorden over",
     "classicStatus": "Kies je eigen categorie",
     "levelsNext": "Volgende: level {next}",
-    "challengeStatus": "Kies een woord, stuur een link"
+    "challengeStatus": "Kies een woord, stuur een link",
+    "kidsTitle": "Kidswereld",
+    "kidsText": "Korte woorden met een plaatje. Tilo helpt, je kunt niet verliezen en je spaart stickers.",
+    "kidsButton": "Naar de Kidswereld",
+    "kidsStickers": "{count} stickers gespaard",
+    "offlineShort": "Speel offline: zet Hanglet op je beginscherm."
   },
   "dictionary": {
     "title": "Mijn woordenboek",
@@ -351,8 +385,8 @@
     "title": "Instellingen",
     "intro": "Stel Hanglet in zoals jij het fijn vindt.",
     "language": "Taal",
-    "kidsFirst": "Kids-modus bovenaan",
-    "kidsFirstHelp": "Zet de Kids-modus bovenaan op de startpagina",
+    "kidsFirst": "Toon de Kidswereld eerst",
+    "kidsFirstHelp": "Zet de Kidswereld bovenaan de homepage",
     "appearance": "Uiterlijk",
     "colorMode": "Kleurmodus",
     "system": "Systeem",
@@ -395,7 +429,9 @@
     "resetConfirm": "Ja, wissen",
     "resetDone": "Je voortgang is gewist.",
     "music": "Achtergrondmuziek",
-    "musicHelp": "Rustige, zachte muziek tijdens het spelen"
+    "musicHelp": "Vrolijke, huppelende muziek tijdens het spelen",
+    "difficulty": "Moeilijkheid",
+    "difficultyHelp": "Voor het dagwoord, Klassiek, Levels en Tegen de klok. Nieuwe spelers beginnen op Makkelijk."
   },
   "themes": {
     "ocean": "Oceaan",
@@ -500,7 +536,7 @@
     },
     "kids-win": {
       "name": "Kleine ster",
-      "description": "Win een spel in de Kids-modus"
+      "description": "Los een woord op in de Kidswereld"
     },
     "dictionary-25": {
       "name": "Verzamelaar",
@@ -595,13 +631,17 @@
     "play": "Speel"
   },
   "seo": {
+    "404": {
+      "title": "Pagina niet gevonden – Hanglet",
+      "description": "Deze pagina bestaat niet."
+    },
     "index": {
       "title": "Hanglet – Een vrolijk woordspel voor elke dag",
-      "description": "Raad het woord letter voor letter met Tilo. Dagwoord, 40 levels, Tegen de klok, Kids-modus en uitdagingen voor vrienden. Gratis, in het Nederlands en Engels."
+      "description": "Los de raadsels van Tilo op, letter voor letter. Dagwoord, 40 levels, Tegen de klok, een Kidswereld voor 6 tot 9 jaar en uitdagingen voor vrienden. Gratis, in het Nederlands en Engels."
     },
     "play": {
       "title": "Spelen – Hanglet",
-      "description": "Raad het woord letter voor letter voordat je figuur af is."
+      "description": "Lees het raadsel en vind het woord, letter voor letter, voordat je hartjes op zijn."
     },
     "levels": {
       "title": "Levelkaart – Hanglet",
@@ -633,15 +673,24 @@
     },
     "about": {
       "title": "Over – Hanglet",
-      "description": "Over Hanglet, een vrolijk woordspel voor alle leeftijden, gemaakt met gewone HTML, CSS en JavaScript."
+      "description": "Over Hanglet, een vrolijk raadselwoordspel voor iedereen vanaf 8 jaar, met een Kidswereld voor 6 tot 9 jaar."
     },
     "privacy": {
       "title": "Privacy – Hanglet",
       "description": "Geen account en geen cookies. Je voortgang blijft op je eigen apparaat."
     },
-    "404": {
-      "title": "Pagina niet gevonden – Hanglet",
-      "description": "Deze pagina bestaat niet."
+    "kids": {
+      "title": "Kidswereld – Hanglet",
+      "description": "De Kidswereld van Hanglet voor 6 tot 9 jaar: korte woorden met een plaatje, hulp van Tilo, niet verliezen en stickers sparen."
     }
+  },
+  "adapt": {
+    "title": "Zullen we het iets makkelijker maken?",
+    "text": "Twee keer achter elkaar net niet. Dat overkomt iedereen! Op {level} krijg je {extra}.",
+    "easyExtra": "de eerste letter cadeau en 8 levens",
+    "normalExtra": "het raadsel in beeld en 7 levens",
+    "yes": "Ja, maak het makkelijker",
+    "no": "Nee, dank je",
+    "done": "Gelukt! Je speelt nu op {level}."
   }
 }

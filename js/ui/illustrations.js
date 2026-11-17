@@ -36,16 +36,6 @@ const ILLUSTRATIONS = {
     <path d="M60 56V32M60 56l16 10" stroke="#26243a" stroke-width="5" stroke-linecap="round"/>
     <circle cx="60" cy="56" r="5" fill="#ff6b4a"/>`,
 
-  // A balloon and a kite
-  kids: `
-    <path d="M86 8l18 22-18 26-18-26z" fill="#3fa9f5"/>
-    <path d="M86 8v48M68 30h36" stroke="#ffffff" stroke-width="2"/>
-    <path d="M86 56c-6 8 6 12 0 22s6 12 2 18" fill="none" stroke="#26243a" stroke-width="2"/>
-    <ellipse cx="38" cy="38" rx="24" ry="28" fill="#ff6b4a"/>
-    <ellipse cx="29" cy="27" rx="5" ry="9" fill="#fff" opacity=".4" transform="rotate(-20 29 27)"/>
-    <path d="M35 66l3 4 3-4z" fill="#d94d2f"/>
-    <path d="M38 70c-6 8 6 14 0 28" fill="none" stroke="#26243a" stroke-width="2"/>`,
-
   // An envelope with a letter tile
   challenge: `
     <rect x="14" y="30" width="92" height="62" rx="10" fill="#ffffff"/>

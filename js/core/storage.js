@@ -1,6 +1,8 @@
 // Saving and loading all player data in localStorage.
 // There is no server: everything stays on the player's device.
 
+import { DEFAULT_DIFFICULTY } from "./difficulty.js";
+
 export const STORAGE_KEY = "hanglet-data-v1";
 
 function createDefaultData() {
@@ -9,15 +11,15 @@ function createDefaultData() {
       language: null, // null = follow the browser
       colorMode: "system", // "system", "light" or "dark"
       theme: "ocean",
-      figure: "classic",
+      figure: "balloon", // friendly default, the classic figure can be picked in Settings
       textSize: "normal", // "normal" or "large"
       contrast: "normal", // "normal" or "high"
       sound: true,
-      music: false, // calm background music, off by default
+      music: false, // cheerful background music, off by default
       vibration: true,
       reduceMotion: null, // null = follow the device setting
-      kidsFirst: false, // show Kids mode first on the home page
-      options: { category: "mixed", length: "medium", difficulty: "normal" },
+      kidsFirst: false, // show the Kids world first on the home page
+      options: { category: "mixed", length: "medium", difficulty: DEFAULT_DIFFICULTY },
     },
     player: { xp: 0, coins: 40, hintTokens: 0 }, // hintTokens: free hints from the chest
     stats: {
@@ -25,6 +27,7 @@ function createDefaultData() {
       wins: 0,
       losses: 0,
       winStreak: 0,
+      lossStreak: 0, // words lost in a row, for the "make it easier?" offer
       bestWinStreak: 0,
       // missesInWins[3] = number of games won with 3 misses
       missesInWins: [0, 0, 0, 0, 0, 0, 0, 0],
@@ -49,6 +52,7 @@ function createDefaultData() {
     seenThemes: ["ocean"],
     figures: ["classic", "balloon"], // figures the player owns
     dictionary: { en: {}, nl: {} }, // solved words per language
+    kids: { stickers: {}, solved: 0 }, // Kids world: stickers per picture
     chest: { lastOpened: null },
     missions: null, // { date, progress, claimed } for today
     welcomeDone: false,

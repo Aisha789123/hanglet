@@ -21,7 +21,7 @@ const FACES = {
     arms: '<path d="M22 76q-12-4-12-16M98 76q12-4 12-16" class="tilo-arm"/>',
   },
   sad: {
-    eyes: '<g class="tilo-eyes"><ellipse cx="47" cy="65" rx="6.5" ry="7" fill="#fff"/><ellipse cx="73" cy="65" rx="6.5" ry="7" fill="#fff"/><circle cx="47" cy="67" r="3.5" fill="#26243a"/><circle cx="73" cy="67" r="3.5" fill="#26243a"/></g><path d="M39 55l12 3M81 55l-12 3" stroke="#26243a" stroke-width="3" stroke-linecap="round"/><path class="tilo-tear" d="M40 74q-3 6 0 8q3-2 0-8z" fill="#5bb8f5"/>',
+    eyes: '<g class="tilo-eyes"><ellipse cx="47" cy="65" rx="6.5" ry="7" fill="#fff"/><ellipse cx="73" cy="65" rx="6.5" ry="7" fill="#fff"/><circle cx="47" cy="67" r="3.5" fill="#26243a"/><circle cx="73" cy="67" r="3.5" fill="#26243a"/></g><path d="M39 57l12-4M81 57l-12-4" stroke="#26243a" stroke-width="3" stroke-linecap="round"/><path class="tilo-tear" d="M40 74q-3 6 0 8q3-2 0-8z" fill="#5bb8f5"/>',
     mouth: '<path d="M52 87q8-7 16 0" fill="none" stroke="#26243a" stroke-width="3.5" stroke-linecap="round"/>',
     arms: '<path d="M22 84q-6 8-2 16M98 84q6 8 2 16" class="tilo-arm"/>',
   },

@@ -5,7 +5,6 @@ import { language } from "./i18n.js";
 import { seededRandom, shuffle } from "./random.js";
 import { daysBetween, toDateKey } from "./dates.js";
 
-export const DAILY_LIVES = 6;
 const FIRST_DAY = "2026-01-01";
 
 // Daily #1 was on the first day, every day after that adds one
