@@ -30,6 +30,19 @@
   root.dataset.text = settings.textSize || "normal";
   root.dataset.contrast = settings.contrast || "normal";
 
+  // Winter season: 1 December - 6 January (?season=winter or ?season=off to test)
+  var season = null;
+  try {
+    var asked = new URLSearchParams(location.search).get("season");
+    if (asked === "winter" || asked === "off") sessionStorage.setItem("hanglet-season", asked);
+    season = sessionStorage.getItem("hanglet-season");
+  } catch (error) {
+    season = null;
+  }
+  var now = new Date();
+  var isWinter = season ? season === "winter" : now.getMonth() === 11 || (now.getMonth() === 0 && now.getDate() <= 6);
+  if (isWinter) root.dataset.season = "winter";
+
   // Hide English texts until the Dutch texts are filled in (max 1.5 seconds)
   if (language !== "en") {
     root.dataset.translating = "true";

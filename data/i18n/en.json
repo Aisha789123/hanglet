@@ -12,7 +12,8 @@
     "app": "App",
     "howToPlay": "How to play",
     "about": "About",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "badges": "Badges"
   },
   "footer": {
     "tagline": "A calm word game, one letter at a time.",
@@ -28,8 +29,14 @@
     "done": "Done",
     "cancel": "Cancel",
     "backHome": "Back to home",
-    "misses": { "one": "1 miss", "other": "{count} misses" },
-    "lives": { "one": "1 life", "other": "{count} lives" }
+    "misses": {
+      "one": "1 miss",
+      "other": "{count} misses"
+    },
+    "lives": {
+      "one": "1 life",
+      "other": "{count} lives"
+    }
   },
   "welcome": {
     "title": "Welcome to Hanglet",
@@ -73,7 +80,11 @@
     "jobs": "Jobs",
     "science": "Science",
     "music": "Music",
-    "things": "Things"
+    "things": "Things",
+    "colors": "Colors",
+    "clothing": "Clothing",
+    "winter": "Winter",
+    "challenge": "Challenge"
   },
   "lengths": {
     "short": "Short",
@@ -115,14 +126,25 @@
     "notEnough": "You need {coins} coins for this hint.",
     "letterShown": "Hint: {letter} is in the word.",
     "lettersRemoved": "Hint: {letters} are not in the word.",
-    "description": { "title": "Show the description", "text": "A short sentence about the word" },
-    "letter": { "title": "Reveal a letter", "text": "One letter is filled in" },
-    "remove": { "title": "Remove 3 wrong letters", "text": "Three letters that are not in the word disappear" }
+    "description": {
+      "title": "Show the description",
+      "text": "A short sentence about the word"
+    },
+    "letter": {
+      "title": "Reveal a letter",
+      "text": "One letter is filled in"
+    },
+    "remove": {
+      "title": "Remove 3 wrong letters",
+      "text": "Three letters that are not in the word disappear"
+    },
+    "tokens": {
+      "one": "You have 1 free hint from your chest",
+      "other": "You have {count} free hints from your chest"
+    }
   },
   "modes": {
     "daily": {
-      "title": "Daily",
-      "text": "Three words a day, the same for everyone. About 5 minutes.",
       "titleNumber": "Daily #{number}",
       "progress": "Word {index} of {total}",
       "wordOf": "Word {index} of {total}",
@@ -130,14 +152,14 @@
       "comeBack": "Come back tomorrow for new words",
       "doneTitle": "You solved {solved} of {total} today",
       "next": "Next Daily",
-      "playClassic": "Play Classic",
       "dotsLabel": "Daily progress",
       "dotSolved": "solved",
       "dotMissed": "missed",
       "dotCurrent": "now playing",
       "dotTodo": "to do",
       "wordNumber": "Word {number}",
-      "notSolved": "not solved"
+      "notSolved": "not solved",
+      "playMore": "Play more"
     },
     "classic": {
       "title": "Classic",
@@ -156,13 +178,20 @@
       "solved": "{count} solved",
       "newBest": "New personal best!",
       "best": "Best: {count}",
-      "result": { "one": "1 word solved", "other": "{count} words solved" },
+      "result": {
+        "one": "1 word solved",
+        "other": "{count} words solved"
+      },
       "timeUp": "Time is up!"
     },
     "kids": {
       "title": "Kids",
       "subtitle": "Easy words with a picture",
       "text": "Short, easy words with a picture. Big buttons and free hints."
+    },
+    "challenge": {
+      "title": "Challenge a friend",
+      "text": "Type a secret word and let a friend guess it."
     }
   },
   "kids": {
@@ -190,7 +219,6 @@
     "winStreak": "Win streak {count}",
     "dayStreak": "Day streak {count}",
     "wordWas": "The word was {word}",
-    "levelUp": "You reached player level {level}!",
     "badge": "Badge unlocked:",
     "theme": "New theme:",
     "tryIt": "Try it"
@@ -199,11 +227,17 @@
     "classic": "I solved a {count}-letter word in Hanglet with {misses}. {link}",
     "level": "I finished level {number} in Hanglet with {stars} of 3 stars. {link}",
     "daily": "Hanglet Daily #{number} · {solved}/{total}",
-    "timed": "I solved {count} words in 2 minutes in Hanglet Time Attack. {link}"
+    "timed": "I solved {count} words in 2 minutes in Hanglet Time Attack. {link}",
+    "title": "Share your result",
+    "imageAlt": "Your result as a picture, without the word",
+    "copyText": "Copy text",
+    "download": "Save picture",
+    "cardFooter": "Play along on Hanglet!",
+    "letters": "A word with {count} letters"
   },
   "levels": {
     "title": "Level map",
-    "intro": "Win a level to unlock the next one. Fewer misses means more stars.",
+    "intro": "Every level has a few words. Solve them all to unlock the next level. Fewer misses means more stars.",
     "progress": "{done} of {total} levels complete.",
     "level": "Level {number}",
     "map": "Level map",
@@ -212,9 +246,10 @@
     "failed": "Level failed",
     "summit": "You reached the summit!",
     "starsLabel": "{count} of 3 stars",
-    "livesShort": "{count} lives",
     "lockedLabel": "Level {number}, locked",
-    "nodeLabel": "Level {number}, {category}, {stars} of 3 stars"
+    "nodeLabel": "Level {number}, {category}, {stars} of 3 stars",
+    "failedText": "One word missed. Try the level again, you can do it!",
+    "wordsShort": "{count} words"
   },
   "stages": {
     "warmup": "Warm-up",
@@ -231,13 +266,10 @@
     "playerLevel": "Player level {level}",
     "xpLabel": "XP to the next level",
     "coins": "Coins",
-    "dailyReady": "Daily #{number} is ready",
     "dailyBusy": "In progress · word {index} of 3",
     "dailyDone": "Done today · {solved}/{total}",
-    "nextIn": "next in",
     "seeResult": "See today's result",
     "continueDaily": "Continue the Daily",
-    "levelsStatus": "{done} of {total} done · next: level {next}",
     "levelsAllDone": "All levels complete",
     "timedBest": "Best: {count} words",
     "timedNew": "2 minutes on the clock",
@@ -246,15 +278,24 @@
     "dictionaryCount": "You collected {count} words.",
     "dictionaryEmpty": "Every word you solve is saved here, with its meaning.",
     "openDictionary": "Open",
-    "howItWorks": "How it works",
-    "step1Title": "Read the clue",
-    "step1Text": "The category tells you what kind of word you are looking for.",
-    "step2Title": "Pick letters",
-    "step2Text": "Tap a letter or type it. Right letters fill the word, wrong ones change the figure.",
-    "step3Title": "Collect rewards",
-    "step3Text": "Earn XP and coins, unlock figures and themes, and fill your dictionary.",
     "offlineTitle": "Play offline",
-    "offlineText": "Add Hanglet to your home screen. It works without internet."
+    "offlineText": "Add Hanglet to your home screen. It works without internet.",
+    "play": "Play",
+    "playSubDaily": "Today's Daily #{number} · 3 words",
+    "playSubClassic": "Daily done! Keep going with Classic",
+    "morning": "Good morning!",
+    "afternoon": "Hi there!",
+    "evening": "Good evening!",
+    "speechReady": "Your Daily words are ready.",
+    "speechBusy": "Shall we finish your Daily?",
+    "speechDone": "Great job today! Up for more?",
+    "dropWords": "PLAY,GUESS,WORDS,SMILE,HELLO",
+    "dailyTitle": "Daily challenge",
+    "dailyReadyText": "Three new words, the same for everyone.",
+    "newWordsIn": "New words in",
+    "classicStatus": "Pick your own category",
+    "levelsNext": "Next: level {next}",
+    "challengeStatus": "Pick a word, send a link"
   },
   "dictionary": {
     "title": "My dictionary",
@@ -267,7 +308,10 @@
     "empty": "Your dictionary is still empty. Solve a word to add it here.",
     "startPlaying": "Start playing",
     "noResults": "No words found.",
-    "solvedTimes": { "one": "Solved once", "other": "Solved {count} times" },
+    "solvedTimes": {
+      "one": "Solved once",
+      "other": "Solved {count} times"
+    },
     "since": "since {date}"
   },
   "stats": {
@@ -349,7 +393,9 @@
     "resetTitle": "Reset all progress?",
     "resetText": "This removes everything and can't be undone.",
     "resetConfirm": "Yes, reset",
-    "resetDone": "Your progress has been reset."
+    "resetDone": "Your progress has been reset.",
+    "music": "Background music",
+    "musicHelp": "Calm, soft music while you play"
   },
   "themes": {
     "ocean": "Ocean",
@@ -362,33 +408,240 @@
     "gold": "Gold"
   },
   "figures": {
-    "classic": { "name": "Classic", "text": "The well-known figure, drawn part by part" },
-    "balloon": { "name": "Balloon", "text": "Loses air with every miss and floats away when you win" },
-    "flower": { "name": "Flower", "text": "Loses a petal with every miss" },
-    "snowman": { "name": "Snowman", "text": "Melts a little when the sun comes out" },
-    "rocket": { "name": "Rocket", "text": "Build it with right letters and watch it launch" }
+    "classic": {
+      "name": "Classic",
+      "text": "The well-known figure, drawn part by part"
+    },
+    "balloon": {
+      "name": "Balloon",
+      "text": "Loses air with every miss and floats away when you win"
+    },
+    "flower": {
+      "name": "Flower",
+      "text": "Loses a petal with every miss"
+    },
+    "snowman": {
+      "name": "Snowman",
+      "text": "Melts a little when the sun comes out"
+    },
+    "rocket": {
+      "name": "Rocket",
+      "text": "Build it with right letters and watch it launch"
+    }
   },
   "achievements": {
-    "first-win": { "name": "First win", "description": "Win your first game" },
-    "wins-10": { "name": "Getting good", "description": "Win 10 games" },
-    "wins-50": { "name": "Word master", "description": "Win 50 games" },
-    "flawless": { "name": "Flawless", "description": "Win a game without a single miss" },
-    "hard-win": { "name": "Brave", "description": "Win a game on Hard" },
-    "long-word": { "name": "Long haul", "description": "Solve a word with 10 or more letters" },
-    "daily-first": { "name": "Daily habit", "description": "Finish your first Daily" },
-    "daily-streak-3": { "name": "Warming up", "description": "Reach a 3-day streak" },
-    "daily-streak-7": { "name": "Week strong", "description": "Reach a 7-day streak" },
-    "win-streak-5": { "name": "Hot hand", "description": "Win 5 games in a row" },
-    "win-streak-10": { "name": "Unstoppable", "description": "Win 10 games in a row" },
-    "levels-10": { "name": "Climber", "description": "Complete 10 levels" },
-    "levels-all": { "name": "Summit", "description": "Complete all 40 levels" },
-    "timed-10": { "name": "Speed reader", "description": "Solve 10 words in one Time Attack" },
-    "hint-used": { "name": "A little help", "description": "Use your first hint" },
-    "explorer": { "name": "Explorer", "description": "Win a game in every category" },
-    "player-level-5": { "name": "Rising star", "description": "Reach player level 5" },
-    "kids-win": { "name": "Young star", "description": "Win a game in Kids mode" },
-    "dictionary-25": { "name": "Collector", "description": "Collect 25 words in your dictionary" },
-    "dictionary-100": { "name": "Bookworm", "description": "Collect 100 words in your dictionary" },
-    "bilingual": { "name": "Bilingual", "description": "Solve words in English and in Dutch" }
+    "first-win": {
+      "name": "First win",
+      "description": "Win your first game"
+    },
+    "wins-10": {
+      "name": "Getting good",
+      "description": "Win 10 games"
+    },
+    "wins-50": {
+      "name": "Word master",
+      "description": "Win 50 games"
+    },
+    "flawless": {
+      "name": "Flawless",
+      "description": "Win a game without a single miss"
+    },
+    "hard-win": {
+      "name": "Brave",
+      "description": "Win a game on Hard"
+    },
+    "long-word": {
+      "name": "Long haul",
+      "description": "Solve a word with 10 or more letters"
+    },
+    "daily-first": {
+      "name": "Daily habit",
+      "description": "Finish your first Daily"
+    },
+    "daily-streak-3": {
+      "name": "Warming up",
+      "description": "Reach a 3-day streak"
+    },
+    "daily-streak-7": {
+      "name": "Week strong",
+      "description": "Reach a 7-day streak"
+    },
+    "win-streak-5": {
+      "name": "Hot hand",
+      "description": "Win 5 games in a row"
+    },
+    "win-streak-10": {
+      "name": "Unstoppable",
+      "description": "Win 10 games in a row"
+    },
+    "levels-10": {
+      "name": "Climber",
+      "description": "Complete 10 levels"
+    },
+    "levels-all": {
+      "name": "Summit",
+      "description": "Complete all 40 levels"
+    },
+    "timed-10": {
+      "name": "Speed reader",
+      "description": "Solve 10 words in one Time Attack"
+    },
+    "hint-used": {
+      "name": "A little help",
+      "description": "Use your first hint"
+    },
+    "explorer": {
+      "name": "Explorer",
+      "description": "Win a game in every category"
+    },
+    "player-level-5": {
+      "name": "Rising star",
+      "description": "Reach player level 5"
+    },
+    "kids-win": {
+      "name": "Young star",
+      "description": "Win a game in Kids mode"
+    },
+    "dictionary-25": {
+      "name": "Collector",
+      "description": "Collect 25 words in your dictionary"
+    },
+    "dictionary-100": {
+      "name": "Bookworm",
+      "description": "Collect 100 words in your dictionary"
+    },
+    "bilingual": {
+      "name": "Bilingual",
+      "description": "Solve words in English and in Dutch"
+    }
+  },
+  "mascot": {
+    "label": "Tilo, the Hanglet mascot"
+  },
+  "music": {
+    "label": "Background music"
+  },
+  "combo": {
+    "nice": "Nice!",
+    "great": "Great!",
+    "amazing": "On fire!",
+    "count": "Combo x{count}",
+    "double": "{count} letters at once!"
+  },
+  "chest": {
+    "title": "Daily treasure",
+    "ready": "Your chest is ready. What's inside today?",
+    "opened": "You opened today's chest.",
+    "next": "New chest in",
+    "open": "Open",
+    "freeHint": "Free hint!"
+  },
+  "missions": {
+    "title": "Daily missions",
+    "count": "{done}/{total} done",
+    "done": "Mission complete!",
+    "win3": "Win {count} games",
+    "flawless2": "Solve {count} words without a miss",
+    "long1": "Solve a word with 8 or more letters",
+    "daily": "Finish today's Daily",
+    "combo4": "Get a combo of 4 right letters",
+    "timed5": "Solve 5 words in one Time Attack",
+    "level1": "Complete a level",
+    "nohint3": "Win {count} games without hints",
+    "category2": "Win {count} games in {category}"
+  },
+  "levelUp": {
+    "eyebrow": "Well done!",
+    "title": "Level up!",
+    "text": "You're getting better and better.",
+    "button": "Awesome!"
+  },
+  "badges": {
+    "title": "Badges",
+    "intro": "Collect them all! Every badge gives you coins.",
+    "collected": "{count} of {total} badges",
+    "reward": "+{coins} coins for every badge",
+    "open": "See all badges"
+  },
+  "challenge": {
+    "intro": "Type a secret word. You get a link: send it to a friend and see if they can guess it!",
+    "word": "Your secret word",
+    "wordHelp": "{min} to {max} letters, only A to Z",
+    "previewLabel": "Your word has {count} letters",
+    "invalid": "Use {min} to {max} letters, without numbers or spaces.",
+    "hint": "A hint for your friend (optional)",
+    "hintPlaceholder": "For example: something you eat",
+    "name": "Your name (optional)",
+    "make": "Make my link",
+    "ready": "Your challenge is ready!",
+    "readyText": "Send this link to a friend. The word is hidden in the link.",
+    "link": "Challenge link",
+    "copy": "Copy link",
+    "copied": "Link copied. Send it to a friend!",
+    "another": "Make another one",
+    "message": "{name} challenges you in Hanglet! Can you guess my word of {count} letters?",
+    "someone": "A friend",
+    "from": "A challenge from {name}",
+    "fromFriend": "A challenge from a friend",
+    "makeOwn": "Make your own challenge",
+    "broken": "This link doesn't work",
+    "brokenText": "The challenge link is broken or incomplete. Ask your friend to send it again.",
+    "solvedShare": "I guessed {name}'s word in Hanglet with {misses}! {link}",
+    "lostShare": "{name}'s word was too hard for me this time. {link}"
+  },
+  "season": {
+    "title": "Winter special",
+    "text": "Cozy winter words, only until 6 January",
+    "play": "Play"
+  },
+  "seo": {
+    "index": {
+      "title": "Hanglet – A playful word game for every day",
+      "description": "Guess the word letter by letter with Tilo. Daily challenge, 40 levels, Time Attack, Kids mode and challenges for friends. Free, in English and Dutch."
+    },
+    "play": {
+      "title": "Play – Hanglet",
+      "description": "Guess the word one letter at a time before your figure is finished."
+    },
+    "levels": {
+      "title": "Level map – Hanglet",
+      "description": "Follow the map through 40 Hanglet levels with more words and fewer lives as you climb."
+    },
+    "dictionary": {
+      "title": "My dictionary – Hanglet",
+      "description": "Every word you solved in Hanglet, with a short meaning."
+    },
+    "badges": {
+      "title": "Badges – Hanglet",
+      "description": "Collect all Hanglet badges and see how close you are to the next one."
+    },
+    "stats": {
+      "title": "Statistics – Hanglet",
+      "description": "Your games, win rate, streaks and Daily calendar in Hanglet."
+    },
+    "settings": {
+      "title": "Settings – Hanglet",
+      "description": "Language, colors, figure, text size, contrast, sound and music in Hanglet."
+    },
+    "challenge": {
+      "title": "Challenge a friend – Hanglet",
+      "description": "Type a secret word, send the link and see if your friend can guess it."
+    },
+    "how-to-play": {
+      "title": "How to play – Hanglet",
+      "description": "How Hanglet works: letters, hints, figures, modes and rewards."
+    },
+    "about": {
+      "title": "About – Hanglet",
+      "description": "About Hanglet, a playful word game for all ages made with plain HTML, CSS and JavaScript."
+    },
+    "privacy": {
+      "title": "Privacy – Hanglet",
+      "description": "No account and no cookies. Your progress stays on your device."
+    },
+    "404": {
+      "title": "Page not found – Hanglet",
+      "description": "This page does not exist."
+    }
   }
 }

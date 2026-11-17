@@ -7,6 +7,7 @@ import { getUnlockedThemes } from "./themes.js";
 import { FIGURES, isFigureOwned } from "./figures.js";
 import { getLevelInfo } from "./xp.js";
 import { addDays, toDateKey } from "./dates.js";
+import { trackMission } from "./missions.js";
 
 // The three kinds of hints and what they cost (free in Kids mode)
 export const HINTS = [
@@ -27,7 +28,7 @@ export function rewardForWord(won, misses, lives, isKids = false) {
 }
 
 // Save the result of one word (Daily, Classic, Levels and Kids). Returns the rewards.
-export function recordWord({ won, misses, lives, word, category, picture = null, isKids = false }) {
+export function recordWord({ won, misses, lives, word, category, picture = null, isKids = false, hintsUsed = 0 }) {
   const stats = data.stats;
   stats.played++;
   stats.recentWords = [word, ...stats.recentWords].slice(0, 40);
@@ -49,7 +50,8 @@ export function recordWord({ won, misses, lives, word, category, picture = null,
     stats.winStreak = 0;
   }
 
-  return giveRewards(rewardForWord(won, misses, lives, isKids));
+  const missionsDone = trackMission({ type: "word", won, misses, length: word.length, category, hintsUsed });
+  return { ...giveRewards(rewardForWord(won, misses, lives, isKids)), missionsDone };
 }
 
 // Remember a solved word in "My dictionary"
@@ -81,6 +83,7 @@ export function recordDaily(dateKey, results) {
   daily.lastDate = dateKey;
   daily.progress = null;
   save();
+  return trackMission({ type: "daily" });
 }
 
 // The streak only counts if the last Daily was today or yesterday
@@ -93,10 +96,12 @@ export function currentDailyStreak() {
   return 0;
 }
 
+// Save a finished level. Returns the missions that just got done.
 export function recordLevel(number, stars) {
   const old = data.levels.stars[number] || 0;
   data.levels.stars[number] = Math.max(old, stars);
   save();
+  return trackMission({ type: "level" });
 }
 
 // Save a finished Time Attack. Returns the rewards and if it is a new best.
@@ -106,8 +111,9 @@ export function recordTimed(score) {
   timed.best = Math.max(timed.best, score);
   timed.sessions++;
   timed.totalWords += score;
+  const missionsDone = trackMission({ type: "timed", score });
   const result = giveRewards({ xp: score * 12, coins: score * 4 });
-  return { ...result, isBest };
+  return { ...result, isBest, missionsDone };
 }
 
 export function spendCoins(amount) {

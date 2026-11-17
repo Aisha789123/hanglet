@@ -96,7 +96,7 @@
 }
 
 /* ---------- Color themes (accent only) ---------- */
-[data-theme="ocean"]  { --accent: #1d63d8; --accent-strong: #164fae; --accent-soft: #e6eefc; }
+[data-theme="ocean"]  { --accent: #1d6fe0; --accent-strong: #1554b0; --accent-soft: #d9e7ff; }
 [data-theme="forest"] { --accent: #0f7a5c; --accent-strong: #0b5f47; --accent-soft: #e1f2ec; }
 [data-theme="sunset"] { --accent: #c4501d; --accent-strong: #a03f14; --accent-soft: #fcebe2; }
 [data-theme="berry"]  { --accent: #b0296a; --accent-strong: #8c1f53; --accent-soft: #f9e5ef; }
@@ -281,12 +281,6 @@ main {
 .logo-mark-small {
   width: 28px;
   height: 28px;
-}
-
-.brand-name {
-  font-size: var(--text-xl);
-  font-weight: 800;
-  letter-spacing: -0.02em;
 }
 
 .main-nav {
@@ -590,7 +584,6 @@ body.page-play .site-footer {
 [data-contrast="high"] .card,
 [data-contrast="high"] .key,
 [data-contrast="high"] .tile,
-[data-contrast="high"] .mode-card,
 [data-contrast="high"] .segment span {
   border: 2px solid var(--border);
 }

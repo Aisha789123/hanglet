@@ -13,12 +13,13 @@ function createDefaultData() {
       textSize: "normal", // "normal" or "large"
       contrast: "normal", // "normal" or "high"
       sound: true,
+      music: false, // calm background music, off by default
       vibration: true,
       reduceMotion: null, // null = follow the device setting
       kidsFirst: false, // show Kids mode first on the home page
       options: { category: "mixed", length: "medium", difficulty: "normal" },
     },
-    player: { xp: 0, coins: 40 },
+    player: { xp: 0, coins: 40, hintTokens: 0 }, // hintTokens: free hints from the chest
     stats: {
       played: 0,
       wins: 0,
@@ -48,6 +49,8 @@ function createDefaultData() {
     seenThemes: ["ocean"],
     figures: ["classic", "balloon"], // figures the player owns
     dictionary: { en: {}, nl: {} }, // solved words per language
+    chest: { lastOpened: null },
+    missions: null, // { date, progress, claimed } for today
     welcomeDone: false,
     tutorialDone: false,
   };

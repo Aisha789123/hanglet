@@ -10,6 +10,7 @@ import { applyAppearance, isReducedMotion } from "../ui/appearance.js";
 import { icon } from "../ui/icons.js";
 import { figurePreview } from "../ui/figures/index.js";
 import { playSound, vibrate } from "../ui/feedback.js";
+import { startMusic, stopMusic } from "../ui/music.js";
 import { showToast } from "../ui/toast.js";
 import { setupInstallButton } from "../ui/install.js";
 
@@ -60,6 +61,11 @@ setupSwitch("kids-first-switch", () => settings.kidsFirst, (on) => {
 setupSwitch("sound-switch", () => settings.sound, (on) => {
   settings.sound = on;
   if (on) playSound("win");
+});
+setupSwitch("music-switch", () => settings.music, (on) => {
+  settings.music = on;
+  if (on) startMusic();
+  else stopMusic();
 });
 setupSwitch("vibration-switch", () => settings.vibration, (on) => {
   settings.vibration = on;

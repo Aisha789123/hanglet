@@ -533,3 +533,13 @@
   transform-box: fill-box;
   transform-origin: center;
 }
+
+/* Classic: a faint sketch of the whole figure, so the stage is never empty */
+.figure-classic .ghost {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 3;
+  stroke-dasharray: 2 7;
+  stroke-linecap: round;
+  opacity: 0.35;
+}

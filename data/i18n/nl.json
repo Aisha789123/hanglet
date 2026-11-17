@@ -12,7 +12,8 @@
     "app": "App",
     "howToPlay": "Zo speel je",
     "about": "Over",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "badges": "Badges"
   },
   "footer": {
     "tagline": "Een rustig woordspel, letter voor letter.",
@@ -28,8 +29,14 @@
     "done": "Klaar",
     "cancel": "Annuleren",
     "backHome": "Terug naar de startpagina",
-    "misses": { "one": "1 fout", "other": "{count} fouten" },
-    "lives": { "one": "1 leven", "other": "{count} levens" }
+    "misses": {
+      "one": "1 fout",
+      "other": "{count} fouten"
+    },
+    "lives": {
+      "one": "1 leven",
+      "other": "{count} levens"
+    }
   },
   "welcome": {
     "title": "Welkom bij Hanglet",
@@ -73,7 +80,11 @@
     "jobs": "Beroepen",
     "science": "Wetenschap",
     "music": "Muziek",
-    "things": "Dingen"
+    "things": "Dingen",
+    "colors": "Kleuren",
+    "clothing": "Kleding",
+    "winter": "Winter",
+    "challenge": "Uitdaging"
   },
   "lengths": {
     "short": "Kort",
@@ -115,14 +126,25 @@
     "notEnough": "Je hebt {coins} munten nodig voor deze hint.",
     "letterShown": "Hint: {letter} zit in het woord.",
     "lettersRemoved": "Hint: {letters} zitten niet in het woord.",
-    "description": { "title": "Omschrijving tonen", "text": "Een korte zin over het woord" },
-    "letter": { "title": "Letter onthullen", "text": "Er wordt één letter ingevuld" },
-    "remove": { "title": "3 foute letters wegstrepen", "text": "Drie letters die niet in het woord zitten verdwijnen" }
+    "description": {
+      "title": "Omschrijving tonen",
+      "text": "Een korte zin over het woord"
+    },
+    "letter": {
+      "title": "Letter onthullen",
+      "text": "Er wordt één letter ingevuld"
+    },
+    "remove": {
+      "title": "3 foute letters wegstrepen",
+      "text": "Drie letters die niet in het woord zitten verdwijnen"
+    },
+    "tokens": {
+      "one": "Je hebt 1 gratis hint uit je schatkist",
+      "other": "Je hebt {count} gratis hints uit je schatkist"
+    }
   },
   "modes": {
     "daily": {
-      "title": "Dagwoord",
-      "text": "Drie woorden per dag, voor iedereen hetzelfde. Ongeveer 5 minuten.",
       "titleNumber": "Dagwoord #{number}",
       "progress": "Woord {index} van {total}",
       "wordOf": "Woord {index} van {total}",
@@ -130,14 +152,14 @@
       "comeBack": "Kom morgen terug voor nieuwe woorden",
       "doneTitle": "Je hebt er vandaag {solved} van {total} geraden",
       "next": "Volgend dagwoord",
-      "playClassic": "Speel Klassiek",
       "dotsLabel": "Voortgang dagwoord",
       "dotSolved": "geraden",
       "dotMissed": "gemist",
       "dotCurrent": "nu bezig",
       "dotTodo": "nog te doen",
       "wordNumber": "Woord {number}",
-      "notSolved": "niet geraden"
+      "notSolved": "niet geraden",
+      "playMore": "Meer spelen"
     },
     "classic": {
       "title": "Klassiek",
@@ -156,13 +178,20 @@
       "solved": "{count} geraden",
       "newBest": "Nieuw persoonlijk record!",
       "best": "Record: {count}",
-      "result": { "one": "1 woord geraden", "other": "{count} woorden geraden" },
+      "result": {
+        "one": "1 woord geraden",
+        "other": "{count} woorden geraden"
+      },
       "timeUp": "De tijd is om!"
     },
     "kids": {
       "title": "Kids",
       "subtitle": "Makkelijke woorden met een plaatje",
       "text": "Korte, makkelijke woorden met een plaatje. Grote knoppen en gratis hints."
+    },
+    "challenge": {
+      "title": "Daag een vriend uit",
+      "text": "Typ een geheim woord en laat een vriend het raden."
     }
   },
   "kids": {
@@ -190,7 +219,6 @@
     "winStreak": "Winreeks {count}",
     "dayStreak": "Dagreeks {count}",
     "wordWas": "Het woord was {word}",
-    "levelUp": "Je bent nu spelerslevel {level}!",
     "badge": "Badge verdiend:",
     "theme": "Nieuw thema:",
     "tryIt": "Probeer het"
@@ -199,11 +227,17 @@
     "classic": "Ik heb een woord van {count} letters geraden in Hanglet met {misses}. {link}",
     "level": "Ik heb level {number} in Hanglet gehaald met {stars} van de 3 sterren. {link}",
     "daily": "Hanglet Dagwoord #{number} · {solved}/{total}",
-    "timed": "Ik heb {count} woorden geraden in 2 minuten in Hanglet Tegen de klok. {link}"
+    "timed": "Ik heb {count} woorden geraden in 2 minuten in Hanglet Tegen de klok. {link}",
+    "title": "Deel je resultaat",
+    "imageAlt": "Je resultaat als plaatje, zonder het woord",
+    "copyText": "Kopieer tekst",
+    "download": "Plaatje opslaan",
+    "cardFooter": "Speel mee op Hanglet!",
+    "letters": "Een woord van {count} letters"
   },
   "levels": {
     "title": "Levelkaart",
-    "intro": "Win een level om het volgende te openen. Minder fouten geeft meer sterren.",
+    "intro": "Elk level heeft een paar woorden. Raad ze allemaal om het volgende level te openen. Minder fouten geeft meer sterren.",
     "progress": "{done} van de {total} levels gehaald.",
     "level": "Level {number}",
     "map": "Levelkaart",
@@ -212,9 +246,10 @@
     "failed": "Level niet gehaald",
     "summit": "Je hebt de top bereikt!",
     "starsLabel": "{count} van de 3 sterren",
-    "livesShort": "{count} levens",
     "lockedLabel": "Level {number}, op slot",
-    "nodeLabel": "Level {number}, {category}, {stars} van de 3 sterren"
+    "nodeLabel": "Level {number}, {category}, {stars} van de 3 sterren",
+    "failedText": "Eén woord gemist. Probeer het level opnieuw, je kunt het!",
+    "wordsShort": "{count} woorden"
   },
   "stages": {
     "warmup": "Opwarmen",
@@ -231,13 +266,10 @@
     "playerLevel": "Spelerslevel {level}",
     "xpLabel": "XP tot het volgende level",
     "coins": "Munten",
-    "dailyReady": "Dagwoord #{number} staat klaar",
     "dailyBusy": "Bezig · woord {index} van 3",
     "dailyDone": "Vandaag gespeeld · {solved}/{total}",
-    "nextIn": "volgende over",
     "seeResult": "Bekijk je resultaat",
     "continueDaily": "Ga verder met het dagwoord",
-    "levelsStatus": "{done} van {total} gehaald · volgende: level {next}",
     "levelsAllDone": "Alle levels gehaald",
     "timedBest": "Record: {count} woorden",
     "timedNew": "2 minuten op de klok",
@@ -246,15 +278,24 @@
     "dictionaryCount": "Je hebt {count} woorden verzameld.",
     "dictionaryEmpty": "Elk woord dat je raadt komt hier, met de betekenis erbij.",
     "openDictionary": "Openen",
-    "howItWorks": "Zo werkt het",
-    "step1Title": "Lees de hint",
-    "step1Text": "De categorie vertelt wat voor woord je zoekt.",
-    "step2Title": "Kies letters",
-    "step2Text": "Tik of typ een letter. Goede letters vullen het woord, foute veranderen het figuur.",
-    "step3Title": "Verzamel beloningen",
-    "step3Text": "Verdien XP en munten, speel figuren en thema's vrij en vul je woordenboek.",
     "offlineTitle": "Speel offline",
-    "offlineText": "Zet Hanglet op je beginscherm. Het werkt ook zonder internet."
+    "offlineText": "Zet Hanglet op je beginscherm. Het werkt ook zonder internet.",
+    "play": "Speel",
+    "playSubDaily": "Dagwoord #{number} · 3 woorden",
+    "playSubClassic": "Dagwoord klaar! Ga door met Klassiek",
+    "morning": "Goedemorgen!",
+    "afternoon": "Hoi!",
+    "evening": "Goedenavond!",
+    "speechReady": "Je dagwoorden staan klaar.",
+    "speechBusy": "Zullen we je dagwoord afmaken?",
+    "speechDone": "Knap gedaan vandaag! Zin in meer?",
+    "dropWords": "SPEEL,RADEN,WOORD,LEUK,HALLO",
+    "dailyTitle": "Dagelijkse uitdaging",
+    "dailyReadyText": "Drie nieuwe woorden, voor iedereen hetzelfde.",
+    "newWordsIn": "Nieuwe woorden over",
+    "classicStatus": "Kies je eigen categorie",
+    "levelsNext": "Volgende: level {next}",
+    "challengeStatus": "Kies een woord, stuur een link"
   },
   "dictionary": {
     "title": "Mijn woordenboek",
@@ -267,7 +308,10 @@
     "empty": "Je woordenboek is nog leeg. Raad een woord om het hier te zetten.",
     "startPlaying": "Begin met spelen",
     "noResults": "Geen woorden gevonden.",
-    "solvedTimes": { "one": "1 keer geraden", "other": "{count} keer geraden" },
+    "solvedTimes": {
+      "one": "1 keer geraden",
+      "other": "{count} keer geraden"
+    },
     "since": "sinds {date}"
   },
   "stats": {
@@ -349,7 +393,9 @@
     "resetTitle": "Alle voortgang wissen?",
     "resetText": "Hiermee verwijder je alles. Dit kun je niet ongedaan maken.",
     "resetConfirm": "Ja, wissen",
-    "resetDone": "Je voortgang is gewist."
+    "resetDone": "Je voortgang is gewist.",
+    "music": "Achtergrondmuziek",
+    "musicHelp": "Rustige, zachte muziek tijdens het spelen"
   },
   "themes": {
     "ocean": "Oceaan",
@@ -362,33 +408,240 @@
     "gold": "Goud"
   },
   "figures": {
-    "classic": { "name": "Klassiek", "text": "Het bekende poppetje, deel voor deel getekend" },
-    "balloon": { "name": "Ballon", "text": "Loopt leeg bij elke fout en zweeft weg als je wint" },
-    "flower": { "name": "Bloem", "text": "Verliest een blaadje bij elke fout" },
-    "snowman": { "name": "Sneeuwpop", "text": "Smelt een beetje als de zon tevoorschijn komt" },
-    "rocket": { "name": "Raket", "text": "Bouw hem met goede letters en zie hem opstijgen" }
+    "classic": {
+      "name": "Klassiek",
+      "text": "Het bekende poppetje, deel voor deel getekend"
+    },
+    "balloon": {
+      "name": "Ballon",
+      "text": "Loopt leeg bij elke fout en zweeft weg als je wint"
+    },
+    "flower": {
+      "name": "Bloem",
+      "text": "Verliest een blaadje bij elke fout"
+    },
+    "snowman": {
+      "name": "Sneeuwpop",
+      "text": "Smelt een beetje als de zon tevoorschijn komt"
+    },
+    "rocket": {
+      "name": "Raket",
+      "text": "Bouw hem met goede letters en zie hem opstijgen"
+    }
   },
   "achievements": {
-    "first-win": { "name": "Eerste winst", "description": "Win je eerste spel" },
-    "wins-10": { "name": "Lekker bezig", "description": "Win 10 spellen" },
-    "wins-50": { "name": "Woordmeester", "description": "Win 50 spellen" },
-    "flawless": { "name": "Foutloos", "description": "Win een spel zonder één fout" },
-    "hard-win": { "name": "Dapper", "description": "Win een spel op Moeilijk" },
-    "long-word": { "name": "Lange adem", "description": "Raad een woord van 10 letters of meer" },
-    "daily-first": { "name": "Dagelijkse gewoonte", "description": "Speel je eerste dagwoord uit" },
-    "daily-streak-3": { "name": "Op gang", "description": "Haal een dagreeks van 3" },
-    "daily-streak-7": { "name": "Hele week", "description": "Haal een dagreeks van 7" },
-    "win-streak-5": { "name": "Op dreef", "description": "Win 5 spellen achter elkaar" },
-    "win-streak-10": { "name": "Niet te stoppen", "description": "Win 10 spellen achter elkaar" },
-    "levels-10": { "name": "Klimmer", "description": "Haal 10 levels" },
-    "levels-all": { "name": "De top", "description": "Haal alle 40 levels" },
-    "timed-10": { "name": "Snelle lezer", "description": "Raad 10 woorden in één keer tegen de klok" },
-    "hint-used": { "name": "Een beetje hulp", "description": "Gebruik je eerste hint" },
-    "explorer": { "name": "Ontdekker", "description": "Win een spel in elke categorie" },
-    "player-level-5": { "name": "Rijzende ster", "description": "Haal spelerslevel 5" },
-    "kids-win": { "name": "Kleine ster", "description": "Win een spel in de Kids-modus" },
-    "dictionary-25": { "name": "Verzamelaar", "description": "Verzamel 25 woorden in je woordenboek" },
-    "dictionary-100": { "name": "Boekenwurm", "description": "Verzamel 100 woorden in je woordenboek" },
-    "bilingual": { "name": "Tweetalig", "description": "Raad woorden in het Engels en in het Nederlands" }
+    "first-win": {
+      "name": "Eerste winst",
+      "description": "Win je eerste spel"
+    },
+    "wins-10": {
+      "name": "Lekker bezig",
+      "description": "Win 10 spellen"
+    },
+    "wins-50": {
+      "name": "Woordmeester",
+      "description": "Win 50 spellen"
+    },
+    "flawless": {
+      "name": "Foutloos",
+      "description": "Win een spel zonder één fout"
+    },
+    "hard-win": {
+      "name": "Dapper",
+      "description": "Win een spel op Moeilijk"
+    },
+    "long-word": {
+      "name": "Lange adem",
+      "description": "Raad een woord van 10 letters of meer"
+    },
+    "daily-first": {
+      "name": "Dagelijkse gewoonte",
+      "description": "Speel je eerste dagwoord uit"
+    },
+    "daily-streak-3": {
+      "name": "Op gang",
+      "description": "Haal een dagreeks van 3"
+    },
+    "daily-streak-7": {
+      "name": "Hele week",
+      "description": "Haal een dagreeks van 7"
+    },
+    "win-streak-5": {
+      "name": "Op dreef",
+      "description": "Win 5 spellen achter elkaar"
+    },
+    "win-streak-10": {
+      "name": "Niet te stoppen",
+      "description": "Win 10 spellen achter elkaar"
+    },
+    "levels-10": {
+      "name": "Klimmer",
+      "description": "Haal 10 levels"
+    },
+    "levels-all": {
+      "name": "De top",
+      "description": "Haal alle 40 levels"
+    },
+    "timed-10": {
+      "name": "Snelle lezer",
+      "description": "Raad 10 woorden in één keer tegen de klok"
+    },
+    "hint-used": {
+      "name": "Een beetje hulp",
+      "description": "Gebruik je eerste hint"
+    },
+    "explorer": {
+      "name": "Ontdekker",
+      "description": "Win een spel in elke categorie"
+    },
+    "player-level-5": {
+      "name": "Rijzende ster",
+      "description": "Haal spelerslevel 5"
+    },
+    "kids-win": {
+      "name": "Kleine ster",
+      "description": "Win een spel in de Kids-modus"
+    },
+    "dictionary-25": {
+      "name": "Verzamelaar",
+      "description": "Verzamel 25 woorden in je woordenboek"
+    },
+    "dictionary-100": {
+      "name": "Boekenwurm",
+      "description": "Verzamel 100 woorden in je woordenboek"
+    },
+    "bilingual": {
+      "name": "Tweetalig",
+      "description": "Raad woorden in het Engels en in het Nederlands"
+    }
+  },
+  "mascot": {
+    "label": "Tilo, de mascotte van Hanglet"
+  },
+  "music": {
+    "label": "Achtergrondmuziek"
+  },
+  "combo": {
+    "nice": "Goed zo!",
+    "great": "Lekker bezig!",
+    "amazing": "Geweldig!",
+    "count": "Combo x{count}",
+    "double": "{count} letters tegelijk!"
+  },
+  "chest": {
+    "title": "Dagelijkse schat",
+    "ready": "Je schatkist staat klaar. Wat zit er vandaag in?",
+    "opened": "Je hebt de schatkist van vandaag geopend.",
+    "next": "Nieuwe schat over",
+    "open": "Openen",
+    "freeHint": "Gratis hint!"
+  },
+  "missions": {
+    "title": "Dagopdrachten",
+    "count": "{done}/{total} klaar",
+    "done": "Opdracht klaar!",
+    "win3": "Win {count} spellen",
+    "flawless2": "Raad {count} woorden zonder fout",
+    "long1": "Raad een woord van 8 letters of meer",
+    "daily": "Speel het dagwoord uit",
+    "combo4": "Haal een combo van 4 goede letters",
+    "timed5": "Raad 5 woorden in één ronde tegen de klok",
+    "level1": "Haal een level",
+    "nohint3": "Win {count} spellen zonder hints",
+    "category2": "Win {count} spellen in {category}"
+  },
+  "levelUp": {
+    "eyebrow": "Goed gedaan!",
+    "title": "Level omhoog!",
+    "text": "Je wordt steeds beter.",
+    "button": "Super!"
+  },
+  "badges": {
+    "title": "Badges",
+    "intro": "Verzamel ze allemaal! Elke badge levert munten op.",
+    "collected": "{count} van de {total} badges",
+    "reward": "+{coins} munten voor elke badge",
+    "open": "Bekijk alle badges"
+  },
+  "challenge": {
+    "intro": "Typ een geheim woord. Je krijgt een link: stuur die naar een vriend en kijk of die het kan raden!",
+    "word": "Jouw geheime woord",
+    "wordHelp": "{min} tot {max} letters, alleen A tot Z",
+    "previewLabel": "Je woord heeft {count} letters",
+    "invalid": "Gebruik {min} tot {max} letters, zonder cijfers of spaties.",
+    "hint": "Een hint voor je vriend (mag leeg)",
+    "hintPlaceholder": "Bijvoorbeeld: iets wat je eet",
+    "name": "Je naam (mag leeg)",
+    "make": "Maak mijn link",
+    "ready": "Je uitdaging staat klaar!",
+    "readyText": "Stuur deze link naar een vriend. Het woord zit verstopt in de link.",
+    "link": "Link van de uitdaging",
+    "copy": "Kopieer link",
+    "copied": "Link gekopieerd. Stuur hem naar een vriend!",
+    "another": "Nog een maken",
+    "message": "{name} daagt je uit in Hanglet! Kun jij mijn woord van {count} letters raden?",
+    "someone": "Een vriend",
+    "from": "Een uitdaging van {name}",
+    "fromFriend": "Een uitdaging van een vriend",
+    "makeOwn": "Maak zelf een uitdaging",
+    "broken": "Deze link werkt niet",
+    "brokenText": "De link van de uitdaging is kapot of niet compleet. Vraag je vriend om hem opnieuw te sturen.",
+    "solvedShare": "Ik heb het woord van {name} geraden in Hanglet met {misses}! {link}",
+    "lostShare": "Het woord van {name} was deze keer te moeilijk voor mij. {link}"
+  },
+  "season": {
+    "title": "Winterspecial",
+    "text": "Gezellige winterwoorden, alleen tot 6 januari",
+    "play": "Speel"
+  },
+  "seo": {
+    "index": {
+      "title": "Hanglet – Een vrolijk woordspel voor elke dag",
+      "description": "Raad het woord letter voor letter met Tilo. Dagwoord, 40 levels, Tegen de klok, Kids-modus en uitdagingen voor vrienden. Gratis, in het Nederlands en Engels."
+    },
+    "play": {
+      "title": "Spelen – Hanglet",
+      "description": "Raad het woord letter voor letter voordat je figuur af is."
+    },
+    "levels": {
+      "title": "Levelkaart – Hanglet",
+      "description": "Volg de kaart door 40 levels van Hanglet, met meer woorden en minder levens naarmate je hoger komt."
+    },
+    "dictionary": {
+      "title": "Mijn woordenboek – Hanglet",
+      "description": "Elk woord dat je in Hanglet hebt geraden, met een korte betekenis."
+    },
+    "badges": {
+      "title": "Badges – Hanglet",
+      "description": "Verzamel alle badges van Hanglet en zie hoe dicht je bij de volgende bent."
+    },
+    "stats": {
+      "title": "Statistiek – Hanglet",
+      "description": "Je spellen, winpercentage, reeksen en dagwoordkalender in Hanglet."
+    },
+    "settings": {
+      "title": "Instellingen – Hanglet",
+      "description": "Taal, kleuren, figuur, tekstgrootte, contrast, geluid en muziek in Hanglet."
+    },
+    "challenge": {
+      "title": "Daag een vriend uit – Hanglet",
+      "description": "Typ een geheim woord, stuur de link en kijk of je vriend het kan raden."
+    },
+    "how-to-play": {
+      "title": "Zo speel je – Hanglet",
+      "description": "Zo werkt Hanglet: letters, hints, figuren, spelmodi en beloningen."
+    },
+    "about": {
+      "title": "Over – Hanglet",
+      "description": "Over Hanglet, een vrolijk woordspel voor alle leeftijden, gemaakt met gewone HTML, CSS en JavaScript."
+    },
+    "privacy": {
+      "title": "Privacy – Hanglet",
+      "description": "Geen account en geen cookies. Je voortgang blijft op je eigen apparaat."
+    },
+    "404": {
+      "title": "Pagina niet gevonden – Hanglet",
+      "description": "Deze pagina bestaat niet."
+    }
   }
 }

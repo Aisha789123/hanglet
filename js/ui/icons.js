@@ -52,6 +52,7 @@ const PATHS = {
   gift: '<rect x="3" y="8" width="18" height="5" rx="1"/><path d="M5 13v8h14v-8M12 8v13M12 8c-2-4-6-4-6-1.5S9 8 12 8zM12 8c2-4 6-4 6-1.5S15 8 12 8z"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   search: '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+  music: '<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',
   school: '<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/>',
 };
 
@@ -59,12 +60,18 @@ export function icon(name, className = "icon") {
   return `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${PATHS[name] || ""}</svg>`;
 }
 
-// The Hanglet logo mark: a letter tile hanging from a hook
+// The Hanglet logo mark: a letter tile with a hook on top (like the mascot)
 export function logoMark(className = "logo-mark") {
-  return `<svg class="${className}" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
-    <rect width="48" height="48" rx="13" fill="var(--accent)"/>
-    <path d="M11 38h13M15.5 38V11h14.5v5" fill="none" stroke="var(--on-accent)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <rect x="22" y="18.5" width="16" height="16" rx="3.5" fill="var(--on-accent)"/>
-    <path d="M26.5 29.5h7" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/>
+  return `<svg class="${className}" viewBox="0 0 48 52" aria-hidden="true" focusable="false">
+    <path d="M24 12V7a4.5 4.5 0 1 1 4.5-4.5" fill="none" stroke="#26243a" stroke-width="3" stroke-linecap="round"/>
+    <rect x="3" y="15" width="42" height="36" rx="11" fill="#e0a21c"/>
+    <rect x="3" y="11" width="42" height="36" rx="11" fill="#ffc531"/>
+    <path d="M16 20v18M32 20v18M16 29h16" stroke="#26243a" stroke-width="5" stroke-linecap="round"/>
   </svg>`;
+}
+
+// The word HANGLET made of colored letter tiles
+export function logoWordmark(className = "wordmark") {
+  const tiles = [..."HANGLET"].map((letter, i) => `<span class="wm-tile wm-${i % 4}" aria-hidden="true">${letter}</span>`).join("");
+  return `<span class="${className}"><span class="visually-hidden">Hanglet</span>${tiles}</span>`;
 }

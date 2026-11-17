@@ -3,7 +3,7 @@
 import { data, save } from "../core/storage.js";
 import { currentDailyStreak } from "../core/progress.js";
 import { LANGUAGES, language, t, translatePage } from "../core/i18n.js";
-import { icon, logoMark } from "./icons.js";
+import { icon, logoMark, logoWordmark } from "./icons.js";
 import { applyAppearance, watchSystemChanges } from "./appearance.js";
 import { showWelcome } from "./welcome.js";
 import { startAnalytics } from "../analytics.js";
@@ -12,8 +12,8 @@ const NAV_ITEMS = [
   { id: "home", label: "nav.play", href: "./index.html", icon: "home" },
   { id: "levels", label: "nav.levels", href: "./levels.html", icon: "path" },
   { id: "dictionary", label: "nav.words", href: "./dictionary.html", icon: "book" },
+  { id: "badges", label: "nav.badges", href: "./badges.html", icon: "trophy" },
   { id: "stats", label: "nav.stats", href: "./stats.html", icon: "chart" },
-  { id: "settings", label: "nav.settings", href: "./settings.html", icon: "sliders" },
 ];
 
 function navLinks(activePage, withIcons) {
@@ -30,12 +30,13 @@ function headerHtml(activePage) {
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="./index.html" aria-label="${t("nav.homeLabel")}">
-          ${logoMark()}<span class="brand-name">Hanglet</span>
+          ${logoWordmark()}
         </a>
         <nav class="main-nav" aria-label="${t("nav.main")}">${navLinks(activePage, false)}</nav>
         <div class="header-stats">
           <a class="pill pill-streak" href="./stats.html" id="header-streak"></a>
           <span class="pill pill-coins" id="header-coins"></span>
+          <a class="icon-button header-settings" href="./settings.html" aria-label="${t("nav.settings")}"${activePage === "settings" ? ' aria-current="page"' : ""}>${icon("sliders")}</a>
         </div>
       </div>
     </header>`;
@@ -92,6 +93,19 @@ export function refreshHeader() {
   }
 }
 
+// Title and description in the chosen language (search engines that run
+// JavaScript and the browser tab both use these)
+function applySeoTexts() {
+  const page = location.pathname.split("/").pop().replace(".html", "") || "index";
+  const title = t(`seo.${page}.title`);
+  const description = t(`seo.${page}.description`);
+  if (title.startsWith("seo.")) return;
+  if (page !== "play") document.title = title;
+  document.querySelector('meta[name="description"]')?.setAttribute("content", description);
+  document.querySelector('meta[property="og:title"]')?.setAttribute("content", title);
+  document.querySelector('meta[property="og:description"]')?.setAttribute("content", description);
+}
+
 // Call this once on every page
 export function initPage(activePage) {
   applyAppearance();
@@ -100,6 +114,7 @@ export function initPage(activePage) {
   document.body.insertAdjacentHTML("afterbegin", headerHtml(activePage));
   document.body.insertAdjacentHTML("beforeend", footerHtml(activePage));
   translatePage();
+  applySeoTexts();
   delete document.documentElement.dataset.translating;
 
   document.querySelectorAll("[data-language]").forEach((button) => {

@@ -56,7 +56,7 @@ for (let start = 1; start <= LEVEL_COUNT; start += 10) {
   const bottom = isFirst ? mapHeight : position(start).y + STEP / 2;
   html += `
     <div class="map-stage stage-${level.stage}" style="top:${top}px;height:${bottom - top}px">
-      <span class="stage-label">${t(`stages.${level.stage}`)} · ${t(`lengths.${level.length}`)} · ${t("levels.livesShort", { count: level.lives })}</span>
+      <span class="stage-label">${t(`stages.${level.stage}`)} · ${t("levels.wordsShort", { count: level.wordCount })} · ${t(`lengths.${level.length}`)}</span>
     </div>`;
 }
 

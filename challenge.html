@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Challenge a friend – Hanglet</title>
+  <meta name="description" content="Challenge a friend in Hanglet: type a secret word, send the link and see if they can guess it.">
+  <meta name="theme-color" content="#f6f7f9">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hanglet">
+  <meta property="og:title" content="Challenge a friend – Hanglet">
+  <meta property="og:description" content="Challenge a friend in Hanglet: type a secret word, send the link and see if they can guess it.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="assets/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/figures.css">
+  <link rel="stylesheet" href="css/game.css">
+
+  <!-- Visitor statistics (GoatCounter) are set up in js/analytics.js -->
+  <script src="js/theme-init.js"></script>
+  <script type="module" src="js/pages/challenge.js"></script>
+</head>
+<body class="page-challenge">
+  <main id="main" class="container challenge-page">
+    <section class="card challenge-card">
+      <div class="challenge-mascot" id="challenge-mascot"></div>
+      <h1 class="page-title" data-i18n="modes.challenge.title"></h1>
+      <p class="page-intro" data-i18n="challenge.intro"></p>
+
+      <form class="challenge-form" id="challenge-form" novalidate>
+        <label class="field">
+          <span class="field-label" data-i18n="challenge.word"></span>
+          <input type="text" id="challenge-word" maxlength="20" autocomplete="off" autocapitalize="none" spellcheck="false" required aria-describedby="word-help challenge-error">
+          <small id="word-help"></small>
+        </label>
+        <div class="word-preview" id="word-preview" role="img"></div>
+        <p class="form-error" id="challenge-error" role="alert" hidden></p>
+        <label class="field">
+          <span class="field-label" data-i18n="challenge.hint"></span>
+          <input type="text" id="challenge-hint" maxlength="80" autocomplete="off" data-i18n-attr="placeholder: challenge.hintPlaceholder">
+        </label>
+        <label class="field">
+          <span class="field-label" data-i18n="challenge.name"></span>
+          <input type="text" id="challenge-name" maxlength="20" autocomplete="nickname">
+        </label>
+        <button class="button button-sun button-large" type="submit">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>
+          <span data-i18n="challenge.make"></span>
+        </button>
+      </form>
+
+      <div class="challenge-result" id="challenge-result" hidden aria-live="polite"></div>
+    </section>
+  </main>
+</body>
+</html>

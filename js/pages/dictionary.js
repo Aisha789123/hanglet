@@ -27,7 +27,7 @@ countEl.innerHTML = `
   <div class="progress" role="progressbar" aria-label="${t("dictionary.progressLabel")}" aria-valuemin="0" aria-valuemax="${totalWords}" aria-valuenow="${entries.length}"><span style="width:${percent}%"></span></div>`;
 
 // Category filter: only categories that have words
-const usedCategories = ["all", ...CATEGORY_IDS, "things"].filter(
+const usedCategories = ["all", ...CATEGORY_IDS, "winter", "things"].filter(
   (id) => id === "all" || entries.some((entry) => entry.category === id)
 );
 filterEl.innerHTML = usedCategories.map((id, index) => `

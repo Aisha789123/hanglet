@@ -19,44 +19,9 @@
 }
 
 /* =================== Home =================== */
-.hero {
-  display: grid;
-  gap: var(--space-6);
-  align-items: center;
-  margin-bottom: var(--space-7);
-}
-
-.hero-logo {
-  display: block;
-  margin-bottom: var(--space-4);
-}
-
-.hero-logo-mark {
-  width: 64px;
-  height: 64px;
-}
 
 .install-title {
   margin-bottom: var(--space-1);
-}
-
-.hero h1 {
-  font-size: var(--text-3xl);
-  max-width: 17ch;
-  margin-bottom: var(--space-3);
-}
-
-.hero p {
-  color: var(--text-muted);
-  font-size: var(--text-lg);
-  max-width: 44ch;
-}
-
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-5);
 }
 
 /* Player summary */
@@ -129,105 +94,8 @@
 }
 
 /* Mode cards */
-.mode-grid {
-  display: grid;
-  gap: var(--space-3);
-  margin-bottom: var(--space-7);
-}
-
-.mode-card {
-  position: relative;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-4) var(--space-5);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  color: var(--text);
-  text-decoration: none;
-  box-shadow: var(--shadow-sm);
-  transition: border-color var(--speed), transform var(--speed) var(--ease), box-shadow var(--speed);
-}
-
-.mode-card:hover {
-  border-color: var(--accent);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.mode-icon {
-  display: grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  background: var(--accent-soft);
-  color: var(--accent-strong);
-}
-
-.mode-icon .icon {
-  width: 24px;
-  height: 24px;
-}
-
-.mode-card h3 {
-  font-size: var(--text-lg);
-}
-
-.mode-card p {
-  color: var(--text-muted);
-  font-size: var(--text-sm);
-}
-
-.mode-status {
-  display: block;
-  margin-top: 2px;
-  color: var(--accent-strong);
-  font-size: var(--text-sm);
-  font-weight: 800;
-}
-
-.mode-arrow {
-  color: var(--text-muted);
-}
-
-.mode-card.is-featured {
-  border-color: var(--accent);
-  border-width: 2px;
-}
 
 /* How it works */
-.steps {
-  display: grid;
-  gap: var(--space-4);
-  margin-bottom: var(--space-7);
-}
-
-.step {
-  display: flex;
-  gap: var(--space-4);
-}
-
-.step-number {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--surface-2);
-  font-weight: 800;
-}
-
-.step h3 {
-  font-size: var(--text-base);
-}
-
-.step p {
-  color: var(--text-muted);
-}
 
 .install-card {
   display: flex;
@@ -239,24 +107,6 @@
 
 .install-card p {
   color: var(--text-muted);
-}
-
-@media (min-width: 768px) {
-  .hero {
-    grid-template-columns: 1.2fr 1fr;
-  }
-
-  .mode-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .steps {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .step {
-    flex-direction: column;
-  }
 }
 
 /* =================== Game =================== */
@@ -320,22 +170,6 @@
 }
 
 .hint-button > .icon {
-  color: var(--coin);
-}
-
-.hint-cost {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  background: var(--coin-soft);
-  font-size: var(--text-sm);
-}
-
-.hint-cost .icon {
-  width: 14px;
-  height: 14px;
   color: var(--coin);
 }
 
@@ -600,40 +434,6 @@
 }
 
 /* Result dialog */
-.result-badge {
-  display: grid;
-  place-items: center;
-  width: 64px;
-  height: 64px;
-  margin: 0 auto var(--space-3);
-  border-radius: 50%;
-  animation: badge-pop 500ms var(--ease) both;
-}
-
-.result-badge .icon {
-  width: 32px;
-  height: 32px;
-  stroke-width: 2.5;
-}
-
-.result.is-win .result-badge {
-  background: var(--success-soft);
-  color: var(--success);
-}
-
-.result.is-lose .result-badge {
-  background: var(--danger-soft);
-  color: var(--danger);
-}
-
-.result-word {
-  margin-top: var(--space-3);
-  color: var(--text) !important;
-  font-size: var(--text-2xl);
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
 
 .result-text {
   margin-top: var(--space-2);
@@ -982,50 +782,6 @@
 }
 
 /* Badges */
-.badges {
-  display: grid;
-  gap: var(--space-2);
-}
-
-.badge {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--surface-2);
-}
-
-.badge-icon {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: var(--surface-3);
-  color: var(--text-muted);
-}
-
-.badge.is-unlocked .badge-icon {
-  background: var(--accent);
-  color: var(--on-accent);
-}
-
-.badge-text {
-  display: grid;
-  line-height: 1.3;
-}
-
-.badge-text span,
-.badge-text small {
-  color: var(--text-muted);
-  font-size: var(--text-sm);
-}
-
-.badge.is-locked strong {
-  color: var(--text-muted);
-}
 
 @media (min-width: 768px) {
   .stats-layout {
@@ -1039,10 +795,6 @@
   .stat-tiles {
     grid-template-columns: repeat(6, 1fr);
   }
-
-  .badges {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  }
 }
 
 /* =================== Settings =================== */
@@ -1050,11 +802,6 @@
   display: grid;
   gap: var(--space-4);
   max-width: 720px;
-}
-
-.mode-switch .segment span {
-  flex-direction: row;
-  gap: var(--space-2);
 }
 
 .theme-list {
@@ -1178,19 +925,6 @@
    ========================================================= */
 
 /* ---------- Colored mode cards and stats ---------- */
-.mode-card .mode-icon {
-  background: var(--tone-soft);
-  color: var(--tone);
-}
-
-.mode-card .mode-status {
-  color: var(--tone);
-}
-
-.mode-card.is-featured,
-.mode-card:hover {
-  border-color: var(--tone);
-}
 
 .player-stats .icon,
 .progress-list .icon {
@@ -1369,14 +1103,6 @@ body.is-kids .clue-text {
 
 .result.is-lose .result-hero {
   background: var(--surface-2);
-}
-
-.result .result-badge {
-  background: var(--surface);
-}
-
-.result.is-lose .result-badge {
-  color: var(--danger);
 }
 
 .result-tiles {

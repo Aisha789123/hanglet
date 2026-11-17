@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Badges – Hanglet</title>
+  <meta name="description" content="All Hanglet badges: see which ones you earned and how close you are to the next one.">
+  <meta name="theme-color" content="#f6f7f9">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hanglet">
+  <meta property="og:title" content="Badges – Hanglet">
+  <meta property="og:description" content="All Hanglet badges: see which ones you earned and how close you are to the next one.">
+  <meta property="og:image" content="assets/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="assets/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/figures.css">
+  <link rel="stylesheet" href="css/game.css">
+
+  <!-- Visitor statistics (GoatCounter) are set up in js/analytics.js -->
+  <script src="js/theme-init.js"></script>
+  <script type="module" src="js/pages/badges.js"></script>
+</head>
+<body class="page-badges">
+  <main id="main" class="container badges-page">
+    <h1 class="page-title" data-i18n="badges.title"></h1>
+    <p class="page-intro" data-i18n="badges.intro"></p>
+    <section class="card badge-summary" id="badge-summary"></section>
+    <ul class="badge-grid" id="badge-grid"></ul>
+  </main>
+</body>
+</html>

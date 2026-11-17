@@ -21,11 +21,12 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/pages.css">
   <link rel="stylesheet" href="css/figures.css">
+  <link rel="stylesheet" href="css/game.css">
 
   <!-- Visitor statistics (GoatCounter) are set up in js/analytics.js -->
   <script src="js/theme-init.js"></script>
@@ -40,6 +41,7 @@
         <h1 id="mode-title">Hanglet</h1>
         <p id="mode-subtitle"></p>
       </div>
+      <button class="icon-button music-button" id="music-button" type="button" aria-pressed="false" data-i18n-attr="aria-label: music.label"></button>
       <button class="hint-button" id="hint-button" type="button" hidden></button>
     </div>
 
@@ -52,7 +54,11 @@
         <div class="lives" id="lives" role="img"></div>
       </div>
       <div class="board-main">
-        <div class="figure-box" id="figure"></div>
+        <div class="figure-stage">
+          <div class="figure-box" id="figure"></div>
+          <div class="stage-mascot" id="stage-mascot"></div>
+          <div class="combo-area" id="combo" aria-hidden="true"></div>
+        </div>
         <div class="board-play">
           <div class="clue" id="clue" hidden aria-live="polite"></div>
           <div class="word" id="word" role="img"></div>

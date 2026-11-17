@@ -4,10 +4,15 @@ import NL_WORDS from "../../data/words/nl.js";
 import KIDS from "../../data/kids.js";
 import { language, t } from "./i18n.js";
 import { pickRandom } from "./random.js";
+import { isWinterSeason } from "./season.js";
 
 const WORD_LISTS = { en: EN_WORDS, nl: NL_WORDS };
 
-export const CATEGORY_IDS = ["animals", "food", "countries", "sports", "nature", "jobs", "science", "music"];
+export const CATEGORY_IDS = ["animals", "food", "countries", "sports", "nature", "jobs", "science", "music", "colors", "clothing"];
+
+// In the winter season there is one extra category, shown first
+export const SEASON_CATEGORY = isWinterSeason() ? "winter" : null;
+export const PLAYABLE_CATEGORIES = SEASON_CATEGORY ? [SEASON_CATEGORY, ...CATEGORY_IDS] : CATEGORY_IDS;
 
 export const LENGTHS = [
   { id: "short", min: 4, max: 5 },
@@ -26,7 +31,7 @@ export const KIDS_LIVES = 10;
 // Every word of a language with its category and description
 export function getAllWords(lang = language) {
   const list = WORD_LISTS[lang] || WORD_LISTS.en;
-  return CATEGORY_IDS.flatMap((category) =>
+  return PLAYABLE_CATEGORIES.flatMap((category) =>
     list[category].map(([word, description]) => ({ word, description, category }))
   );
 }
@@ -81,6 +86,12 @@ function pickFresh(pool, recentWords) {
 }
 
 // Find the description and picture of a word (used by the dictionary)
+// Searches every list of the language, also the season list outside the season
 export function findWord(word) {
-  return ALL_WORDS.find((item) => item.word === word) || KIDS_WORDS.find((item) => item.word === word);
+  const list = WORD_LISTS[language] || WORD_LISTS.en;
+  for (const [category, words] of Object.entries(list)) {
+    const found = words.find(([item]) => item === word);
+    if (found) return { word, description: found[1], category };
+  }
+  return KIDS_WORDS.find((item) => item.word === word);
 }

@@ -1,12 +1,13 @@
 # Hanglet
 
-**A calm word game for every day, for all ages, in English and Dutch.**
+**A playful word game for every day, for all ages, in English and Dutch.**
 
-Hanglet is a word guessing game for the browser. Guess the hidden word letter by
-letter before your figure is finished. Play the Daily (three words, the same for
-everyone), endless Classic games, a level map with 40 levels, a 2-minute Time
-Attack, or the Kids mode with pictures. Earn XP and coins, unlock figures, themes
-and badges, and collect every word in your own dictionary.
+Guess the hidden word letter by letter together with **Tilo**, the little letter
+tile with a hook on his head. Play the Daily (three words, the same for everyone),
+endless Classic games, a level map with 40 levels, a 2-minute Time Attack, the
+Kids mode with pictures, or challenge a friend with your own secret word. Open
+your daily treasure chest, finish daily missions, collect badges and fill your
+own dictionary.
 
 Inspired by the Codédex Python tutorial, rebuilt as a full web game.
 
@@ -14,46 +15,47 @@ Inspired by the Codédex Python tutorial, rebuilt as a full web game.
 
 ## Features
 
-**Two languages**
-- English and Dutch, chosen on the first visit (the browser language is picked automatically) and changeable in Settings or in the footer
-- All interface text in `data/i18n/en.json` and `data/i18n/nl.json`
-- A separate word list per language: real Dutch words, not translations. 42–43 words per category per language, each with a short description
+**Look and feel**
+- Own mascot **Tilo** (SVG) with five moods: happy, thinking, surprised, sad and cheering. He greets you on the home page, reacts to every letter and cheers or comforts you on the result screen
+- Logo made of colored letter tiles, rounded **Fredoka** font for headings and **Nunito** for text
+- Bright, friendly palette with a soft illustrated background, in light and dark mode
+- Chunky 3D buttons, keys and tiles that press down
+- Smooth page transitions (View Transitions API, with a fade-in fallback)
+- Juicy feedback: tiles that flip in, particles on right letters, shaking on misses, combo texts ("Nice! Combo x3")
+- Optional calm background music made with the Web Audio API (off by default), plus sound effects
+- Winter season look from 1 December to 6 January: snow, Tilo with a hat and an extra Winter word list
 
 **Game modes**
-- **Daily** – three words per day (short, medium, long), the same for everyone with the same language. Once per day, with a live countdown to the next one
+- **Daily** – three words per day, the same for everyone with the same language, with progress rings and a countdown. Afterwards "Play more" goes straight to Classic
 - **Classic** – endless play with your own category, length and difficulty
-- **Levels** – 40 levels on a winding map in four stages, up to 3 stars per level
+- **Levels** – 40 levels on a winding map. Every level has 3 to 6 words, stars count the misses of the whole level
 - **Time Attack** – as many words as you can in 2 minutes
-- **Kids** – short easy words with a picture hint, 10 lives, big buttons, warm colors, free hints, friendly texts and no time pressure
+- **Kids** – short easy words with a picture hint, 10 lives, big buttons and free hints
+- **Challenge a friend** – type a secret word (and a hint), get a link and send it, also via WhatsApp. The word is scrambled inside the link, so no server is needed
 
-**Hints** (free in Kids mode)
-- Show the description – 10 coins
-- Reveal a letter – 20 coins (never the last one)
-- Remove 3 wrong letters – 15 coins
+**Rewards**
+- XP, player levels with a level-up screen, coins that fly to the counter
+- Daily treasure chest: 20–60 coins and sometimes a free hint
+- Three daily missions (for example "Solve 2 words without a miss") with coin rewards
+- 21 badges that pop up when you earn them, and a badge page with progress
+- 5 figures (classic, balloon, flower, snowman, rocket) and 8 color themes to unlock
+- "My dictionary" with every word you solved and its meaning
+- Share card: a picture of your result (made on a canvas), without spoilers
 
-**Figures** (own SVG drawings with animations)
-- Classic figure (free), balloon that loses air and floats away on a win (free)
-- Flower that loses its petals (150 coins), snowman that melts (badge "Getting good")
-- Rocket that you build with every right letter and that launches when you win (300 coins)
+**Words**
+- English and Dutch, each with its own word list of real words (no translations)
+- 10 categories with 42–46 words each, every word with a short description: animals, food, countries, sports, nature, jobs, science, music, colors and clothing
+- An extra Winter list (43–44 words) in the winter season, and 37 Kids words with own pictures
 
-**For all ages**
-- Welcome dialog: language, who is playing (everyone / kids) and large text
-- Interactive tour the first time you play (it asks you to tap a letter)
-- Settings for large text, high contrast and reduced motion
+**For everyone**
+- Welcome dialog (language, who is playing, large text) and an interactive tour
+- Large text, high contrast and reduce motion (also follows the device setting)
 - Keyboard play, screen reader labels and live messages, visible focus
 
-**Progress**
-- XP, player levels and coins, 21 badges, 8 color themes
-- Day streak and win streak, with a calendar
-- "My dictionary": every solved word with its description, search and category filter
-- Statistics: played, win %, streaks, misses per game
-
 **Website and app**
-- Home, How to play, About, Privacy and 404 pages (text pages in English and Dutch)
-- Spoiler-free share button
+- Home, How to play, About, Privacy and 404 pages in English and Dutch
 - Installable as an app (PWA) and works offline
-- Title, description and Open Graph tags
-- Sounds made with the Web Audio API (no audio files)
+- Title, description and Open Graph tags, translated per language
 - Optional, cookie-free visitor statistics with GoatCounter
 
 ## How to run
@@ -84,76 +86,71 @@ export const GOATCOUNTER_CODE = "your-code";
 
 Leave it empty to keep statistics off. GoatCounter uses no cookies.
 
+### Try the winter look
+
+The winter season starts automatically on 1 December. To see it earlier, open
+any page with `?season=winter` (and `?season=off` to go back). The choice is
+remembered until you close the tab.
+
 ### After changing files
 
 The service worker (`sw.js`) saves all files for offline use. Raise the version
-in `CACHE_NAME` (for example `hanglet-v3`) and add new files to `FILES`, so
-players get the new version.
+in `CACHE_NAME` (now `hanglet-v3`) and add new files to `FILES`, so players get
+the new version.
 
 ### Adding words
 
 Add a line like `["giraffe", "The animal with the longest neck"]` to the right
 category in `data/words/en.js` or `data/words/nl.js`. Use lowercase letters a–z
-only (no accents) and at least 4 letters.
+only (no accents), at least 4 letters, and don't use the word itself in the
+description.
 
 ## Folder structure
 
 ```
 word-guessing-web/
-├── index.html            Home page
-├── play.html             Game screen (?mode=daily|classic|levels|timed|kids)
+├── index.html            Home: mascot, Play button, Daily, chest, missions, modes
+├── play.html             Game screen (?mode=daily|classic|levels|timed|kids|challenge)
 ├── levels.html           Level map
+├── challenge.html        Make a challenge for a friend
+├── badges.html           All badges
 ├── dictionary.html       My dictionary
-├── stats.html            Statistics, calendar and badges
-├── settings.html         Language, look, accessibility, figures, sound, reset
-├── how-to-play.html      Rules (English + Dutch)
-├── about.html            About (English + Dutch)
-├── privacy.html          Privacy (English + Dutch)
-├── 404.html              Page not found
+├── stats.html            Statistics and calendar
+├── settings.html         Language, look, accessibility, figures, sound, music, reset
+├── how-to-play.html, about.html, privacy.html, 404.html   (English + Dutch)
 ├── manifest.webmanifest  PWA settings
 ├── sw.js                 Service worker (offline)
 ├── css/
-│   ├── base.css          Design tokens, palette, themes, accessibility, header, footer
+│   ├── base.css          Tokens, palette, themes, accessibility, header, footer
 │   ├── components.css    Buttons, cards, switches, dialogs, hint menu, tour
-│   ├── pages.css         Home, game, Kids, result screen, level map, dictionary…
-│   └── figures.css       Colors and animations of the five figures
+│   ├── pages.css         Game board, levels, dictionary, stats, settings
+│   ├── figures.css       The five figures and their animations
+│   └── game.css          The v3 game look: fonts, colors, depth, mascot, home,
+│                         effects, rewards, badges, challenge, share, winter
 ├── data/
-│   ├── i18n/en.json      English interface text
-│   ├── i18n/nl.json      Dutch interface text
-│   ├── words/en.js       English words + descriptions
-│   ├── words/nl.js       Dutch words + descriptions
-│   └── kids.js           Kids words (both languages) + picture names
+│   ├── i18n/en.json, nl.json   Interface text
+│   ├── words/en.js, nl.js      Word lists with descriptions (incl. the Winter list)
+│   └── kids.js                 Kids words + picture names
 ├── js/
-│   ├── theme-init.js     Sets colors, text size and language before the page shows
+│   ├── theme-init.js     Colors, text size, language and season before the page shows
 │   ├── analytics.js      GoatCounter setup (fill in your code here)
 │   ├── core/             Game logic without page code
-│   │   ├── i18n.js         Loading texts, t() and translatePage()
-│   │   ├── round.js        One round: word, lives, guesses, hints
-│   │   ├── words.js        Word lists per language
-│   │   ├── daily.js        Daily words per date and language
-│   │   ├── levels.js       The 40 levels and stars
-│   │   ├── progress.js     Stats, streaks, XP, coins, dictionary, hints, shop
-│   │   ├── achievements.js Badges
-│   │   ├── figures.js      Figures and how to unlock them
-│   │   ├── themes.js       Color themes and how to unlock them
-│   │   ├── xp.js           Player levels
-│   │   ├── storage.js      Saving in localStorage
-│   │   ├── dates.js        Date helpers
-│   │   └── random.js       (Seeded) random helpers
+│   │   ├── round.js, words.js, daily.js, levels.js, progress.js, achievements.js
+│   │   ├── missions.js     Daily missions
+│   │   ├── chest.js        Daily treasure chest
+│   │   ├── challenge.js    Challenge links (scramble and unscramble)
+│   │   ├── season.js       Winter season
+│   │   └── i18n.js, storage.js, figures.js, themes.js, xp.js, dates.js, random.js
 │   ├── ui/
-│   │   ├── figures/        classic, balloon, flower, snowman, rocket (+ index, steps)
-│   │   ├── pictures.js     SVG pictures for the Kids mode
-│   │   ├── layout.js       Header, tab bar, footer, language switch
-│   │   ├── welcome.js      First-visit dialog
-│   │   ├── tutorial.js     Interactive tour
-│   │   ├── keyboard.js     On-screen keyboard
-│   │   ├── feedback.js     Sounds (Web Audio) and vibration
-│   │   ├── countdown.js    Countdown to the next Daily
-│   │   ├── confetti.js     Confetti on a win
-│   │   ├── toast.js        Small messages, copy to clipboard
-│   │   ├── appearance.js   Color mode, theme, text size, contrast, motion
-│   │   ├── install.js      "Install app" button
-│   │   └── icons.js        Line icons and the logo
+│   │   ├── mascot.js       Tilo and his moods
+│   │   ├── effects.js      Particles, combo text, flying coins
+│   │   ├── celebrations.js Level up, badge and mission pops
+│   │   ├── home-rewards.js Chest and missions on the home page
+│   │   ├── share.js        Share card (canvas) and share window
+│   │   ├── music.js        Background music (Web Audio)
+│   │   ├── illustrations.js Pictures for the mode tiles and the chest
+│   │   ├── figures/        classic, balloon, flower, snowman, rocket
+│   │   └── layout.js, keyboard.js, feedback.js, tutorial.js, welcome.js, …
 │   └── pages/            One script per page
 └── assets/               Logo, favicon, app icons, preview image
 ```
@@ -161,7 +158,7 @@ word-guessing-web/
 ## Privacy
 
 No account and no cookies. All progress is saved in the browser's
-`localStorage` on the player's own device. The Nunito font is loaded from Google
+`localStorage` on the player's own device. The fonts are loaded from Google
 Fonts. Visitor statistics with GoatCounter are off until you add your code.
 
 ## Credits

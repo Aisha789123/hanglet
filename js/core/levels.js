@@ -4,24 +4,28 @@ import { CATEGORY_IDS } from "./words.js";
 export const LEVEL_COUNT = 40;
 
 // Level 1-10: short words, 11-20: medium, 21-40: long. Fewer lives every 10 levels.
+// Every level has several words: 3 in the first stage, up to 6 in the last.
 export function getLevel(number) {
   const tier = Math.floor((number - 1) / 10);
   const lengths = ["short", "medium", "long", "long"];
   const lives = [8, 7, 6, 5];
+  const wordCounts = [3, 4, 5, 6];
   const category = CATEGORY_IDS[(number - 1) % CATEGORY_IDS.length];
   return {
     number,
     length: lengths[tier],
     lives: lives[tier],
+    wordCount: wordCounts[tier],
     category,
     stage: ["warmup", "climb", "expert", "summit"][tier],
   };
 }
 
-// 3 stars for 0-1 misses, 2 stars for up to half of the lives, else 1 star
-export function starsFor(misses, lives) {
-  if (misses <= 1) return 3;
-  if (misses <= lives / 2) return 2;
+// Stars for a whole level, based on all misses in all its words.
+// 3 words: 0-1 misses = 3 stars, up to 6 = 2 stars, more = 1 star.
+export function starsForLevel(totalMisses, wordCount) {
+  if (totalMisses <= wordCount - 2) return 3;
+  if (totalMisses <= wordCount * 2) return 2;
   return 1;
 }
 

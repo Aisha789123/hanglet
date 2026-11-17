@@ -5,6 +5,11 @@ export function createClassic(container) {
   container.innerHTML = `
     <svg class="figure figure-classic" viewBox="0 0 200 200" role="img">
       <ellipse class="ground" cx="96" cy="186" rx="84" ry="9"/>
+      <g class="ghost">
+        <path d="M30 179.5h96M57.5 180V25.5M57.5 25.5h86M60 66L98 28M134 30c3 8-2 14 0 22"/>
+        <circle cx="134" cy="68" r="16"/>
+        <path d="M134 84v44M114 108l20-14 20 14M134 128l-15 30M134 128l15 30"/>
+      </g>
       <rect class="part wood" data-step="1" x="30" y="174" width="96" height="11" rx="5.5"/>
       <rect class="part wood" data-step="2" x="52" y="24" width="11" height="156" rx="5.5"/>
       <rect class="part wood" data-step="3" x="52" y="20" width="92" height="11" rx="5.5"/>

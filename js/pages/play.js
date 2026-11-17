@@ -2,9 +2,9 @@
 import { data, save } from "../core/storage.js";
 import { language, t, tn } from "../core/i18n.js";
 import { Round } from "../core/round.js";
-import { CATEGORY_IDS, DIFFICULTIES, KIDS_LIVES, LENGTHS, getCategoryName, getLives, pickKidsWord, pickWord } from "../core/words.js";
+import { DIFFICULTIES, KIDS_LIVES, LENGTHS, PLAYABLE_CATEGORIES, getCategoryName, getLives, pickKidsWord, pickWord } from "../core/words.js";
 import { DAILY_LIVES, getDailyNumber, getDailyWords } from "../core/daily.js";
-import { LEVEL_COUNT, getLevel, highestUnlocked, starsFor } from "../core/levels.js";
+import { LEVEL_COUNT, getLevel, highestUnlocked, starsForLevel } from "../core/levels.js";
 import { HINTS, checkAchievements, countHint, currentDailyStreak, recordDaily, recordLevel, recordTimed, recordWord, spendCoins } from "../core/progress.js";
 import { getFigure, isFigureOwned } from "../core/figures.js";
 import { toDateKey } from "../core/dates.js";
@@ -18,11 +18,18 @@ import { launchConfetti } from "../ui/confetti.js";
 import { isReducedMotion } from "../ui/appearance.js";
 import { startCountdown } from "../ui/countdown.js";
 import { startTutorial } from "../ui/tutorial.js";
-import { copyText, showToast } from "../ui/toast.js";
+import { showToast } from "../ui/toast.js";
+import { shareResult } from "../ui/share.js";
+import { createMascot, mascotSvg } from "../ui/mascot.js";
+import { burst, floatText, flyCoins } from "../ui/effects.js";
+import { showBadgePops, showLevelUp, showMissionPops } from "../ui/celebrations.js";
+import { trackMission } from "../core/missions.js";
+import { decodeChallenge } from "../core/challenge.js";
+import { startMusic, stopMusic } from "../ui/music.js";
 
 // ---------- Mode ----------
 const params = new URLSearchParams(location.search);
-const MODE_NAMES = ["daily", "classic", "levels", "timed", "kids"];
+const MODE_NAMES = ["daily", "classic", "levels", "timed", "kids", "challenge"];
 const modeName = MODE_NAMES.includes(params.get("mode")) ? params.get("mode") : "classic";
 const isKids = modeName === "kids";
 if (isKids) document.body.classList.add("is-kids");
@@ -44,6 +51,9 @@ const wordEl = document.getElementById("word");
 const announcer = document.getElementById("announcer");
 const dialog = document.getElementById("result-dialog");
 const hintSheet = document.getElementById("hint-sheet");
+const comboEl = document.getElementById("combo");
+const musicButton = document.getElementById("music-button");
+const mascot = createMascot(document.getElementById("stage-mascot"), "happy");
 
 const keyboard = createKeyboard(document.getElementById("keyboard"), handleGuess);
 
@@ -70,6 +80,7 @@ function startRound(pick, lives, earlierGuesses = []) {
   keyboard.reset();
   keyboard.setLocked(false);
   figure = createFigure(chosenFigureId(), figureEl);
+  mascot.setMood("happy");
 
   // Put back guesses from a Daily that was left halfway
   for (const letter of earlierGuesses) {
@@ -101,7 +112,9 @@ function handleGuess(letter) {
   if (result === "correct") {
     playSound("correct", correctInRow);
     correctInRow++;
-    updateTiles();
+    const newTiles = updateTiles();
+    newTiles.forEach((tile) => burst(tile, 8));
+    celebrate(newTiles.length);
     announce(t("play.letterRight", { letter: letter.toUpperCase() }));
   } else {
     correctInRow = 0;
@@ -109,11 +122,28 @@ function handleGuess(letter) {
     vibrate(40);
     shakeBoard();
     updateLives();
+    mascot.setMood(round.livesLeft() <= 1 ? "surprised" : "thinking");
+    mascot.react("shake");
     announce(t("play.letterWrong", { letter: letter.toUpperCase(), count: round.livesLeft() }));
   }
   updateFigure();
   tour?.notifyGuess(result);
   afterGuess();
+}
+
+// Mascot and combo text after a right letter
+function celebrate(newLetters) {
+  mascot.setMood(correctInRow >= 3 ? "cheering" : "happy");
+  mascot.react("bounce");
+  if (round.isOver()) return;
+  if (correctInRow === 4) showMissionPops(trackMission({ type: "combo", count: correctInRow }));
+  if (correctInRow >= 2) {
+    const words = ["", "", "combo.nice", "combo.great", "combo.amazing"];
+    const key = words[Math.min(correctInRow, 4)];
+    floatText(comboEl, `${t(key)} ${t("combo.count", { count: correctInRow })}`, correctInRow >= 4 ? "coral" : "sun");
+  } else if (newLetters >= 2) {
+    floatText(comboEl, t("combo.double", { count: newLetters }), "mint");
+  }
 }
 
 // Runs after every guess or hint
@@ -130,6 +160,7 @@ function afterGuess() {
   updateClue(true);
   if (won) figure.win();
   else figure.lose();
+  mascot.setMood(won ? "cheering" : "sad");
   playSound(won ? figure.winSound : figure.loseSound);
   // The rocket has its own launch sound, play the happy tune after it
   if (won && figure.winSound !== "win") setTimeout(() => playSound("win"), 900);
@@ -142,8 +173,14 @@ function afterGuess() {
 
 // ---------- Hints ----------
 
+// A free hint from the treasure chest is used before coins
+function usesToken() {
+  return !isKids && data.player.hintTokens > 0;
+}
+
 function hintCost(hint) {
-  return isKids ? 0 : hint.cost;
+  if (modeName === "challenge" && hint.id === "description") return 0;
+  return isKids || usesToken() ? 0 : hint.cost;
 }
 
 function hintAvailable(hint) {
@@ -161,6 +198,7 @@ function openHintSheet() {
       <h2 id="hint-title">${t("hints.title")}</h2>
       <span class="pill pill-coins">${icon("coin")}<span>${coins}</span></span>
     </div>
+    ${usesToken() ? `<p class="token-note">${icon("gift")}${tn("hints.tokens", data.player.hintTokens)}</p>` : ""}
     <div class="hint-options">
       ${HINTS.map((hint) => {
         const cost = hintCost(hint);
@@ -190,7 +228,10 @@ function useHint(id) {
   hintSheet.close();
   if (!hintAvailable(hint)) return;
   const cost = hintCost(hint);
-  if (cost > 0 && !spendCoins(cost)) {
+  if (usesToken()) {
+    data.player.hintTokens--;
+    save();
+  } else if (cost > 0 && !spendCoins(cost)) {
     showToast(t("hints.notEnough", { coins: cost }), icon("coin"));
     return;
   }
@@ -226,6 +267,7 @@ function buildTiles() {
 // Fill in guessed letters. With showAll, missing letters are shown too (after a loss).
 function updateTiles(showAll = false) {
   const tiles = wordEl.children;
+  const newTiles = [];
   let delay = 0;
   [...round.word].forEach((letter, index) => {
     const tile = tiles[index];
@@ -237,12 +279,14 @@ function updateTiles(showAll = false) {
       tile.classList.add(guessed ? "is-revealed" : "is-missed");
       tile.style.animationDelay = `${delay}ms`;
       delay += 60;
+      newTiles.push(tile);
     }
   });
   const spoken = [...round.word]
     .map((letter, index) => (tiles[index].dataset.letter ? letter.toUpperCase() : t("play.blank")))
     .join(" ");
   wordEl.setAttribute("aria-label", t("play.wordLabel", { count: round.word.length, letters: spoken }));
+  return newTiles;
 }
 
 function updateLives() {
@@ -314,12 +358,6 @@ function rewardsHtml(rewards) {
     items.push(`<span class="reward reward-coins">${icon("coin")}<span data-count="${rewards.coins}">+${rewards.coins}</span></span>`);
   }
   let html = `<div class="rewards">${items.join("")}</div>`;
-  if (rewards.levelAfter > rewards.levelBefore) {
-    html += `<p class="unlock-note">${icon("spark")}${t("result.levelUp", { level: rewards.levelAfter })}</p>`;
-  }
-  for (const achievement of rewards.newAchievements) {
-    html += `<p class="unlock-note">${icon(achievement.icon)}${t("result.badge")} <strong>${t(`achievements.${achievement.id}.name`)}</strong></p>`;
-  }
   for (const theme of rewards.newThemes) {
     html += `<p class="unlock-note">${icon("palette")}${t("result.theme")} <strong>${t(`themes.${theme.id}`)}</strong> <a href="./settings.html">${t("result.tryIt")}</a></p>`;
   }
@@ -350,13 +388,20 @@ function countUp(container) {
   container.querySelectorAll("[data-count]").forEach((element) => {
     const target = Number(element.dataset.count);
     const start = performance.now();
+    let finished = false;
     function step(now) {
+      if (finished) return;
       // The frame time can be a little before "start", so keep progress between 0 and 1
       const progress = Math.min(1, Math.max(0, (now - start) / 700));
       element.textContent = `+${Math.round(target * (1 - (1 - progress) ** 3))}`;
       if (progress < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
+    // Always end on the right number, also when animation frames are slow or skipped
+    setTimeout(() => {
+      finished = true;
+      element.textContent = `+${target}`;
+    }, 900);
   });
 }
 
@@ -365,7 +410,7 @@ function showResult({ won, eyebrow, title, body = "", rewards = null, actions })
   dialog.className = `dialog result ${won ? "is-win" : "is-lose"}`;
   dialog.innerHTML = `
     <div class="result-hero">
-      <div class="result-badge">${icon(won ? "check" : "heart")}</div>
+      <div class="result-mascot">${mascotSvg(won ? "cheering" : "sad")}</div>
       <p class="eyebrow">${eyebrow}</p>
       <h2 id="result-title">${title}</h2>
     </div>
@@ -391,12 +436,32 @@ function showResult({ won, eyebrow, title, body = "", rewards = null, actions })
   actionsEl.firstElementChild?.focus();
   countUp(dialog);
   if (won) launchConfetti();
-  if (rewards && (rewards.newAchievements.length || rewards.newThemes.length)) {
-    setTimeout(() => playSound("unlock"), 500);
-  } else if (rewards && rewards.coins > 0) {
-    setTimeout(() => playSound("coin"), 400);
+  celebrateRewards(rewards);
+}
+
+// Coins fly to the counter, then level up, badges and missions show
+function celebrateRewards(rewards) {
+  if (!rewards) {
+    refreshHeader();
+    return;
   }
-  refreshHeader();
+  const coinsEl = dialog.querySelector(".reward-coins");
+  if (rewards.coins > 0 && coinsEl) {
+    setTimeout(() => flyCoins(coinsEl, rewards.coins, () => {
+      refreshHeader();
+      playSound("coin");
+    }), 500);
+  } else {
+    refreshHeader();
+  }
+  const missions = [...(rewards.missionsDone || []), ...(rewards.extraMissions || [])];
+  setTimeout(async () => {
+    if (rewards.levelAfter > rewards.levelBefore) {
+      await showLevelUp(rewards.levelAfter, rewards.newThemes);
+    }
+    showBadgePops(rewards.newAchievements);
+    showMissionPops(missions);
+  }, 1100);
 }
 
 function closeResult() {
@@ -406,15 +471,13 @@ function closeResult() {
 // The player has to choose an action, so Escape does nothing
 dialog.addEventListener("cancel", (event) => event.preventDefault());
 
-function shareAction(getText, primary = false) {
+// getCard gives the data for the share picture (see js/ui/share.js)
+function shareAction(getText, primary = false, getCard = null) {
   return {
     label: t("result.share"),
     icon: "share",
     primary,
-    onClick: async () => {
-      const copied = await copyText(getText());
-      showToast(copied ? t("result.copied") : t("result.copyFailed"), icon("check"));
-    },
+    onClick: () => shareResult({ text: getText(), card: getCard ? getCard() : null }),
   };
 }
 
@@ -439,7 +502,7 @@ function optionGroup(name, label, items, selected) {
 
 function showSetup(intro, startLabel, onStart) {
   const options = data.settings.options;
-  const categories = ["mixed", ...CATEGORY_IDS].map((id) => ({ id, name: getCategoryName(id) }));
+  const categories = ["mixed", ...PLAYABLE_CATEGORIES].map((id) => ({ id, name: getCategoryName(id) }));
   const lengths = LENGTHS.map((item) => ({ id: item.id, name: t(`lengths.${item.id}`), detail: t(`lengths.${item.id}Detail`) }));
   const difficulties = DIFFICULTIES.map((item) => ({ id: item.id, name: t(`difficulty.${item.id}`), detail: tn("common.lives", item.lives) }));
   setupEl.innerHTML = `
@@ -483,6 +546,7 @@ function roundResult(won) {
     category: round.category,
     picture: round.picture,
     isKids,
+    hintsUsed: round.hintsUsed,
   };
 }
 
@@ -491,6 +555,18 @@ function roundResult(won) {
 const classic = {
   title: () => t("modes.classic.title"),
   start() {
+    // "?category=animals" picks a category, "?start=1" skips the options screen
+    const category = params.get("category");
+    if (category && ["mixed", ...PLAYABLE_CATEGORIES].includes(category)) {
+      data.settings.options.category = category;
+      save();
+    }
+    if (params.get("start") === "1") {
+      history.replaceState(null, "", "?mode=classic");
+      params.delete("start");
+      classic.next();
+      return;
+    }
     subtitleEl.textContent = t("modes.classic.subtitle");
     showSetup(t("setup.classicIntro"), t("setup.start"), () => classic.next());
   },
@@ -512,7 +588,8 @@ const classic = {
       actions: [
         { label: t("result.nextWord"), icon: "next", primary: true, onClick: () => classic.next() },
         { label: t("result.options"), icon: "sliders", onClick: () => { closeResult(); classic.start(); } },
-        ...(won ? [shareAction(() => t("share.classic", { count: round.word.length, misses: missesText(round.misses), link: shareLink() }))] : []),
+        ...(won ? [shareAction(() => t("share.classic", { count: round.word.length, misses: missesText(round.misses), link: shareLink() }), false,
+          () => ({ title: t("modes.classic.title"), subtitle: t("share.letters", { count: round.word.length }), rows: [{ won: true, misses: round.misses, lives: round.lives }] }))] : []),
       ],
     });
   },
@@ -549,8 +626,12 @@ const kids = {
 };
 
 // ---------- Mode: Levels ----------
+// A level has several words. Lose one word and the level is failed.
+// The stars depend on all misses in the whole level.
 
 let levelNumber = 1;
+let levelResults = []; // { won, misses } per word
+let levelWords = [];
 
 const levels = {
   title: () => t("modes.levels.title"),
@@ -563,43 +644,98 @@ const levels = {
   play() {
     closeResult();
     const level = getLevel(levelNumber);
+    levelResults = [];
+    // Pick all words of the level at the start, all different
+    levelWords = [];
+    const avoid = [...data.stats.recentWords];
+    for (let i = 0; i < level.wordCount; i++) {
+      const pick = pickWord(level.category, level.length, avoid);
+      levelWords.push(pick);
+      avoid.push(pick.word);
+    }
     titleEl.textContent = t("levels.level", { number: levelNumber });
-    subtitleEl.textContent = `${t(`stages.${level.stage}`)} · ${getCategoryName(level.category)} · ${tn("common.lives", level.lives)}`;
     history.replaceState(null, "", `?mode=levels&level=${levelNumber}`);
     hintButton.hidden = false;
-    startRound(pickWord(level.category, level.length, data.stats.recentWords), level.lives);
+    levels.nextWord();
+  },
+  nextWord() {
+    closeResult();
+    const level = getLevel(levelNumber);
+    const index = levelResults.length;
+    subtitleEl.textContent = `${t("modes.daily.progress", { index: index + 1, total: level.wordCount })} · ${t(`stages.${level.stage}`)} · ${getCategoryName(level.category)}`;
+    statusEl.innerHTML = progressDots(levelResults, index, level.wordCount);
+    startRound(levelWords[index], level.lives);
   },
   onRoundEnd(won) {
-    const stars = won ? starsFor(round.misses, round.lives) : 0;
-    if (won) recordLevel(levelNumber, stars);
+    const level = getLevel(levelNumber);
+    levelResults.push({ won, misses: round.misses });
     const rewards = recordWord(roundResult(won));
-    const starRow = `<div class="star-row" aria-label="${t("levels.starsLabel", { count: stars })}">${[1, 2, 3]
-      .map((n) => `<span class="${n <= stars ? "is-earned" : ""}">${icon("star")}</span>`).join("")}</div>`;
+    statusEl.innerHTML = progressDots(levelResults, levelResults.length, level.wordCount);
     const isLast = levelNumber >= LEVEL_COUNT;
 
-    const actions = won
-      ? [
-          isLast
-            ? { label: t("levels.map"), icon: "path", primary: true, href: "./levels.html" }
-            : { label: t("levels.level", { number: levelNumber + 1 }), icon: "next", primary: true, onClick: () => { levelNumber++; levels.play(); } },
-          { label: t("levels.map"), icon: "path", href: "./levels.html" },
-          shareAction(() => t("share.level", { number: levelNumber, stars, link: shareLink() })),
-        ]
-      : [
+    if (!won) {
+      showResult({
+        won: false,
+        eyebrow: t("levels.level", { number: levelNumber }),
+        title: t("levels.failed"),
+        body: wordReveal(round.word, round.description) + `<p class="result-text">${t("levels.failedText")}</p>`,
+        rewards,
+        actions: [
           { label: t("result.tryAgain"), icon: "refresh", primary: true, onClick: () => levels.play() },
           { label: t("levels.map"), icon: "path", href: "./levels.html" },
-        ];
+        ],
+      });
+      return;
+    }
 
+    // More words to go in this level
+    if (levelResults.length < level.wordCount) {
+      showResult({
+        won: true,
+        eyebrow: t("modes.daily.wordOf", { index: levelResults.length, total: level.wordCount }),
+        title: t("result.niceOne"),
+        body: wordReveal(round.word, round.description),
+        rewards,
+        actions: [{ label: t("result.nextWord"), icon: "next", primary: true, onClick: () => levels.nextWord() }],
+      });
+      return;
+    }
+
+    // The whole level is done
+    const totalMisses = levelResults.reduce((sum, result) => sum + result.misses, 0);
+    const stars = starsForLevel(totalMisses, level.wordCount);
+    const levelMissions = recordLevel(levelNumber, stars);
+    const starRow = `<div class="star-row" aria-label="${t("levels.starsLabel", { count: stars })}">${[1, 2, 3]
+      .map((n) => `<span class="${n <= stars ? "is-earned" : ""}">${icon("star")}</span>`).join("")}</div>`;
     showResult({
-      won,
-      eyebrow: t("levels.level", { number: levelNumber }),
-      title: won ? (isLast ? t("levels.summit") : t("levels.complete")) : t("levels.failed"),
-      body: (won ? starRow : "") + wordReveal(round.word, round.description),
-      rewards,
-      actions: isLast && won ? actions.filter((a, i) => i !== 1) : actions,
+      won: true,
+      eyebrow: `${t("levels.level", { number: levelNumber })} · ${tn("common.misses", totalMisses)}`,
+      title: isLast ? t("levels.summit") : t("levels.complete"),
+      body: starRow + wordReveal(round.word, round.description),
+      rewards: { ...rewards, extraMissions: levelMissions },
+      actions: [
+        isLast
+          ? { label: t("levels.map"), icon: "path", primary: true, href: "./levels.html" }
+          : { label: t("levels.level", { number: levelNumber + 1 }), icon: "next", primary: true, onClick: () => { levelNumber++; levels.play(); } },
+        ...(isLast ? [] : [{ label: t("levels.map"), icon: "path", href: "./levels.html" }]),
+        shareAction(() => t("share.level", { number: levelNumber, stars, link: shareLink() }), false,
+          () => ({ title: t("levels.level", { number: levelNumber }), subtitle: t("levels.starsLabel", { count: stars }), stars, rows: levelResults })),
+      ],
     });
   },
 };
+
+// Dots that show the words of a level or the Daily: solved, missed, now, to do
+function progressDots(results, index, total) {
+  return `<ol class="daily-dots" aria-label="${t("modes.daily.dotsLabel")}">${Array.from({ length: total }, (_, i) => {
+    const result = results[i];
+    const state = result ? (result.won ? "is-won" : "is-lost") : i === index ? "is-current" : "";
+    const label = result
+      ? (result.won ? t("modes.daily.dotSolved") : t("modes.daily.dotMissed"))
+      : i === index ? t("modes.daily.dotCurrent") : t("modes.daily.dotTodo");
+    return `<li class="${state}" aria-label="${i + 1}: ${label}"></li>`;
+  }).join("")}</ol>`;
+}
 
 // ---------- Mode: Daily ----------
 
@@ -632,7 +768,7 @@ const daily = {
     const progress = data.daily.progress;
     const words = dailyWords();
     subtitleEl.textContent = t("modes.daily.progress", { index: progress.index + 1, total: words.length });
-    statusEl.innerHTML = dailyDots(progress.results, progress.index, words.length);
+    statusEl.innerHTML = progressDots(progress.results, progress.index, words.length);
     hintButton.hidden = false;
     startRound(words[progress.index], DAILY_LIVES, progress.guessed);
   },
@@ -648,7 +784,7 @@ const daily = {
     progress.index++;
     progress.guessed = [];
     save();
-    statusEl.innerHTML = dailyDots(progress.results, progress.index, words.length);
+    statusEl.innerHTML = progressDots(progress.results, progress.index, words.length);
 
     if (progress.index < words.length) {
       showResult({
@@ -663,8 +799,8 @@ const daily = {
     }
 
     const results = progress.results;
-    recordDaily(today, results);
-    rewards = combineRewards(rewards, checkAchievements());
+    const dailyMissions = recordDaily(today, results);
+    rewards = { ...combineRewards(rewards, checkAchievements()), extraMissions: dailyMissions };
     const solved = results.filter((r) => r.won).length;
     showResult({
       won: solved > 0,
@@ -673,7 +809,8 @@ const daily = {
       body: wordReveal(round.word, round.description) + dailySummary(results),
       rewards,
       actions: [
-        shareAction(() => dailyShareText(results), true),
+        { label: t("modes.daily.playMore"), icon: "play", primary: true, href: playMoreLink(results) },
+        shareAction(() => dailyShareText(results), false, () => dailyCard(results)),
         { label: t("common.done"), icon: "check", onClick: () => { closeResult(); daily.showDone(); } },
       ],
     });
@@ -694,25 +831,14 @@ const daily = {
           <div><strong id="next-daily" class="countdown">--:--:--</strong><span>${t("modes.daily.next")}</span></div>
         </div>
         <div class="result-actions">
-          <button class="button button-primary" type="button" id="share-daily">${icon("share")}<span>${t("result.shareResult")}</span></button>
-          <a class="button button-secondary" href="./play.html?mode=classic">${icon("infinity")}<span>${t("modes.daily.playClassic")}</span></a>
+          <a class="button button-primary" href="${playMoreLink(entry.results)}">${icon("play")}<span>${t("modes.daily.playMore")}</span></a>
+          <button class="button button-secondary" type="button" id="share-daily">${icon("share")}<span>${t("result.shareResult")}</span></button>
         </div>
       </div>`;
     startCountdown(document.getElementById("next-daily"), () => location.reload());
-    setupEl.querySelector("#share-daily").addEventListener("click", shareAction(() => dailyShareText(entry.results)).onClick);
+    setupEl.querySelector("#share-daily").addEventListener("click", shareAction(() => dailyShareText(entry.results), false, () => dailyCard(entry.results)).onClick);
   },
 };
-
-function dailyDots(results, index, total) {
-  return `<ol class="daily-dots" aria-label="${t("modes.daily.dotsLabel")}">${Array.from({ length: total }, (_, i) => {
-    const result = results[i];
-    const state = result ? (result.won ? "is-won" : "is-lost") : i === index ? "is-current" : "";
-    const label = result
-      ? (result.won ? t("modes.daily.dotSolved") : t("modes.daily.dotMissed"))
-      : i === index ? t("modes.daily.dotCurrent") : t("modes.daily.dotTodo");
-    return `<li class="${state}" aria-label="${i + 1}: ${label}"></li>`;
-  }).join("")}</ol>`;
-}
 
 function dailySummary(results, showWords = false) {
   return `<ul class="daily-summary">${results.map((r, i) => `
@@ -721,6 +847,23 @@ function dailySummary(results, showWords = false) {
       <span>${showWords ? `<strong>${r.word}</strong> · ${getCategoryName(r.category)}` : t("modes.daily.wordNumber", { number: i + 1 })}</span>
       <span class="muted">${r.won ? missesText(r.misses) : t("modes.daily.notSolved")}</span>
     </li>`).join("")}</ul>`;
+}
+
+// "Play more" goes straight to Classic, with the category of the last Daily word
+function playMoreLink(results) {
+  const last = results[results.length - 1];
+  const category = last && PLAYABLE_CATEGORIES.includes(last.category) ? last.category : "mixed";
+  return `./play.html?mode=classic&start=1&category=${category}`;
+}
+
+// The share picture of a Daily
+function dailyCard(results) {
+  const solved = results.filter((r) => r.won).length;
+  return {
+    title: t("modes.daily.titleNumber", { number: dailyNumber }),
+    subtitle: t("modes.daily.solvedOf", { solved, total: results.length }),
+    rows: results,
+  };
 }
 
 // Spoiler-free: only shows solved or not and how many misses
@@ -782,6 +925,9 @@ const timed = {
     if (left === 0) timed.finish();
   },
   onRoundEnd(won) {
+    showMissionPops(trackMission({
+      type: "word", won, misses: round.misses, length: round.word.length, category: round.category, hintsUsed: round.hintsUsed,
+    }));
     if (won) {
       timedScore++;
       document.getElementById("timed-score").textContent = t("modes.timed.solved", { count: timedScore });
@@ -807,7 +953,54 @@ const timed = {
       actions: [
         { label: t("result.playAgain"), icon: "refresh", primary: true, onClick: () => timed.begin() },
         { label: t("result.options"), icon: "sliders", onClick: () => { closeResult(); timed.start(); } },
-        shareAction(() => t("share.timed", { count: timedScore, link: shareLink() })),
+        shareAction(() => t("share.timed", { count: timedScore, link: shareLink() }), false,
+          () => ({ title: t("modes.timed.title"), subtitle: tn("modes.timed.result", timedScore), big: timedScore })),
+      ],
+    });
+  },
+};
+
+// ---------- Mode: Challenge from a friend ----------
+
+const challengeData = decodeChallenge(params.get("c"));
+
+const challenge = {
+  title: () => t("modes.challenge.title"),
+  start() {
+    if (!challengeData) {
+      subtitleEl.textContent = "";
+      hintButton.hidden = true;
+      setupEl.hidden = false;
+      setupEl.innerHTML = `
+        <div class="daily-done">
+          <h2>${t("challenge.broken")}</h2>
+          <p class="setup-intro">${t("challenge.brokenText")}</p>
+          <div class="result-actions">
+            <a class="button button-primary" href="./challenge.html">${icon("play")}<span>${t("challenge.makeOwn")}</span></a>
+          </div>
+        </div>`;
+      return;
+    }
+    subtitleEl.textContent = challengeData.name
+      ? t("challenge.from", { name: challengeData.name })
+      : t("challenge.fromFriend");
+    hintButton.hidden = false;
+    startRound({ word: challengeData.word, category: "challenge", description: challengeData.hint }, DAILY_LIVES);
+  },
+  onRoundEnd(won) {
+    const name = challengeData.name || t("challenge.someone");
+    showResult({
+      won,
+      eyebrow: challengeData.name ? t("challenge.from", { name: challengeData.name }) : t("challenge.fromFriend"),
+      title: won ? t("result.solved") : t("result.notThisTime"),
+      body: wordReveal(round.word, challengeData.hint),
+      actions: [
+        { label: t("challenge.makeOwn"), icon: "play", primary: true, href: "./challenge.html" },
+        shareAction(() => (won
+          ? t("challenge.solvedShare", { name, misses: missesText(round.misses), link: shareLink() })
+          : t("challenge.lostShare", { name, link: shareLink() })), false,
+        () => ({ title: t("modes.challenge.title"), subtitle: name, rows: [{ won, misses: round.misses, lives: round.lives }] })),
+        { label: t("common.home"), icon: "home", href: "./index.html" },
       ],
     });
   },
@@ -815,13 +1008,38 @@ const timed = {
 
 // ---------- Start ----------
 
-const MODES = { classic, levels, daily, timed, kids };
+const MODES = { classic, levels, daily, timed, kids, challenge };
 const mode = MODES[modeName];
 
 document.title = `${mode.title()} – Hanglet`;
 titleEl.textContent = mode.title();
 hintButton.innerHTML = `${icon("bulb")}<span>${t("hints.button")}</span>`;
 hintButton.addEventListener("click", openHintSheet);
+
+// Background music: off by default, remembered in the settings
+function updateMusicButton() {
+  musicButton.innerHTML = icon("music");
+  musicButton.setAttribute("aria-pressed", String(data.settings.music));
+  musicButton.classList.toggle("is-on", data.settings.music);
+}
+musicButton.addEventListener("click", () => {
+  data.settings.music = !data.settings.music;
+  save();
+  if (data.settings.music) startMusic();
+  else stopMusic();
+  updateMusicButton();
+});
+updateMusicButton();
+// Browsers only allow sound after the first tap or key press
+if (data.settings.music) {
+  const startOnce = () => {
+    if (data.settings.music) startMusic();
+    window.removeEventListener("pointerdown", startOnce);
+    window.removeEventListener("keydown", startOnce);
+  };
+  window.addEventListener("pointerdown", startOnce);
+  window.addEventListener("keydown", startOnce);
+}
 hintSheet.addEventListener("click", (event) => {
   // Clicking the dark area outside the sheet closes it
   if (event.target === hintSheet) hintSheet.close();

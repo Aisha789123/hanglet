@@ -108,15 +108,3 @@ renderCalendar();
 // ---------- Achievements ----------
 const unlockedCount = ACHIEVEMENTS.filter((a) => data.achievements[a.id]).length;
 document.getElementById("badge-count").textContent = t("stats.badgeCount", { count: unlockedCount, total: ACHIEVEMENTS.length });
-document.getElementById("badges").innerHTML = ACHIEVEMENTS.map((achievement) => {
-  const date = data.achievements[achievement.id];
-  return `
-    <li class="badge ${date ? "is-unlocked" : "is-locked"}">
-      <span class="badge-icon">${icon(date ? achievement.icon : "lock")}</span>
-      <span class="badge-text">
-        <strong>${t(`achievements.${achievement.id}.name`)}</strong>
-        <span>${t(`achievements.${achievement.id}.description`)}</span>
-        ${date ? `<small>${t("stats.unlockedOn", { date: formatDate(date) })}</small>` : ""}
-      </span>
-    </li>`;
-}).join("");
