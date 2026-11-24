@@ -1,11 +1,12 @@
 // Settings page: language, difficulty, appearance, accessibility, themes, figures,
-// sound and feel, the tutorial and resetting progress.
-import { data, save, resetAll } from "../core/storage.js";
-import { language, t } from "../core/i18n.js";
+// sound and feel, the tutorial, and your progress (download, load, reset).
+import { data, save, resetAll, exportData, parseImport, replaceAll } from "../core/storage.js";
+import { language, t, tn } from "../core/i18n.js";
 import { THEMES, isThemeUnlocked } from "../core/themes.js";
 import { FIGURES, isFigureOwned } from "../core/figures.js";
-import { buyFigure, setDifficulty } from "../core/progress.js";
-import { initPage, refreshHeader, setLanguage } from "../ui/layout.js";
+import { setDifficulty } from "../core/progress.js";
+import { toDateKey } from "../core/dates.js";
+import { initPage, setLanguage } from "../ui/layout.js";
 import { applyAppearance, isReducedMotion } from "../ui/appearance.js";
 import { icon } from "../ui/icons.js";
 import { figurePreview } from "../ui/figures/index.js";
@@ -79,11 +80,10 @@ if (!("vibrate" in navigator)) {
 
 // ---------- Color themes ----------
 const themeList = document.getElementById("theme-list");
+document.getElementById("stars-have").textContent = tn("settings.youHave", data.player.stars);
 
-function themeUnlockText(theme) {
-  if (!theme.unlock) return t("settings.free");
-  if (theme.unlock.level) return t("settings.reachLevel", { level: theme.unlock.level });
-  return t("settings.unlockStreak");
+function unlockText(item) {
+  return item.stars > 0 ? tn("settings.needStars", item.stars) : t("settings.free");
 }
 
 function renderThemes() {
@@ -95,10 +95,10 @@ function renderThemes() {
       <li>
         <button type="button" class="theme-option${selected ? " is-selected" : ""}" data-theme-id="${theme.id}"
           ${unlocked ? "" : "disabled"} aria-pressed="${selected}"
-          aria-label="${name}${unlocked ? "" : `, ${t("settings.locked")}: ${themeUnlockText(theme)}`}">
+          aria-label="${name}${unlocked ? "" : `, ${t("settings.locked")}: ${unlockText(theme)}`}">
           <span class="theme-swatch" data-theme="${theme.id}"><span></span><span></span><span></span>${unlocked ? (selected ? icon("check") : "") : icon("lock")}</span>
           <span class="theme-name">${name}</span>
-          <small>${selected ? t("settings.inUse") : themeUnlockText(theme)}</small>
+          <small>${selected ? t("settings.inUse") : unlocked ? t("settings.choose") : `${icon("star")}${unlockText(theme)}`}</small>
         </button>
       </li>`;
   }).join("");
@@ -116,30 +116,22 @@ themeList.addEventListener("click", (event) => {
 });
 renderThemes();
 
-// ---------- Figures shop ----------
+// ---------- Figures (unlocked with stars) ----------
 const figureList = document.getElementById("figure-list");
-
-function figureStatus(figure, owned) {
-  if (settings.figure === figure.id) return t("settings.inUse");
-  if (owned) return t("settings.choose");
-  if (figure.achievement) return t("settings.unlockBadge", { badge: t(`achievements.${figure.achievement}.name`) });
-  return t("settings.buyFor", { coins: figure.price });
-}
 
 function renderFigures() {
   figureList.innerHTML = FIGURES.map((figure) => {
     const owned = isFigureOwned(figure, data);
     const selected = settings.figure === figure.id;
-    const canBuy = !owned && figure.price && data.player.coins >= figure.price;
-    const disabled = !owned && !canBuy;
+    const status = selected ? t("settings.inUse") : owned ? t("settings.choose") : unlockText(figure);
     return `
       <li>
         <button type="button" class="figure-option${selected ? " is-selected" : ""}${owned ? "" : " is-locked"}"
-          data-figure-id="${figure.id}" ${disabled ? "disabled" : ""} aria-pressed="${selected}">
+          data-figure-id="${figure.id}" ${owned ? "" : "disabled"} aria-pressed="${selected}">
           <span class="figure-preview" data-preview="${figure.id}"></span>
           <span class="figure-name">${t(`figures.${figure.id}.name`)}</span>
           <small>${t(`figures.${figure.id}.text`)}</small>
-          <span class="figure-status">${!owned && figure.price ? icon("coin") : owned ? "" : icon("lock")}${figureStatus(figure, owned)}</span>
+          <span class="figure-status">${owned ? "" : `${icon("lock")}${icon("star")}`}${status}</span>
         </button>
       </li>`;
   }).join("");
@@ -149,19 +141,11 @@ function renderFigures() {
 figureList.addEventListener("click", (event) => {
   const button = event.target.closest("[data-figure-id]");
   if (!button || button.disabled) return;
-  const figure = FIGURES.find((item) => item.id === button.dataset.figureId);
-  if (!isFigureOwned(figure, data)) {
-    if (!buyFigure(figure.id)) return;
-    playSound("unlock");
-    showToast(t("settings.bought", { name: t(`figures.${figure.id}.name`) }), icon("gift"));
-    refreshHeader();
-  } else {
-    playSound("tap");
-  }
-  settings.figure = figure.id;
+  playSound("tap");
+  settings.figure = button.dataset.figureId;
   save();
   renderFigures();
-  figureList.querySelector(`[data-figure-id="${figure.id}"]`).focus();
+  figureList.querySelector(`[data-figure-id="${settings.figure}"]`).focus();
 });
 renderFigures();
 
@@ -172,6 +156,47 @@ document.getElementById("tutorial-button").addEventListener("click", () => {
   location.href = "./play.html?mode=classic";
 });
 
+// ---------- Your progress: download and load a file ----------
+document.getElementById("export-button").addEventListener("click", () => {
+  const blob = new Blob([exportData()], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `hanglet-progress-${toDateKey()}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast(t("settings.exportDone"), icon("download"));
+});
+
+const importFile = document.getElementById("import-file");
+const importDialog = document.getElementById("import-dialog");
+let importedData = null;
+
+document.getElementById("import-button").addEventListener("click", () => importFile.click());
+importFile.addEventListener("change", async () => {
+  const file = importFile.files[0];
+  importFile.value = "";
+  if (!file) return;
+  importedData = parseImport(await file.text());
+  if (!importedData) {
+    showToast(t("settings.importFailed"), icon("close"));
+    return;
+  }
+  importDialog.showModal();
+});
+document.getElementById("import-cancel").addEventListener("click", () => {
+  importedData = null;
+  importDialog.close();
+});
+document.getElementById("import-confirm").addEventListener("click", () => {
+  if (importedData && replaceAll(importedData)) {
+    sessionStorage.setItem("hanglet-message", "settings.importDone");
+    location.reload();
+  }
+});
+
 // ---------- Reset ----------
 const resetDialog = document.getElementById("reset-dialog");
 document.getElementById("reset-button").addEventListener("click", () => resetDialog.showModal());
@@ -179,13 +204,15 @@ document.getElementById("reset-cancel").addEventListener("click", () => resetDia
 document.getElementById("reset-confirm").addEventListener("click", () => {
   resetAll();
   // Reload so the page starts with fresh default data, then show a message
-  sessionStorage.setItem("hanglet-reset", "1");
+  sessionStorage.setItem("hanglet-message", "settings.resetDone");
   location.reload();
 });
 
-if (sessionStorage.getItem("hanglet-reset") === "1") {
-  sessionStorage.removeItem("hanglet-reset");
-  showToast(t("settings.resetDone"), icon("check"));
+// A message after a reload (reset or import)
+const message = sessionStorage.getItem("hanglet-message");
+if (message) {
+  sessionStorage.removeItem("hanglet-message");
+  showToast(t(message), icon("check"));
 }
 
 setupInstallButton(document.getElementById("install-button"));

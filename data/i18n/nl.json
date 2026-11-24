@@ -16,12 +16,12 @@
     "badges": "Badges"
   },
   "footer": {
-    "tagline": "Een vrolijk woordspel, raadsel voor raadsel.",
+    "tagline": "Een vrolijk raadselspel: het raadsel wordt steeds duidelijker.",
     "note": "Je voortgang blijft op dit apparaat."
   },
   "header": {
     "streak": "Dagreeks: {count}. Open statistiek",
-    "coins": "{count} munten"
+    "stars": "{count} sterren. Bekijk wat je kunt vrijspelen"
   },
   "common": {
     "close": "Sluiten",
@@ -36,11 +36,15 @@
     "lives": {
       "one": "1 leven",
       "other": "{count} levens"
+    },
+    "stars": {
+      "one": "1 ster",
+      "other": "{count} sterren"
     }
   },
   "welcome": {
     "title": "Welkom bij Hanglet",
-    "text": "Een vrolijk woordspel voor iedereen vanaf 8 jaar. We zetten het even voor je klaar.",
+    "text": "Een vrolijk raadselspel voor iedereen vanaf 8 jaar. We zetten het even voor je klaar.",
     "language": "Taal",
     "who": "Wie speelt er?",
     "everyone": "Iedereen (8+)",
@@ -54,16 +58,15 @@
     "done": "Begrepen",
     "step": "Stap {step} van {total}",
     "word": "Dit is het verborgen woord. Elk vakje is één letter.",
-    "category": "De categorie is je eerste hint.",
-    "picture": "Kijk naar het plaatje en lees het raadsel. Zo vind je het woord!",
+    "picture": "Kijk naar het plaatje en lees de aanwijzing van Tilo. Zo vind je het woord!",
     "keyboard": "Tik op een letter om te raden. Probeer het maar!",
     "goodGuess": "Goed zo! Die letter zit in het woord.",
     "wrongGuess": "Die letter zit niet in het woord. Geeft niks, probeer verder!",
     "figure": "Elke foute letter kost een hartje. Vind het woord voordat je hartjes op zijn!",
-    "hints": "Kom je er niet uit? Gebruik een hint: laat een letter zien of haal foute letters weg.",
     "hintsFree": "Kom je er niet uit? Tik op Help, dan helpt Tilo je.",
-    "riddle": "Dit is het raadsel van Tilo. Het vertelt je wat het woord is!",
-    "kidsKeyboard": "Alleen deze letters! Tik er een aan."
+    "kidsKeyboard": "Alleen deze letters! Tik er een aan.",
+    "clues": "Dit zijn de aanwijzingen van Tilo. De eerste is lastig! Na elke 2 foute letters komt er een duidelijkere bij. Hoe eerder je het raadt, hoe meer sterren.",
+    "knowIt": "Weet je het woord? Tik hier en typ het. Een fout woord kost 2 levens."
   },
   "keyboard": {
     "label": "Letters",
@@ -86,7 +89,9 @@
     "colors": "Kleuren",
     "clothing": "Kleding",
     "winter": "Winter",
-    "challenge": "Uitdaging"
+    "challenge": "Uitdaging",
+    "home": "In huis",
+    "mystery": "Mysterie"
   },
   "lengths": {
     "short": "Kort",
@@ -100,22 +105,20 @@
     "easy": "Makkelijk",
     "normal": "Normaal",
     "hard": "Moeilijk",
-    "easyDetail": "Raadsel + eerste letter cadeau · 8 levens",
-    "normalDetail": "Raadsel in beeld · 7 levens",
-    "hardDetail": "Alleen de categorie · 6 levens"
+    "easyDetail": "8 levens · eerste letter cadeau",
+    "normalDetail": "7 levens · 3 aanwijzingen",
+    "hardDetail": "6 levens · maar 2 aanwijzingen"
   },
   "setup": {
     "category": "Categorie",
     "length": "Woordlengte",
     "difficulty": "Moeilijkheid",
     "start": "Begin met spelen",
-    "startClock": "Start de klok",
-    "classicIntro": "Kies je instellingen en speel zoveel woorden als je wilt.",
-    "timedIntro": "De klok start zodra je op start drukt. Een gemist woord kost geen tijd, je gaat gewoon door!"
+    "classicIntro": "Kies je instellingen en los zoveel raadsels op als je wilt."
   },
   "play": {
     "board": "Speelbord",
-    "newWord": "Nieuw woord met {count} letters. Categorie: {category}.",
+    "newWord": "Nieuw raadsel met {count} letters. Aanwijzing 1: {clue}",
     "letterRight": "{letter} zit in het woord.",
     "letterWrong": "{letter} zit niet in het woord. Nog {count} levens.",
     "blank": "leeg",
@@ -125,86 +128,59 @@
       "one": "{count} leven over",
       "other": "{count} levens over"
     },
-    "riddle": "Raadsel",
-    "noRiddle": "Op Moeilijk geen raadsel, alleen de categorie. Kom je er niet uit? Koop het raadsel als hint.",
     "freeLetter": "Makkelijk: de eerste letter krijg je cadeau.",
-    "noChallengeRiddle": "Je vriend gaf geen raadsel mee. Succes!"
-  },
-  "hints": {
-    "button": "Hint",
-    "buttonLabel": "Hints. Je hebt {coins} munten.",
-    "title": "Kies een hint",
-    "free": "Gratis",
-    "cost": "{coins} munten",
-    "notEnough": "Je hebt {coins} munten nodig voor deze hint.",
-    "letterShown": "Hint: {letter} zit in het woord.",
-    "lettersRemoved": "Hint: {letters} zitten niet in het woord.",
-    "description": {
-      "title": "Toon het raadsel",
-      "text": "Een korte zin over het woord"
+    "cluesLabel": "Aanwijzingen",
+    "clue": "Aanwijzing {number}",
+    "lockedNext": {
+      "one": "Komt na nog 1 foute letter",
+      "other": "Komt na nog {count} foute letters"
     },
-    "letter": {
-      "title": "Letter onthullen",
-      "text": "Er wordt één letter ingevuld"
-    },
-    "remove": {
-      "title": "3 foute letters wegstrepen",
-      "text": "Drie letters die niet in het woord zitten verdwijnen"
-    },
-    "tokens": {
-      "one": "Je hebt 1 gratis hint uit je schatkist",
-      "other": "Je hebt {count} gratis hints uit je schatkist"
-    }
+    "lockedLater": "Komt na aanwijzing {number}",
+    "lockedHard": "Niet op Moeilijk. Dit moet je zelf doen!",
+    "worth": "Raad het nu voor",
+    "newClue": "Nieuwe aanwijzing! Aanwijzing {number} is open.",
+    "knowIt": "Ik weet het!",
+    "guessLabel": "Typ het hele woord",
+    "check": "Controleer",
+    "costNote": "Een fout woord kost {cost} levens.",
+    "lastLives": "Let op: je hebt nog maar {count} levens.",
+    "wrongLength": "Het woord heeft {count} letters. Probeer opnieuw, dit kost niks.",
+    "wrongWord": "Niet \"{guess}\". Dat kost {cost} levens.",
+    "noChallengeClue": "Je vriend gaf geen aanwijzing mee. Succes!"
   },
   "modes": {
     "daily": {
       "titleNumber": "Dagwoord #{number}",
-      "progress": "Woord {index} van {total}",
-      "wordOf": "Woord {index} van {total}",
-      "solvedOf": "{solved} van {total} geraden",
-      "comeBack": "Kom morgen terug voor nieuwe woorden",
-      "doneTitle": "Je hebt er vandaag {solved} van {total} geraden",
+      "progress": "Raadsel {index} van {total}",
+      "wordOf": "Raadsel {index} van {total}",
+      "comeBack": "Kom morgen terug voor nieuwe raadsels",
       "next": "Volgend dagwoord",
       "dotsLabel": "Voortgang dagwoord",
-      "dotSolved": "geraden",
       "dotMissed": "gemist",
       "dotCurrent": "nu bezig",
       "dotTodo": "nog te doen",
-      "wordNumber": "Woord {number}",
+      "wordNumber": "Raadsel {number}",
       "notSolved": "niet geraden",
-      "playMore": "Meer spelen"
+      "playMore": "Meer spelen",
+      "starsOf": "{stars} van de {max} sterren"
     },
     "classic": {
       "title": "Klassiek",
-      "subtitle": "Onbeperkt spelen, woord na woord",
-      "text": "Onbeperkt spelen. Kies categorie, lengte en moeilijkheid."
+      "subtitle": "Eindeloos raadsels, de een na de ander",
+      "text": "Eindeloos raadsels. Jij kiest de categorie."
     },
     "levels": {
       "title": "Levels",
-      "text": "Volg de kaart door 40 levels, van makkelijk naar pittig."
-    },
-    "timed": {
-      "title": "Tegen de klok",
-      "subtitle": "Raad zoveel mogelijk woorden in 2 minuten",
-      "text": "Raad zoveel mogelijk woorden voordat de tijd om is.",
-      "timeLeft": "Tijd over",
-      "solved": "{count} geraden",
-      "newBest": "Nieuw persoonlijk record!",
-      "best": "Record: {count}",
-      "result": {
-        "one": "1 woord geraden",
-        "other": "{count} woorden geraden"
-      },
-      "timeUp": "De tijd is om!"
+      "text": "40 levels op een kaart, van makkelijk naar pittig."
     },
     "kids": {
       "title": "Kidswereld",
       "subtitle": "Korte woorden met een plaatje",
-      "text": "Korte woorden met een plaatje. Je kunt niet verliezen en je spaart stickers."
+      "text": "Voor 6–9 jaar. Makkelijke, grappige aanwijzingen en een plaatje."
     },
     "challenge": {
       "title": "Daag een vriend uit",
-      "text": "Typ een geheim woord en laat een vriend het raden."
+      "text": "Kies een geheim woord, schrijf 3 aanwijzingen, stuur de link."
     }
   },
   "kids": {
@@ -212,7 +188,7 @@
     "win": "Je hebt hem!",
     "next": "Volgend woord",
     "world": "Kidswereld",
-    "intro": "Korte woorden met een plaatje. Tilo helpt je, en elk woord geeft een sticker!",
+    "intro": "Korte woorden met een plaatje en grappige aanwijzingen. Tilo helpt je, en elk woord geeft een sticker!",
     "play": "Spelen maar!",
     "hello": "Hoi! Zullen we samen woorden zoeken?",
     "stickers": "Mijn stickers",
@@ -228,19 +204,16 @@
     "fill": "Ik help je: hier komt de {letter}!",
     "help": "Help",
     "helpLabel": "Vraag Tilo om hulp",
-    "forParents": "Voor ouders: geen munten, geen klok en je kunt niet verliezen. Woorden hebben 3 tot 5 letters en altijd een plaatje en een korte zin.",
-    "backToHanglet": "Terug naar Hanglet"
+    "forParents": "Voor ouders: geen sterren, geen klok en je kunt niet verliezen. Woorden hebben 3 tot 5 letters, altijd met een plaatje en 3 makkelijke aanwijzingen. Na een foute letter komt er een makkelijkere aanwijzing en helpt Tilo.",
+    "backToHanglet": "Terug naar Hanglet",
+    "lockedNext": "Komt als je hem nodig hebt"
   },
   "result": {
-    "solved": "Geraden!",
     "notThisTime": "Deze keer niet",
     "outOfLives": "Geen levens meer",
-    "niceOne": "Goed zo!",
-    "missedIt": "Helaas",
     "nextWord": "Volgend woord",
     "options": "Instellingen",
     "tryAgain": "Opnieuw",
-    "playAgain": "Nog een keer",
     "share": "Delen",
     "shareResult": "Resultaat delen",
     "copied": "Resultaat gekopieerd. Plak het waar je wilt!",
@@ -249,24 +222,29 @@
     "dayStreak": "Dagreeks {count}",
     "wordWas": "Het woord was {word}",
     "badge": "Badge verdiend:",
-    "theme": "Nieuw thema:",
-    "tryIt": "Probeer het"
+    "tryIt": "Probeer het",
+    "solvedAt": "Geraden bij aanwijzing {number}!",
+    "allClues": "Alle aanwijzingen",
+    "totalStars": {
+      "one": "Je hebt nu 1 ster",
+      "other": "Je hebt nu {count} sterren"
+    },
+    "newTheme": "Nieuw thema:",
+    "newFigure": "Nieuw figuur:"
   },
   "share": {
-    "classic": "Ik heb een woord van {count} letters geraden in Hanglet met {misses}. {link}",
-    "level": "Ik heb level {number} in Hanglet gehaald met {stars} van de 3 sterren. {link}",
-    "daily": "Hanglet Dagwoord #{number} · {solved}/{total}",
-    "timed": "Ik heb {count} woorden geraden in 2 minuten in Hanglet Tegen de klok. {link}",
+    "classic": "Ik heb een raadsel van {count} letters opgelost in Hanglet, bij aanwijzing {number}!",
+    "level": "Hanglet level {number}:",
     "title": "Deel je resultaat",
     "imageAlt": "Je resultaat als plaatje, zonder het woord",
     "copyText": "Kopieer tekst",
     "download": "Plaatje opslaan",
     "cardFooter": "Speel mee op Hanglet!",
-    "letters": "Een woord van {count} letters"
+    "letters": "Een raadsel met {count} letters"
   },
   "levels": {
     "title": "Levelkaart",
-    "intro": "Elk level heeft een paar woorden. Raad ze allemaal om het volgende level te openen. Minder fouten geeft meer sterren.",
+    "intro": "Elk level heeft een paar raadsels. Los ze allemaal op om het volgende level te openen. Hoe meer sterren per raadsel, hoe meer sterren voor het level.",
     "progress": "{done} van de {total} levels gehaald.",
     "level": "Level {number}",
     "map": "Levelkaart",
@@ -277,8 +255,9 @@
     "starsLabel": "{count} van de 3 sterren",
     "lockedLabel": "Level {number}, op slot",
     "nodeLabel": "Level {number}, {category}, {stars} van de 3 sterren",
-    "failedText": "Eén woord gemist. Probeer het level opnieuw, je kunt het!",
-    "wordsShort": "{count} woorden"
+    "failedText": "Eén raadsel gemist. Probeer het level opnieuw, je kunt het!",
+    "wordsShort": "{count} raadsels",
+    "earned": "{count} van de {max} sterren"
   },
   "stages": {
     "warmup": "Opwarmen",
@@ -287,57 +266,42 @@
     "summit": "De top"
   },
   "home": {
-    "title": "Los het raadsel op, letter voor letter.",
-    "intro": "Tilo geeft je een raadsel, jij zoekt de letters. Een vrolijk woordspel voor iedereen vanaf 8 jaar, met elke dag drie nieuwe dagwoorden.",
-    "playDaily": "Speel het dagwoord",
-    "progressLabel": "Jouw voortgang",
-    "chooseMode": "Kies een spel",
-    "playerLevel": "Spelerslevel {level}",
-    "xpLabel": "XP tot het volgende level",
-    "coins": "Munten",
-    "dailyBusy": "Bezig · woord {index} van 3",
-    "dailyDone": "Vandaag gespeeld · {solved}/{total}",
+    "title": "De raadsels van vandaag",
+    "dailyBusy": "Bezig · raadsel {index} van 3",
+    "dailyDone": "Vandaag klaar: {stars} van de 9 sterren",
     "seeResult": "Bekijk je resultaat",
-    "continueDaily": "Ga verder met het dagwoord",
-    "levelsAllDone": "Alle levels gehaald",
-    "timedBest": "Record: {count} woorden",
-    "timedNew": "2 minuten op de klok",
-    "kidsStatus": "Voor kinderen van 6 tot 9",
-    "dictionaryTitle": "Mijn woordenboek",
-    "dictionaryCount": "Je hebt {count} woorden verzameld.",
-    "dictionaryEmpty": "Elk woord dat je raadt komt hier, met de betekenis erbij.",
-    "openDictionary": "Openen",
-    "offlineTitle": "Speel offline",
-    "offlineText": "Zet Hanglet op je beginscherm. Het werkt ook zonder internet.",
-    "play": "Speel",
-    "playSubDaily": "Dagwoord #{number} · 3 woorden",
-    "playSubClassic": "Dagwoord klaar! Ga door met Klassiek",
+    "continueDaily": "Ga verder",
     "morning": "Goedemorgen!",
     "afternoon": "Hoi!",
     "evening": "Goedenavond!",
-    "speechReady": "Je dagwoorden staan klaar.",
+    "speechReady": "Ik heb drie nieuwe raadsels voor je!",
     "speechBusy": "Zullen we je dagwoord afmaken?",
-    "speechDone": "Knap gedaan vandaag! Zin in meer?",
-    "dropWords": "SPEEL,RADEN,WOORD,LEUK,HALLO",
-    "dailyTitle": "Dagelijkse uitdaging",
-    "dailyReadyText": "Drie nieuwe woorden, voor iedereen hetzelfde.",
-    "newWordsIn": "Nieuwe woorden over",
-    "classicStatus": "Kies je eigen categorie",
+    "speechDone": "Knap gedaan! Zin in meer raadsels?",
+    "newWordsIn": "Nieuwe raadsels over",
     "levelsNext": "Volgende: level {next}",
-    "challengeStatus": "Kies een woord, stuur een link",
     "kidsTitle": "Kidswereld",
-    "kidsText": "Korte woorden met een plaatje. Tilo helpt, je kunt niet verliezen en je spaart stickers.",
-    "kidsButton": "Naar de Kidswereld",
     "kidsStickers": "{count} stickers gespaard",
-    "offlineShort": "Speel offline: zet Hanglet op je beginscherm."
+    "dailyEyebrow": "Dagwoord #{number} · 3 raadsels",
+    "dailyReady": "Drie nieuwe raadsels, voor iedereen hetzelfde.",
+    "playButton": "Speel het dagwoord",
+    "moreTitle": "Meer spelen",
+    "levelsDone": "Alle levels gehaald!",
+    "starsLabel": "Jouw sterren",
+    "nextUnlock": "Nog {count} voor {name}",
+    "allUnlocked": "Alles vrijgespeeld!",
+    "wordsCollected": {
+      "one": "1 woord in je woordenboek",
+      "other": "{count} woorden in je woordenboek"
+    },
+    "challenge": "Daag een vriend uit"
   },
   "dictionary": {
     "title": "Mijn woordenboek",
-    "intro": "Elk woord dat je hebt geraden, met de betekenis. Verzamel jij ze allemaal?",
+    "intro": "Elk woord dat je hebt geraden, met de 3 aanwijzingen van Tilo. Bij de gele had je hem.",
     "collected": "{count} van de {total} woorden verzameld",
     "progressLabel": "Verzamelde woorden",
     "search": "Zoeken",
-    "searchPlaceholder": "Zoek een woord of betekenis",
+    "searchPlaceholder": "Zoek een woord of aanwijzing",
     "all": "Alles",
     "empty": "Je woordenboek is nog leeg. Raad een woord om het hier te zetten.",
     "startPlaying": "Begin met spelen",
@@ -346,29 +310,24 @@
       "one": "1 keer geraden",
       "other": "{count} keer geraden"
     },
-    "since": "sinds {date}"
+    "since": "sinds {date}",
+    "solvedAt": "Beste: aanwijzing {number}",
+    "earlier": "Geraden voordat er aanwijzingen waren"
   },
   "stats": {
     "title": "Statistiek",
     "intro": "Alles wat je tot nu toe hebt gedaan. Alleen bewaard op dit apparaat.",
     "overview": "Overzicht",
-    "played": "Gespeeld",
-    "winPercent": "Gewonnen %",
+    "played": "Raadsels gespeeld",
     "winStreak": "Winreeks",
     "bestWinStreak": "Beste winreeks",
     "dayStreak": "Dagreeks",
     "bestDayStreak": "Beste dagreeks",
-    "chartTitle": "Fouten per spel",
-    "chartEmpty": "Speel een spel om je grafiek te zien.",
-    "missesLabel": "{count} fouten",
-    "lost": "Verloren",
+    "chartTitle": "Bij welke aanwijzing had je hem?",
+    "chartEmpty": "Los een raadsel op om je grafiek te zien.",
     "progress": "Voortgang",
-    "playerLevel": "Spelerslevel",
-    "totalXp": "Totaal XP",
     "levelsDone": "Levels gehaald",
-    "timedBest": "Record tegen de klok",
     "wordsCollected": "Woorden verzameld",
-    "hintsUsed": "Hints gebruikt",
     "calendar": "Dagwoordkalender",
     "previousMonth": "Vorige maand",
     "nextMonth": "Volgende maand",
@@ -379,7 +338,15 @@
     "legendNone": "Niets geraden",
     "badges": "Badges",
     "badgeCount": "{count} van {total}",
-    "unlockedOn": "Verdiend op {date}"
+    "unlockedOn": "Verdiend op {date}",
+    "solvedPercent": "Geraden %",
+    "avgStars": "Sterren per raadsel",
+    "clue1Percent": "% bij aanwijzing 1",
+    "totalStars": "Sterren",
+    "clueRow": "Aanwijzing {number}",
+    "notSolved": "Niet geraden",
+    "knowItWins": "Geraden met \"Ik weet het!\"",
+    "perfectDailies": "Dagwoord 9/9"
   },
   "settings": {
     "title": "Instellingen",
@@ -393,10 +360,8 @@
     "light": "Licht",
     "dark": "Donker",
     "themes": "Kleurthema's",
-    "themesHelp": "Speel nieuwe thema's vrij door levels te halen en je reeks vol te houden.",
+    "themesHelp": "Verdien sterren om nieuwe thema's vrij te spelen.",
     "free": "Gratis",
-    "reachLevel": "Haal level {level}",
-    "unlockStreak": "Haal een dagreeks van 7",
     "locked": "op slot",
     "inUse": "In gebruik",
     "choose": "Kiezen",
@@ -408,10 +373,7 @@
     "reduceMotion": "Minder beweging",
     "reduceMotionHelp": "Zet animaties en confetti uit",
     "figures": "Figuren",
-    "figuresHelp": "Kies wat er op het speelbord gebeurt. Speel nieuwe figuren vrij met munten of badges.",
-    "unlockBadge": "Badge: {badge}",
-    "buyFor": "Koop voor {coins}",
-    "bought": "{name} is van jou!",
+    "figuresHelp": "Kies wat er op het speelbord gebeurt. Verdien sterren om nieuwe figuren vrij te spelen.",
     "soundAndFeel": "Geluid en gevoel",
     "sound": "Geluidseffecten",
     "soundHelp": "Korte tonen bij goede en foute letters",
@@ -422,16 +384,32 @@
     "replayTutorial": "Uitleg opnieuw tonen",
     "install": "App installeren",
     "data": "Jouw gegevens",
-    "dataHelp": "Je voortgang wordt alleen in deze browser bewaard. Wissen verwijdert je statistiek, munten, levels, badges, figuren, woordenboek en instellingen.",
+    "dataHelp": "Je voortgang wordt alleen in deze browser bewaard. Download hem als bestand om hem veilig te bewaren of mee te nemen naar een ander apparaat.",
     "reset": "Voortgang wissen",
     "resetTitle": "Alle voortgang wissen?",
-    "resetText": "Hiermee verwijder je alles. Dit kun je niet ongedaan maken.",
+    "resetText": "Hiermee verwijder je je sterren, reeksen, badges, levels, woordenboek en instellingen. Tip: download eerst je voortgang.",
     "resetConfirm": "Ja, wissen",
     "resetDone": "Je voortgang is gewist.",
     "music": "Achtergrondmuziek",
     "musicHelp": "Vrolijke, huppelende muziek tijdens het spelen",
     "difficulty": "Moeilijkheid",
-    "difficultyHelp": "Voor het dagwoord, Klassiek, Levels en Tegen de klok. Nieuwe spelers beginnen op Makkelijk."
+    "difficultyHelp": "Voor het dagwoord, Klassiek en Levels. Nieuwe spelers beginnen op Makkelijk.",
+    "needStars": {
+      "one": "1 ster",
+      "other": "{count} sterren"
+    },
+    "youHave": {
+      "one": "Je hebt 1 ster.",
+      "other": "Je hebt {count} sterren."
+    },
+    "export": "Download mijn voortgang",
+    "import": "Laad voortgang uit een bestand",
+    "importTitle": "Je voortgang vervangen?",
+    "importText": "De voortgang uit het bestand vervangt alles op dit apparaat: sterren, reeksen, badges, levels, woordenboek en instellingen.",
+    "importConfirm": "Ja, laden",
+    "importDone": "Je voortgang is geladen.",
+    "importFailed": "Dit is geen voortgangsbestand van Hanglet.",
+    "exportDone": "Je voortgangsbestand is gedownload."
   },
   "themes": {
     "ocean": "Oceaan",
@@ -467,24 +445,24 @@
   },
   "achievements": {
     "first-win": {
-      "name": "Eerste winst",
-      "description": "Win je eerste spel"
+      "name": "Eerste raadsel",
+      "description": "Los je eerste raadsel op"
     },
     "wins-10": {
-      "name": "Lekker bezig",
-      "description": "Win 10 spellen"
+      "name": "Je wordt goed",
+      "description": "Los 10 raadsels op"
     },
     "wins-50": {
       "name": "Woordmeester",
-      "description": "Win 50 spellen"
+      "description": "Los 50 raadsels op"
     },
     "flawless": {
       "name": "Foutloos",
-      "description": "Win een spel zonder één fout"
+      "description": "Los een raadsel op zonder foute letter"
     },
     "hard-win": {
       "name": "Dapper",
-      "description": "Win een spel op Moeilijk"
+      "description": "Los een raadsel op op Moeilijk"
     },
     "long-word": {
       "name": "Lange adem",
@@ -504,11 +482,11 @@
     },
     "win-streak-5": {
       "name": "Op dreef",
-      "description": "Win 5 spellen achter elkaar"
+      "description": "Los 5 raadsels achter elkaar op"
     },
     "win-streak-10": {
       "name": "Niet te stoppen",
-      "description": "Win 10 spellen achter elkaar"
+      "description": "Los 10 raadsels achter elkaar op"
     },
     "levels-10": {
       "name": "Klimmer",
@@ -528,7 +506,7 @@
     },
     "explorer": {
       "name": "Ontdekker",
-      "description": "Win een spel in elke categorie"
+      "description": "Los een raadsel op in elke categorie"
     },
     "player-level-5": {
       "name": "Rijzende ster",
@@ -549,6 +527,30 @@
     "bilingual": {
       "name": "Tweetalig",
       "description": "Raad woorden in het Engels en in het Nederlands"
+    },
+    "clue1-10": {
+      "name": "Gedachtelezer",
+      "description": "Los 10 raadsels op bij de eerste aanwijzing"
+    },
+    "clue1-50": {
+      "name": "Raadselmeester",
+      "description": "Los 50 raadsels op bij de eerste aanwijzing"
+    },
+    "know-it-10": {
+      "name": "Ik wist het!",
+      "description": "Los 10 raadsels op met \"Ik weet het!\""
+    },
+    "daily-perfect": {
+      "name": "Dagwoord 9/9",
+      "description": "Haal alle 9 sterren in één dagwoord"
+    },
+    "stars-100": {
+      "name": "Sterrenspaarder",
+      "description": "Verzamel 100 sterren"
+    },
+    "stars-500": {
+      "name": "Melkweg",
+      "description": "Verzamel 500 sterren"
     }
   },
   "mascot": {
@@ -564,49 +566,20 @@
     "count": "Combo x{count}",
     "double": "{count} letters tegelijk!"
   },
-  "chest": {
-    "title": "Dagelijkse schat",
-    "ready": "Je schatkist staat klaar. Wat zit er vandaag in?",
-    "opened": "Je hebt de schatkist van vandaag geopend.",
-    "next": "Nieuwe schat over",
-    "open": "Openen",
-    "freeHint": "Gratis hint!"
-  },
-  "missions": {
-    "title": "Dagopdrachten",
-    "count": "{done}/{total} klaar",
-    "done": "Opdracht klaar!",
-    "win3": "Win {count} spellen",
-    "flawless2": "Raad {count} woorden zonder fout",
-    "long1": "Raad een woord van 8 letters of meer",
-    "daily": "Speel het dagwoord uit",
-    "combo4": "Haal een combo van 4 goede letters",
-    "timed5": "Raad 5 woorden in één ronde tegen de klok",
-    "level1": "Haal een level",
-    "nohint3": "Win {count} spellen zonder hints",
-    "category2": "Win {count} spellen in {category}"
-  },
-  "levelUp": {
-    "eyebrow": "Goed gedaan!",
-    "title": "Level omhoog!",
-    "text": "Je wordt steeds beter.",
-    "button": "Super!"
-  },
   "badges": {
     "title": "Badges",
-    "intro": "Verzamel ze allemaal! Elke badge levert munten op.",
+    "intro": "Verzamel ze allemaal!",
     "collected": "{count} van de {total} badges",
-    "reward": "+{coins} munten voor elke badge",
-    "open": "Bekijk alle badges"
+    "open": "Bekijk alle badges",
+    "legacyTitle": "Badges uit eerdere versies",
+    "legacyText": "Deze heb je verdiend in een eerdere versie van Hanglet. Ze blijven van jou."
   },
   "challenge": {
-    "intro": "Typ een geheim woord. Je krijgt een link: stuur die naar een vriend en kijk of die het kan raden!",
+    "intro": "Kies een geheim woord en schrijf tot 3 aanwijzingen: eerst een lastige, dan duidelijkere. Stuur de link en kijk of je vriend het raadt!",
     "word": "Jouw geheime woord",
     "wordHelp": "{min} tot {max} letters, alleen A tot Z",
     "previewLabel": "Je woord heeft {count} letters",
     "invalid": "Gebruik {min} tot {max} letters, zonder cijfers of spaties.",
-    "hint": "Een hint voor je vriend (mag leeg)",
-    "hintPlaceholder": "Bijvoorbeeld: iets wat je eet",
     "name": "Je naam (mag leeg)",
     "make": "Maak mijn link",
     "ready": "Je uitdaging staat klaar!",
@@ -615,15 +588,21 @@
     "copy": "Kopieer link",
     "copied": "Link gekopieerd. Stuur hem naar een vriend!",
     "another": "Nog een maken",
-    "message": "{name} daagt je uit in Hanglet! Kun jij mijn woord van {count} letters raden?",
     "someone": "Een vriend",
     "from": "Een uitdaging van {name}",
     "fromFriend": "Een uitdaging van een vriend",
     "makeOwn": "Maak zelf een uitdaging",
     "broken": "Deze link werkt niet",
     "brokenText": "De link van de uitdaging is kapot of niet compleet. Vraag je vriend om hem opnieuw te sturen.",
-    "solvedShare": "Ik heb het woord van {name} geraden in Hanglet met {misses}! {link}",
-    "lostShare": "Het woord van {name} was deze keer te moeilijk voor mij. {link}"
+    "solvedShare": "Ik heb het raadsel van {name} opgelost in Hanglet! {stars} {link}",
+    "lostShare": "Het woord van {name} was deze keer te moeilijk voor mij. {link}",
+    "clue1": "Aanwijzing 1: lastig",
+    "clue2": "Aanwijzing 2: duidelijker (mag leeg)",
+    "clue3": "Aanwijzing 3: bijna het antwoord (mag leeg)",
+    "clue1Placeholder": "Bijvoorbeeld: ik heb een mond maar eet nooit",
+    "clue2Placeholder": "Bijvoorbeeld: er varen boten over mij",
+    "clue3Placeholder": "Bijvoorbeeld: lang stromend water",
+    "message": "{name} daagt je uit in Hanglet! Kun jij mijn raadsel van {count} letters oplossen?"
   },
   "season": {
     "title": "Winterspecial",
@@ -636,20 +615,20 @@
       "description": "Deze pagina bestaat niet."
     },
     "index": {
-      "title": "Hanglet – Een vrolijk woordspel voor elke dag",
-      "description": "Los de raadsels van Tilo op, letter voor letter. Dagwoord, 40 levels, Tegen de klok, een Kidswereld voor 6 tot 9 jaar en uitdagingen voor vrienden. Gratis, in het Nederlands en Engels."
+      "title": "Hanglet – Het raadsel wordt duidelijker",
+      "description": "Tilo geeft je een lastige aanwijzing, en elke fout maakt het raadsel duidelijker. Elke dag drie nieuwe raadsels, 40 levels en een Kidswereld voor 6 tot 9 jaar. Gratis, in het Nederlands en Engels."
     },
     "play": {
       "title": "Spelen – Hanglet",
-      "description": "Lees het raadsel en vind het woord, letter voor letter, voordat je hartjes op zijn."
+      "description": "Lees de aanwijzingen van Tilo en vind het woord. Met elke fout wordt het raadsel duidelijker."
     },
     "levels": {
       "title": "Levelkaart – Hanglet",
-      "description": "Volg de kaart door 40 levels van Hanglet, met meer woorden en minder levens naarmate je hoger komt."
+      "description": "Volg de kaart door 40 levels van Hanglet, met meer raadsels naarmate je hoger komt."
     },
     "dictionary": {
       "title": "Mijn woordenboek – Hanglet",
-      "description": "Elk woord dat je in Hanglet hebt geraden, met een korte betekenis."
+      "description": "Elk woord dat je in Hanglet hebt geraden, met de 3 aanwijzingen."
     },
     "badges": {
       "title": "Badges – Hanglet",
@@ -657,23 +636,23 @@
     },
     "stats": {
       "title": "Statistiek – Hanglet",
-      "description": "Je spellen, winpercentage, reeksen en dagwoordkalender in Hanglet."
+      "description": "Je raadsels, sterren, reeksen en dagwoordkalender in Hanglet."
     },
     "settings": {
       "title": "Instellingen – Hanglet",
-      "description": "Taal, kleuren, figuur, tekstgrootte, contrast, geluid en muziek in Hanglet."
+      "description": "Taal, moeilijkheid, kleuren, figuur, tekstgrootte, geluid en je voortgangsbestand in Hanglet."
     },
     "challenge": {
       "title": "Daag een vriend uit – Hanglet",
-      "description": "Typ een geheim woord, stuur de link en kijk of je vriend het kan raden."
+      "description": "Kies een geheim woord, schrijf 3 aanwijzingen, stuur de link en kijk of je vriend het raadt."
     },
     "how-to-play": {
       "title": "Zo speel je – Hanglet",
-      "description": "Zo werkt Hanglet: letters, hints, figuren, spelmodi en beloningen."
+      "description": "Zo werkt Hanglet: 3 aanwijzingen, sterren, \"Ik weet het!\", moeilijkheid en spelmodi."
     },
     "about": {
       "title": "Over – Hanglet",
-      "description": "Over Hanglet, een vrolijk raadselwoordspel voor iedereen vanaf 8 jaar, met een Kidswereld voor 6 tot 9 jaar."
+      "description": "Over Hanglet, een vrolijk raadselspel voor iedereen vanaf 8 jaar, met een Kidswereld voor 6 tot 9 jaar."
     },
     "privacy": {
       "title": "Privacy – Hanglet",
@@ -681,16 +660,20 @@
     },
     "kids": {
       "title": "Kidswereld – Hanglet",
-      "description": "De Kidswereld van Hanglet voor 6 tot 9 jaar: korte woorden met een plaatje, hulp van Tilo, niet verliezen en stickers sparen."
+      "description": "De Kidswereld van Hanglet voor 6 tot 9 jaar: korte woorden met een plaatje, grappige aanwijzingen, hulp van Tilo, niet verliezen en stickers sparen."
     }
   },
   "adapt": {
     "title": "Zullen we het iets makkelijker maken?",
     "text": "Twee keer achter elkaar net niet. Dat overkomt iedereen! Op {level} krijg je {extra}.",
-    "easyExtra": "de eerste letter cadeau en 8 levens",
-    "normalExtra": "het raadsel in beeld en 7 levens",
+    "easyExtra": "8 levens en de eerste letter cadeau",
+    "normalExtra": "7 levens en alle 3 aanwijzingen",
     "yes": "Ja, maak het makkelijker",
     "no": "Nee, dank je",
     "done": "Gelukt! Je speelt nu op {level}."
+  },
+  "update": {
+    "available": "Er staat een nieuwe versie van Hanglet klaar.",
+    "refresh": "Vernieuwen"
   }
 }

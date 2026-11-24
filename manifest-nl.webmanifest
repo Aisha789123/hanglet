@@ -1,0 +1,73 @@
+{
+  "name": "Hanglet – Raadselspel",
+  "short_name": "Hanglet",
+  "description": "Een vrolijk raadselspel voor iedereen vanaf 8 jaar, in het Nederlands en Engels. Tilo geeft een lastige aanwijzing, en elke fout maakt het raadsel duidelijker. Elke dag nieuwe raadsels, 40 levels en een Kidswereld voor 6 tot 9 jaar.",
+  "lang": "nl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f7f9",
+  "theme_color": "#1d63d8",
+  "categories": [
+    "games",
+    "education"
+  ],
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dagwoord",
+      "url": "./play.html?mode=daily",
+      "icons": [
+        {
+          "src": "assets/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Klassiek",
+      "url": "./play.html?mode=classic",
+      "icons": [
+        {
+          "src": "assets/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Kidswereld",
+      "url": "./kids.html",
+      "icons": [
+        {
+          "src": "assets/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

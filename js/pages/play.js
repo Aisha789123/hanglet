@@ -1,16 +1,19 @@
-// The game screen. One page for all modes: daily, classic, levels, timed, kids
-// and challenge. The riddle (the description of the word) is always on screen,
-// except on Hard. The Kids world has its own small keyboard and no losing.
+// The game screen. One page for all modes: daily, classic, levels, kids and challenge.
+// The riddle gets clearer: Tilo starts with a smart clue, and every 2 wrong
+// letters open a clearer one. "I know it!" lets you type the whole word.
+// Solved at clue 1 = 3 stars, clue 2 = 2 stars, clue 3 = 1 star.
+// The Kids world has its own small keyboard, easy clues and no losing.
 import { data, save } from "../core/storage.js";
 import { language, t, tn } from "../core/i18n.js";
-import { Round } from "../core/round.js";
+import { MAX_STARS, Round, WRONG_WORD_COST } from "../core/round.js";
 import { LENGTHS, PLAYABLE_CATEGORIES, getCategoryName, pickKidsWord, pickWord } from "../core/words.js";
-import { getDailyNumber, getDailyWords } from "../core/daily.js";
-import { LEVEL_COUNT, getLevel, highestUnlocked, starsForLevel } from "../core/levels.js";
+import { dailyShareLine, getDailyNumber, getDailyWords, starLine } from "../core/daily.js";
+import { LEVEL_COUNT, getLevel, highestUnlocked, maxLevelStars, starsForLevel } from "../core/levels.js";
 import { DIFFICULTIES, easierDifficulty, freeLetters, getDifficulty, shouldSuggestEasier } from "../core/difficulty.js";
 import { kidsHelp, kidsKeyboardLetters } from "../core/kids.js";
-import { HINTS, checkAchievements, countHint, currentDailyStreak, recordDaily, recordKidsWord, recordLevel, recordTimed, recordWord, setDifficulty, spendCoins } from "../core/progress.js";
+import { currentDailyStreak, recordDaily, recordKidsWord, recordLevel, recordWord, setDifficulty } from "../core/progress.js";
 import { getFigure, isFigureOwned } from "../core/figures.js";
+import { cleanWord, decodeChallenge } from "../core/challenge.js";
 import { toDateKey } from "../core/dates.js";
 import { initPage, refreshHeader } from "../ui/layout.js";
 import { icon } from "../ui/icons.js";
@@ -22,45 +25,46 @@ import { launchConfetti } from "../ui/confetti.js";
 import { isReducedMotion } from "../ui/appearance.js";
 import { startCountdown } from "../ui/countdown.js";
 import { startTutorial } from "../ui/tutorial.js";
-import { showToast } from "../ui/toast.js";
 import { shareResult } from "../ui/share.js";
 import { createMascot, mascotSvg } from "../ui/mascot.js";
-import { burst, floatText, flyCoins } from "../ui/effects.js";
-import { showBadgePops, showLevelUp, showMissionPops } from "../ui/celebrations.js";
-import { trackMission } from "../core/missions.js";
-import { decodeChallenge } from "../core/challenge.js";
+import { burst, floatText, flyStars } from "../ui/effects.js";
+import { showBadgePops, showUnlockPops } from "../ui/celebrations.js";
 import { startMusic, stopMusic } from "../ui/music.js";
+
+initPage("home");
 
 // ---------- Mode ----------
 const params = new URLSearchParams(location.search);
-const MODE_NAMES = ["daily", "classic", "levels", "timed", "kids", "challenge"];
+const MODE_NAMES = ["daily", "classic", "levels", "kids", "challenge"];
+// Old links to Time Attack (removed in v5) open Classic
 const modeName = MODE_NAMES.includes(params.get("mode")) ? params.get("mode") : "classic";
 const isKids = modeName === "kids";
-if (isKids) document.body.classList.add("is-kids");
-// A friend's challenge always has the same rules: riddle (if given) and 7 lives
 const isChallenge = modeName === "challenge";
-
-initPage("home");
+document.body.classList.toggle("is-kids", isKids);
 
 // ---------- Page elements ----------
 const titleEl = document.getElementById("mode-title");
 const subtitleEl = document.getElementById("mode-subtitle");
-const hintButton = document.getElementById("hint-button");
+const helpButton = document.getElementById("help-button");
 const setupEl = document.getElementById("setup");
 const boardEl = document.getElementById("board");
 const categoryEl = document.getElementById("category-chip");
 const statusEl = document.getElementById("status-area");
 const livesEl = document.getElementById("lives");
 const figureEl = document.getElementById("figure");
-const clueEl = document.getElementById("clue");
+const cluesEl = document.getElementById("clue-list");
+const worthEl = document.getElementById("clue-worth");
 const wordEl = document.getElementById("word");
+const knowButton = document.getElementById("know-button");
+const guessForm = document.getElementById("guess-form");
+const guessInput = document.getElementById("guess-input");
+const guessNote = document.getElementById("guess-note");
 const announcer = document.getElementById("announcer");
 const dialog = document.getElementById("result-dialog");
-const hintSheet = document.getElementById("hint-sheet");
 const comboEl = document.getElementById("combo");
 const backLink = document.getElementById("back-link");
 const musicButton = document.getElementById("music-button");
-const mascot = createMascot(document.getElementById("stage-mascot"), "happy");
+const mascot = createMascot(document.getElementById("stage-mascot"), "thinking");
 
 const keyboard = createKeyboard(document.getElementById("keyboard"), handleGuess);
 
@@ -101,23 +105,33 @@ function createPictureStage(picture) {
 
 // ---------- Shared round logic ----------
 
-function startRound(pick, earlierGuesses = []) {
+// pick: { word, clues, category, picture }. earlier: a Daily that was left halfway.
+function startRound(pick, earlier = { guessed: [], wordGuesses: 0 }) {
   const current = rules();
-  round = new Round({ ...pick, lives: isKids ? Infinity : current.lives });
+  round = new Round({
+    ...pick,
+    lives: isKids ? Infinity : current.lives,
+    // Hard never shows clue 3. A friend's challenge has as many clues as the friend wrote.
+    maxClues: isChallenge ? pick.clues.length : current.maxClues,
+    // Kids: every wrong letter opens the next (easier) clue
+    missesPerClue: isKids ? 1 : undefined,
+  });
   busy = false;
   correctInRow = 0;
   kidsHelped = false;
   keyboard.reset(isKids ? kidsKeyboardLetters(round.word) : undefined);
   keyboard.setLocked(false);
+  closeGuessForm();
+  knowButton.hidden = isKids;
+  knowButton.disabled = false;
   figure = isKids ? createPictureStage(round.picture) : createFigure(chosenFigureId(), figureEl);
-  mascot.setMood("happy");
+  mascot.setMood("thinking");
 
   // Put back guesses from a Daily that was left halfway
-  for (const letter of earlierGuesses) {
+  for (const letter of earlier.guessed) {
     keyboard.mark(letter, round.guess(letter));
   }
-  // The riddle is free, except on Hard. Kids and challenges always show it.
-  round.descriptionShown = Boolean(round.description) && (isKids || isChallenge || current.riddle);
+  for (let i = 0; i < earlier.wordGuesses; i++) round.guessWord("#".repeat(round.word.length));
   // Easy: the first letter is a gift
   const given = isKids || isChallenge ? [] : freeLetters(round.word, current.id);
   for (const letter of given) {
@@ -129,20 +143,20 @@ function startRound(pick, earlierGuesses = []) {
   buildTiles();
   updateTiles();
   updateLives();
-  updateClue();
+  updateClues();
   updateFigure(true);
-  updateHintButton();
   setupEl.hidden = true;
   boardEl.hidden = false;
-  announce(t("play.newWord", { count: round.word.length, category: getCategoryName(round.category) })
-    + (round.descriptionShown ? ` ${t("play.riddle")}: ${round.description}` : "")
+  const firstClue = round.clues[0] || t("play.noChallengeClue");
+  announce(t("play.newWord", { count: round.word.length, clue: firstClue })
     + (given.length ? ` ${t("play.freeLetter")}` : ""));
   maybeStartTutorial();
 }
 
 function handleGuess(letter) {
-  if (!round || busy || dialog.open || hintSheet.open || boardEl.hidden || round.isOver()) return;
+  if (!round || busy || dialog.open || !guessForm.hidden || boardEl.hidden || round.isOver()) return;
   if (!keyboard.has(letter)) return; // Kids: only the letters on the small keyboard
+  const cluesBefore = round.openClues();
   const result = round.guess(letter);
   if (result === "ignored") return;
 
@@ -166,13 +180,13 @@ function handleGuess(letter) {
       kidsAssist(false);
     } else {
       updateLives();
-      mascot.setMood(round.livesLeft() <= 1 ? "surprised" : "thinking");
+      mascot.setMood(round.livesLeft() <= 2 ? "surprised" : "thinking");
       announce(t("play.letterWrong", { letter: letter.toUpperCase(), count: round.livesLeft() }));
     }
   }
   updateFigure();
   tour?.notifyGuess(result);
-  afterGuess();
+  afterMove(cluesBefore);
 }
 
 // Mascot and combo text after a right letter
@@ -180,7 +194,6 @@ function celebrate(newLetters) {
   mascot.setMood(correctInRow >= 3 ? "cheering" : "happy");
   mascot.react("bounce");
   if (round.isOver()) return;
-  if (correctInRow === 4) showMissionPops(trackMission({ type: "combo", count: correctInRow }));
   if (correctInRow >= 2) {
     const words = ["", "", "combo.nice", "combo.great", "combo.amazing"];
     const key = words[Math.min(correctInRow, 4)];
@@ -190,15 +203,13 @@ function celebrate(newLetters) {
   }
 }
 
-// Tilo says something short next to the riddle (and for screen readers)
+// Tilo says something short under the clues (and for screen readers)
 function say(text) {
   const bubble = document.getElementById("tilo-says");
-  if (bubble) {
-    bubble.textContent = text;
-    bubble.classList.remove("is-new");
-    void bubble.offsetWidth; // restart the pop animation
-    bubble.classList.add("is-new");
-  }
+  bubble.textContent = text;
+  bubble.classList.remove("is-new");
+  void bubble.offsetWidth; // restart the pop animation
+  bubble.classList.add("is-new");
   announce(text);
 }
 
@@ -221,18 +232,26 @@ function kidsAssist(fromButton) {
   say(fromButton ? t("kids.glow") : `${t("kids.tryOther")} ${t("kids.glow")}`);
 }
 
-// Runs after every guess or hint
-function afterGuess() {
-  updateHintButton();
+// After every letter, word or help: open a new clue, or end the round
+function afterMove(cluesBefore) {
+  updateClues();
+  if (!round.isOver() && round.openClues() > cluesBefore) {
+    playSound("hint");
+    if (!isKids) say(t("play.newClue", { number: round.openClues() }));
+    else announce(t("play.newClue", { number: round.openClues() }));
+  }
   mode.onGuess?.();
-  if (!round.isOver()) return;
+  if (round.isOver()) endRound();
+}
 
+function endRound() {
   const won = round.isWon();
   busy = true;
   keyboard.setLocked(true);
-  updateHintButton();
+  closeGuessForm();
+  knowButton.disabled = true;
   if (!won) updateTiles(true);
-  updateClue(true);
+  updateClues(true);
   if (won) figure.win();
   else figure.lose();
   mascot.setMood(won ? "cheering" : "sad");
@@ -243,100 +262,67 @@ function afterGuess() {
 
   // Let the figure animation play before the result screen
   const delay = isReducedMotion() ? 300 : figure.delay;
-  setTimeout(() => mode.onRoundEnd(won), modeName === "timed" ? 0 : delay);
+  setTimeout(() => mode.onRoundEnd(won), delay);
 }
 
-// ---------- Hints ----------
+// ---------- "I know it!": type the whole word ----------
 
-// A free hint from the treasure chest is used before coins
-function usesToken() {
-  return !isKids && data.player.hintTokens > 0;
+function openGuessForm() {
+  if (!round || busy || round.isOver()) return;
+  guessForm.hidden = false;
+  knowButton.hidden = true;
+  guessInput.value = "";
+  guessInput.maxLength = round.word.length + 4;
+  const left = round.livesLeft();
+  const warning = left <= WRONG_WORD_COST;
+  guessNote.textContent = t("play.costNote", { cost: WRONG_WORD_COST })
+    + (warning ? ` ${t("play.lastLives", { count: left })}` : "");
+  guessNote.classList.toggle("is-warning", warning);
+  keyboard.setLocked(true);
+  guessInput.focus();
 }
 
-function hintCost(hint) {
-  return usesToken() ? 0 : hint.cost;
+function closeGuessForm() {
+  guessForm.hidden = true;
+  knowButton.hidden = isKids;
+  if (round && !round.isOver() && !busy) keyboard.setLocked(false);
 }
 
-function hintAvailable(hint) {
-  if (!round || round.isOver() || busy) return false;
-  if (isKids) return round.hiddenLetters().length > 0;
-  if (hint.id === "description") return round.canShowDescription();
-  if (hint.id === "letter") return round.canRevealLetter();
-  return round.canRemoveLetters();
-}
-
-function openHintSheet() {
+function checkWord(event) {
+  event.preventDefault();
   if (!round || round.isOver()) return;
-  // Kids: no hint menu and no coins, Tilo just helps
-  if (isKids) {
-    if (busy) return;
-    kidsAssist(true);
-    afterGuess();
+  const guess = cleanWord(guessInput.value);
+  if (!guess) return;
+  const cluesBefore = round.openClues();
+  const result = round.guessWord(guess);
+
+  // A typo in the length is free: the tiles already show how long the word is
+  if (result === "length") {
+    guessNote.textContent = t("play.wrongLength", { count: round.word.length });
+    guessNote.classList.add("is-warning");
+    guessInput.select();
     return;
   }
-  const coins = data.player.coins;
-  hintSheet.innerHTML = `
-    <div class="sheet-header">
-      <h2 id="hint-title">${t("hints.title")}</h2>
-      <span class="pill pill-coins">${icon("coin")}<span>${coins}</span></span>
-    </div>
-    ${usesToken() ? `<p class="token-note">${icon("gift")}${tn("hints.tokens", data.player.hintTokens)}</p>` : ""}
-    <div class="hint-options">
-      ${HINTS.map((hint) => {
-        const cost = hintCost(hint);
-        const disabled = !hintAvailable(hint) || coins < cost;
-        const costText = cost === 0 ? t("hints.free") : String(cost);
-        return `
-          <button type="button" class="hint-option" data-hint="${hint.id}"${disabled ? " disabled" : ""}
-            aria-label="${t(`hints.${hint.id}.title`)}. ${cost === 0 ? t("hints.free") : t("hints.cost", { coins: cost })}">
-            <span class="hint-icon">${icon(hint.icon)}</span>
-            <span class="hint-text"><strong>${t(`hints.${hint.id}.title`)}</strong><span>${t(`hints.${hint.id}.text`)}</span></span>
-            <span class="hint-price">${cost > 0 ? icon("coin") : ""}${costText}</span>
-          </button>`;
-      }).join("")}
-    </div>
-    <button type="button" class="button button-secondary sheet-close">${t("common.close")}</button>`;
-
-  hintSheet.querySelectorAll(".hint-option").forEach((button) => {
-    button.addEventListener("click", () => useHint(button.dataset.hint));
-  });
-  hintSheet.querySelector(".sheet-close").addEventListener("click", () => hintSheet.close());
-  hintSheet.showModal();
-  hintSheet.querySelector(".hint-option:not(:disabled)")?.focus();
-}
-
-function useHint(id) {
-  const hint = HINTS.find((item) => item.id === id);
-  hintSheet.close();
-  if (!hintAvailable(hint)) return;
-  const cost = hintCost(hint);
-  if (usesToken()) {
-    data.player.hintTokens--;
-    save();
-  } else if (cost > 0 && !spendCoins(cost)) {
-    showToast(t("hints.notEnough", { coins: cost }), icon("coin"));
-    return;
-  }
-  countHint();
-  playSound("hint");
-
-  if (id === "description") {
-    round.showDescription();
-    updateClue();
-    announce(round.description);
-  } else if (id === "letter") {
-    const letter = round.revealLetter();
-    keyboard.mark(letter, "correct");
-    updateTiles();
+  closeGuessForm();
+  if (result === "correct") {
+    [...new Set(round.word)].forEach((letter) => keyboard.mark(letter, "correct"));
+    playSound("correct", 4);
+    updateTiles().forEach((tile) => burst(tile, 10));
+    mascot.setMood("cheering");
+    mascot.react("bounce");
+  } else if (result === "wrong") {
+    playSound("wrong");
+    vibrate([60, 40, 60]);
+    shakeBoard();
+    mascot.setMood("surprised");
+    mascot.react("shake");
+    updateLives();
     updateFigure();
-    announce(t("hints.letterShown", { letter: letter.toUpperCase() }));
-  } else {
-    const letters = round.removeWrongLetters(3);
-    letters.forEach((letter) => keyboard.mark(letter, "removed"));
-    announce(t("hints.lettersRemoved", { letters: letters.join(", ").toUpperCase() }));
+    floatText(comboEl, `−${WRONG_WORD_COST}`, "coral");
+    say(t("play.wrongWord", { guess, cost: WRONG_WORD_COST }));
+    knowButton.focus();
   }
-  refreshHeader();
-  afterGuess();
+  afterMove(cluesBefore);
 }
 
 // ---------- Drawing the board ----------
@@ -394,24 +380,43 @@ function updateFigure(instant = false) {
   });
 }
 
-// The riddle: the description of the word, big and always free (except on Hard,
-// where it shows after the hint or at the end). Tilo's tips appear under it.
-function updateClue(showAtEnd = false) {
-  const shown = (round.descriptionShown || showAtEnd) && round.description;
-  clueEl.classList.toggle("is-hidden-riddle", !shown);
-  // Without a riddle the category is the big clue
-  const content = shown
-    ? `<p class="riddle-label">${t("play.riddle")}</p><p class="riddle-text">${round.description}</p>`
-    : `<p class="riddle-label">${t("setup.category")}</p>
-       <p class="riddle-text">${getCategoryName(round.category)}</p>
-       <p class="riddle-note">${isChallenge ? t("play.noChallengeRiddle") : t("play.noRiddle")}</p>`;
-  clueEl.innerHTML = `${content}<p class="tilo-says" id="tilo-says" aria-hidden="true"></p>`;
+// Star icons: filled for earned, empty for the rest
+function starIcons(count, max = MAX_STARS) {
+  return Array.from({ length: max }, (_, i) => `<span class="${i < count ? "is-earned" : ""}">${icon("star")}</span>`).join("");
 }
 
-function updateHintButton() {
-  const anyHint = round && HINTS.some((hint) => hintAvailable(hint));
-  hintButton.disabled = !anyHint;
-  hintButton.setAttribute("aria-label", isKids ? t("kids.helpLabel") : t("hints.buttonLabel", { coins: data.player.coins }));
+// The clues: open ones with their text, closed ones say when they come.
+// With showAll (after the round) every clue is open.
+function updateClues(showAll = false) {
+  const open = round.openClues();
+  const clues = round.clues.length > 0 ? round.clues : [t("play.noChallengeClue")];
+  cluesEl.innerHTML = clues.map((clue, i) => {
+    const number = i + 1;
+    const isOpen = showAll || number <= open;
+    const isCurrent = !showAll && number === open;
+    let text = clue;
+    if (!isOpen) {
+      if (number > round.maxClues) text = t("play.lockedHard");
+      else if (number === open + 1) text = isKids ? t("kids.lockedNext") : tn("play.lockedNext", round.missesToNextClue());
+      else text = t("play.lockedLater", { number: number - 1 });
+    }
+    return `
+      <li class="clue ${isOpen ? "is-open" : "is-locked"}${isCurrent ? " is-current" : ""}">
+        <span class="clue-number" aria-hidden="true">${isOpen ? number : icon("lock")}</span>
+        <span class="clue-body">
+          <span class="clue-label">${t("play.clue", { number })}</span>
+          <span class="clue-text">${text}</span>
+        </span>
+      </li>`;
+  }).join("");
+
+  // "Solve it now for ★★★" (no stars in the Kids world)
+  if (isKids || round.isOver()) {
+    worthEl.innerHTML = "";
+  } else {
+    const stars = round.starsNow();
+    worthEl.innerHTML = `<span>${t("play.worth")}</span><span class="star-row star-row-small" role="img" aria-label="${tn("common.stars", stars)}">${starIcons(stars)}</span>`;
+  }
 }
 
 function shakeBoard() {
@@ -421,26 +426,27 @@ function shakeBoard() {
 }
 
 function announce(text) {
-  announcer.textContent = text;
+  announcer.textContent = "";
+  setTimeout(() => (announcer.textContent = text), 50);
 }
 
 // ---------- Tutorial ----------
 
 function maybeStartTutorial() {
-  if (data.tutorialDone || tour || modeName === "timed") return;
+  if (data.tutorialDone || tour) return;
   const steps = isKids
     ? [
-      { target: "#word", text: "tour.word" },
       { target: "#stage-card", text: "tour.picture" },
+      { target: "#word", text: "tour.word" },
       { target: "#keyboard", text: "tour.kidsKeyboard", waitForGuess: true },
-      { target: "#hint-button", text: "tour.hintsFree" },
+      { target: "#help-button", text: "tour.hintsFree" },
     ]
     : [
-      { target: "#stage-card", text: round.descriptionShown ? "tour.riddle" : "tour.category" },
+      { target: "#clue-panel", text: "tour.clues" },
       { target: "#word", text: "tour.word" },
       { target: "#keyboard", text: "tour.keyboard", waitForGuess: true },
       { target: "#lives", text: "tour.figure" },
-      { target: "#hint-button", text: "tour.hints" },
+      { target: "#know-button", text: "tour.knowIt" },
     ];
   tour = startTutorial(steps, () => {
     data.tutorialDone = true;
@@ -450,35 +456,32 @@ function maybeStartTutorial() {
 
 // ---------- Result dialog ----------
 
+// Stars earned, and new figures or themes
 function rewardsHtml(rewards) {
   if (!rewards) return "";
-  const items = [`<span class="reward">${icon("star")}<span><span data-count="${rewards.xp}">+${rewards.xp}</span> XP</span></span>`];
-  if (rewards.coins > 0) {
-    items.push(`<span class="reward reward-coins">${icon("coin")}<span data-count="${rewards.coins}">+${rewards.coins}</span></span>`);
+  let html = "";
+  if (rewards.stars > 0) {
+    html += `<div class="rewards"><span class="reward reward-stars">${icon("star")}<span><span data-count="${rewards.stars}">+${rewards.stars}</span></span></span>
+      <span class="reward-total">${tn("result.totalStars", data.player.stars)}</span></div>`;
   }
-  let html = `<div class="rewards">${items.join("")}</div>`;
-  for (const theme of rewards.newThemes) {
-    html += `<p class="unlock-note">${icon("palette")}${t("result.theme")} <strong>${t(`themes.${theme.id}`)}</strong> <a href="./settings.html">${t("result.tryIt")}</a></p>`;
+  for (const unlock of rewards.newUnlocks || []) {
+    const name = unlock.type === "theme" ? t(`themes.${unlock.id}`) : t(`figures.${unlock.id}.name`);
+    const label = unlock.type === "theme" ? t("result.newTheme") : t("result.newFigure");
+    html += `<p class="unlock-note">${icon(unlock.type === "theme" ? "palette" : "figure")}${label} <strong>${name}</strong> <a href="./settings.html">${t("result.tryIt")}</a></p>`;
   }
   return html;
 }
 
-// Merge two reward objects (used when a Daily finishes and badges are checked again)
-function combineRewards(first, second) {
-  return {
-    ...first,
-    levelAfter: second.levelAfter,
-    newAchievements: [...first.newAchievements, ...second.newAchievements],
-    newThemes: [...first.newThemes, ...second.newThemes],
-  };
-}
-
-// The word as small tiles, with the description underneath
-function wordReveal(word, description = "") {
+// The word as tiles, the stars, and all clues with the one you solved it at
+function wordReveal({ word, clues, won, clue, showStars = true }) {
   const tiles = [...word].map((letter, i) => `<span style="animation-delay:${i * 50}ms">${letter}</span>`).join("");
+  const stars = won ? MAX_STARS + 1 - clue : 0;
+  const clueList = clues.map((text, i) =>
+    `<li class="${won && i + 1 === clue ? "is-solved-here" : ""}"><strong>${i + 1}</strong><span>${text}</span></li>`).join("");
   return `
     <div class="result-tiles" role="img" aria-label="${t("result.wordWas", { word })}">${tiles}</div>
-    ${description ? `<p class="result-description">${description}</p>` : ""}`;
+    ${showStars ? `<div class="star-row star-row-big" role="img" aria-label="${tn("common.stars", stars)}">${starIcons(stars)}</div>` : ""}
+    ${clues.length ? `<details class="result-clues"${won ? "" : " open"}><summary>${t("result.allClues")}</summary><ol>${clueList}</ol></details>` : ""}`;
 }
 
 // Numbers in the rewards count up from 0
@@ -506,6 +509,7 @@ function countUp(container) {
 
 // actions: [{ label, icon, primary, onClick, href }]
 function showResult({ won, eyebrow, title, body = "", rewards = null, actions }) {
+  if (dialog.open) dialog.close();
   dialog.className = `dialog result ${won ? "is-win" : "is-lose"}`;
   dialog.innerHTML = `
     <div class="result-hero">
@@ -531,37 +535,27 @@ function showResult({ won, eyebrow, title, body = "", rewards = null, actions })
     actionsEl.appendChild(button);
   }
 
-  if (!won && modeName !== "timed") maybeOfferEasier();
+  if (!won) maybeOfferEasier();
   dialog.showModal();
   actionsEl.firstElementChild?.focus();
   countUp(dialog);
-  if (won) launchConfetti();
-  celebrateRewards(rewards);
-}
-
-// Coins fly to the counter, then level up, badges and missions show
-function celebrateRewards(rewards) {
-  if (!rewards) {
-    refreshHeader();
-    return;
-  }
-  const coinsEl = dialog.querySelector(".reward-coins");
-  if (rewards.coins > 0 && coinsEl) {
-    setTimeout(() => flyCoins(coinsEl, rewards.coins, () => {
+  if (won && (!rewards || rewards.stars === MAX_STARS || isKids)) launchConfetti();
+  // Earned stars fly to the counter in the header
+  const starsEl = dialog.querySelector(".reward-stars");
+  if (rewards && rewards.stars > 0 && starsEl) {
+    setTimeout(() => flyStars(starsEl, rewards.stars, () => {
       refreshHeader();
       playSound("coin");
     }), 500);
   } else {
     refreshHeader();
   }
-  const missions = [...(rewards.missionsDone || []), ...(rewards.extraMissions || [])];
-  setTimeout(async () => {
-    if (rewards.levelAfter > rewards.levelBefore) {
-      await showLevelUp(rewards.levelAfter, rewards.newThemes);
-    }
-    showBadgePops(rewards.newAchievements);
-    showMissionPops(missions);
-  }, 1100);
+  if (rewards) {
+    setTimeout(() => {
+      showBadgePops(rewards.newAchievements || []);
+      showUnlockPops(rewards.newUnlocks || []);
+    }, 900);
+  }
 }
 
 function closeResult() {
@@ -614,15 +608,33 @@ function shareAction(getText, primary = false, getCard = null) {
   };
 }
 
-function missesText(misses) {
-  return tn("common.misses", misses);
-}
-
 function shareLink() {
   return location.origin + location.pathname.replace(/play\.html$/, "");
 }
 
-// ---------- Setup panel (Classic and Time Attack) ----------
+// The result of the round, for recordWord()
+function roundResult(won) {
+  return {
+    won,
+    stars: round.stars(),
+    clue: round.openClues(),
+    misses: round.misses,
+    word: round.word,
+    category: round.category,
+    difficulty: rules().id,
+    solvedByWord: round.solvedByWord,
+  };
+}
+
+function resultTitle(won) {
+  return won ? t("result.solvedAt", { number: round.openClues() }) : t("result.notThisTime");
+}
+
+function reveal(won) {
+  return wordReveal({ word: round.word, clues: round.clues, won, clue: round.openClues() });
+}
+
+// ---------- Setup panel (Classic) ----------
 
 function optionGroup(name, label, items, selected) {
   const options = items.map((item) => `
@@ -662,24 +674,11 @@ function showSetup(intro, startLabel, onStart) {
 
   boardEl.hidden = true;
   setupEl.hidden = false;
-  hintButton.hidden = true;
 }
 
 function optionsSummary() {
-  const { category, length, difficulty } = data.settings.options;
-  return `${getCategoryName(category)} · ${t(`lengths.${length}`)} · ${t(`difficulty.${difficulty}`)}`;
-}
-
-function roundResult(won) {
-  return {
-    won,
-    misses: round.misses,
-    lives: round.lives,
-    word: round.word,
-    category: round.category,
-    difficulty: rules().id,
-    hintsUsed: round.hintsUsed,
-  };
+  const { category, length } = data.settings.options;
+  return `${getCategoryName(category)} · ${t(`lengths.${length}`)} · ${difficultyName()}`;
 }
 
 // ---------- Mode: Classic ----------
@@ -706,25 +705,25 @@ const classic = {
     closeResult();
     const { category, length } = data.settings.options;
     subtitleEl.textContent = optionsSummary();
-    hintButton.hidden = false;
     startRound(pickWord(category, length, data.stats.recentWords));
   },
   onDifficultyChange() {
     subtitleEl.textContent = optionsSummary();
   },
   onRoundEnd(won) {
+    const stars = round.stars();
     const rewards = recordWord(roundResult(won));
     showResult({
       won,
-      eyebrow: won ? `${missesText(round.misses)} · ${t("result.winStreak", { count: data.stats.winStreak })}` : t("result.outOfLives"),
-      title: won ? t("result.solved") : t("result.notThisTime"),
-      body: wordReveal(round.word, round.description),
+      eyebrow: won ? t("result.winStreak", { count: data.stats.winStreak }) : t("result.outOfLives"),
+      title: resultTitle(won),
+      body: reveal(won),
       rewards,
       actions: [
         { label: t("result.nextWord"), icon: "next", primary: true, onClick: () => classic.next() },
         { label: t("result.options"), icon: "sliders", onClick: () => { closeResult(); classic.start(); } },
-        ...(won ? [shareAction(() => t("share.classic", { count: round.word.length, misses: missesText(round.misses), link: shareLink() }), false,
-          () => ({ title: t("modes.classic.title"), subtitle: t("share.letters", { count: round.word.length }), rows: [{ won: true, misses: round.misses, lives: round.lives }] }))] : []),
+        ...(won ? [shareAction(() => `${t("share.classic", { count: round.word.length, number: round.openClues() })} ${starLine([stars])}\n${shareLink()}`, false,
+          () => ({ title: t("modes.classic.title"), subtitle: t("share.letters", { count: round.word.length }), stars }))] : []),
       ],
     });
   },
@@ -732,22 +731,29 @@ const classic = {
 
 // ---------- Mode: Kids ----------
 // You can't lose: the word is always finished (with Tilo's help if needed).
-// No XP or coins, every word gives a sticker for the sticker book.
+// No stars, every word gives a sticker for the sticker book.
 
 const kids = {
   title: () => t("modes.kids.title"),
   start() {
     subtitleEl.textContent = t("modes.kids.subtitle");
     backLink.href = "./kids.html";
+    helpButton.hidden = false;
+    helpButton.innerHTML = `${icon("smile")}<span>${t("kids.help")}</span>`;
+    helpButton.setAttribute("aria-label", t("kids.helpLabel"));
+    helpButton.addEventListener("click", () => {
+      if (!round || busy || round.isOver()) return;
+      kidsAssist(true);
+      afterMove(round.openClues());
+    });
     kids.next();
   },
   next() {
     closeResult();
-    hintButton.hidden = false;
     startRound(pickKidsWord(data.stats.recentWords));
   },
   onRoundEnd() {
-    const isNew = recordKidsWord(round);
+    const isNew = recordKidsWord(round, round.openClues());
     const count = data.kids.stickers[round.picture];
     const compliments = t("kids.compliments").split("|");
     const sticker = `
@@ -759,7 +765,7 @@ const kids = {
       won: true,
       eyebrow: kidsHelped ? t("kids.together") : compliments[Math.floor(Math.random() * compliments.length)],
       title: t("kids.win"),
-      body: sticker + wordReveal(round.word, round.description),
+      body: sticker + wordReveal({ word: round.word, clues: round.clues, won: true, clue: round.openClues(), showStars: false }),
       actions: [
         { label: t("kids.next"), icon: "next", primary: true, onClick: () => kids.next() },
         { label: t("kids.stickerBook"), icon: "smile", href: "./kids.html#stickers" },
@@ -769,11 +775,11 @@ const kids = {
 };
 
 // ---------- Mode: Levels ----------
-// A level has several words. Lose one word and the level is failed.
-// The stars depend on all misses in the whole level.
+// A level has several riddles. Lose one and the level is failed.
+// The level stars depend on all stars earned in the level.
 
 let levelNumber = 1;
-let levelResults = []; // { won, misses } per word
+let levelResults = []; // { won, stars } per riddle
 let levelWords = [];
 
 const levels = {
@@ -799,7 +805,6 @@ const levels = {
     titleEl.textContent = t("levels.level", { number: levelNumber });
     backLink.href = "./levels.html";
     history.replaceState(null, "", `?mode=levels&level=${levelNumber}`);
-    hintButton.hidden = false;
     levels.nextWord();
   },
   nextWord() {
@@ -810,9 +815,13 @@ const levels = {
     statusEl.innerHTML = progressDots(levelResults, index, level.wordCount);
     startRound(levelWords[index]);
   },
+  onDifficultyChange() {
+    levels.nextWord();
+  },
   onRoundEnd(won) {
     const level = getLevel(levelNumber);
-    levelResults.push({ won, misses: round.misses, lives: round.lives });
+    const stars = round.stars();
+    levelResults.push({ won, stars });
     const rewards = recordWord(roundResult(won));
     statusEl.innerHTML = progressDots(levelResults, levelResults.length, level.wordCount);
     const isLast = levelNumber >= LEVEL_COUNT;
@@ -822,7 +831,7 @@ const levels = {
         won: false,
         eyebrow: t("levels.level", { number: levelNumber }),
         title: t("levels.failed"),
-        body: wordReveal(round.word, round.description) + `<p class="result-text">${t("levels.failedText")}</p>`,
+        body: reveal(false) + `<p class="result-text">${t("levels.failedText")}</p>`,
         rewards,
         actions: [
           { label: t("result.tryAgain"), icon: "refresh", primary: true, onClick: () => levels.play() },
@@ -832,13 +841,13 @@ const levels = {
       return;
     }
 
-    // More words to go in this level
+    // More riddles to go in this level
     if (levelResults.length < level.wordCount) {
       showResult({
         won: true,
         eyebrow: t("modes.daily.wordOf", { index: levelResults.length, total: level.wordCount }),
-        title: t("result.niceOne"),
-        body: wordReveal(round.word, round.description),
+        title: resultTitle(true),
+        body: reveal(true),
         rewards,
         actions: [{ label: t("result.nextWord"), icon: "next", primary: true, onClick: () => levels.nextWord() }],
       });
@@ -846,36 +855,40 @@ const levels = {
     }
 
     // The whole level is done
-    const totalMisses = levelResults.reduce((sum, result) => sum + result.misses, 0);
-    const stars = starsForLevel(totalMisses, level.wordCount);
-    const levelMissions = recordLevel(levelNumber, stars);
-    const starRow = `<div class="star-row" aria-label="${t("levels.starsLabel", { count: stars })}">${[1, 2, 3]
-      .map((n) => `<span class="${n <= stars ? "is-earned" : ""}">${icon("star")}</span>`).join("")}</div>`;
+    const earned = levelResults.reduce((sum, result) => sum + result.stars, 0);
+    const levelStars = starsForLevel(earned, level.wordCount);
+    const levelRewards = recordLevel(levelNumber, levelStars);
+    const starsList = levelResults.map((result) => result.stars);
     showResult({
       won: true,
-      eyebrow: `${t("levels.level", { number: levelNumber })} · ${tn("common.misses", totalMisses)}`,
+      eyebrow: `${t("levels.level", { number: levelNumber })} · ${t("levels.earned", { count: earned, max: maxLevelStars(level.wordCount) })}`,
       title: isLast ? t("levels.summit") : t("levels.complete"),
-      body: starRow + wordReveal(round.word, round.description),
-      rewards: { ...rewards, extraMissions: levelMissions },
+      body: `<div class="star-row star-row-big" role="img" aria-label="${t("levels.starsLabel", { count: levelStars })}">${starIcons(levelStars)}</div>
+        <p class="share-line">${starLine(starsList)}</p>`,
+      rewards: {
+        ...rewards,
+        newAchievements: [...rewards.newAchievements, ...levelRewards.newAchievements],
+        newUnlocks: [...rewards.newUnlocks, ...levelRewards.newUnlocks],
+      },
       actions: [
         isLast
           ? { label: t("levels.map"), icon: "path", primary: true, href: "./levels.html" }
           : { label: t("levels.level", { number: levelNumber + 1 }), icon: "next", primary: true, onClick: () => { levelNumber++; levels.play(); } },
         ...(isLast ? [] : [{ label: t("levels.map"), icon: "path", href: "./levels.html" }]),
-        shareAction(() => t("share.level", { number: levelNumber, stars, link: shareLink() }), false,
-          () => ({ title: t("levels.level", { number: levelNumber }), subtitle: t("levels.starsLabel", { count: stars }), stars, rows: levelResults })),
+        shareAction(() => `${t("share.level", { number: levelNumber })} ${starLine(starsList)} (${earned}/${maxLevelStars(level.wordCount)})\n${shareLink()}`, false,
+          () => ({ title: t("levels.level", { number: levelNumber }), subtitle: starLine(starsList), stars: levelStars })),
       ],
     });
   },
 };
 
-// Dots that show the words of a level or the Daily: solved, missed, now, to do
+// Dots that show the riddles of a level or the Daily: solved, missed, now, to do
 function progressDots(results, index, total) {
   return `<ol class="daily-dots" aria-label="${t("modes.daily.dotsLabel")}">${Array.from({ length: total }, (_, i) => {
     const result = results[i];
     const state = result ? (result.won ? "is-won" : "is-lost") : i === index ? "is-current" : "";
     const label = result
-      ? (result.won ? t("modes.daily.dotSolved") : t("modes.daily.dotMissed"))
+      ? (result.won ? tn("common.stars", result.stars) : t("modes.daily.dotMissed"))
       : i === index ? t("modes.daily.dotCurrent") : t("modes.daily.dotTodo");
     return `<li class="${state}" aria-label="${i + 1}: ${label}"></li>`;
   }).join("")}</ol>`;
@@ -893,6 +906,23 @@ function dailyWords() {
   return getDailyWords(today, lang);
 }
 
+function dailyStars(results) {
+  return results.map((result) => result.stars || 0);
+}
+
+function dailyShareText(results) {
+  return `${dailyShareLine(dailyNumber, dailyStars(results))}\n${shareLink()}`;
+}
+
+function dailyCard(results) {
+  const total = dailyStars(results).reduce((sum, stars) => sum + stars, 0);
+  return {
+    title: t("modes.daily.titleNumber", { number: dailyNumber }),
+    subtitle: starLine(dailyStars(results)),
+    big: `${total}/${results.length * MAX_STARS}`,
+  };
+}
+
 const daily = {
   title: () => t("modes.daily.titleNumber", { number: dailyNumber }),
   start() {
@@ -902,7 +932,7 @@ const daily = {
     }
     // Continue a Daily that was started earlier today, or start a new one
     if (!data.daily.progress || data.daily.progress.date !== today) {
-      data.daily.progress = { date: today, lang: language, index: 0, results: [], guessed: [] };
+      data.daily.progress = { date: today, lang: language, index: 0, results: [], guessed: [], wordGuesses: 0 };
       save();
     }
     daily.playCurrent();
@@ -913,20 +943,23 @@ const daily = {
     const words = dailyWords();
     subtitleEl.textContent = `${t("modes.daily.progress", { index: progress.index + 1, total: words.length })} · ${difficultyName()}`;
     statusEl.innerHTML = progressDots(progress.results, progress.index, words.length);
-    hintButton.hidden = false;
-    startRound(words[progress.index], progress.guessed);
+    startRound(words[progress.index], { guessed: progress.guessed || [], wordGuesses: progress.wordGuesses || 0 });
   },
   onGuess() {
     data.daily.progress.guessed = [...round.guessed];
+    data.daily.progress.wordGuesses = round.wordGuesses;
     save();
   },
+  onDifficultyChange() {},
   onRoundEnd(won) {
     const progress = data.daily.progress;
     const words = dailyWords();
+    const stars = round.stars();
     let rewards = recordWord(roundResult(won));
-    progress.results.push({ won, misses: round.misses, lives: round.lives, word: round.word, category: round.category });
+    progress.results.push({ won, stars, word: round.word, category: round.category });
     progress.index++;
     progress.guessed = [];
+    progress.wordGuesses = 0;
     save();
     statusEl.innerHTML = progressDots(progress.results, progress.index, words.length);
 
@@ -934,8 +967,8 @@ const daily = {
       showResult({
         won,
         eyebrow: t("modes.daily.wordOf", { index: progress.index, total: words.length }),
-        title: won ? t("result.niceOne") : t("result.missedIt"),
-        body: wordReveal(round.word, round.description),
+        title: resultTitle(won),
+        body: reveal(won),
         rewards,
         actions: [{ label: t("result.nextWord"), icon: "next", primary: true, onClick: () => daily.playCurrent() }],
       });
@@ -943,44 +976,50 @@ const daily = {
     }
 
     const results = progress.results;
-    const dailyMissions = recordDaily(today, results);
-    rewards = { ...combineRewards(rewards, checkAchievements()), extraMissions: dailyMissions };
-    const solved = results.filter((r) => r.won).length;
+    const dailyRewards = recordDaily(today, results);
+    rewards = {
+      ...rewards,
+      newAchievements: [...rewards.newAchievements, ...dailyRewards.newAchievements],
+      newUnlocks: [...rewards.newUnlocks, ...dailyRewards.newUnlocks],
+    };
+    const total = dailyStars(results).reduce((sum, value) => sum + value, 0);
     showResult({
-      won: solved > 0,
+      won: total > 0,
       eyebrow: `${t("modes.daily.titleNumber", { number: dailyNumber })} · ${t("result.dayStreak", { count: currentDailyStreak() })}`,
-      title: t("modes.daily.solvedOf", { solved, total: results.length }),
-      body: wordReveal(round.word, round.description) + dailySummary(results),
+      title: t("modes.daily.starsOf", { stars: total, max: results.length * MAX_STARS }),
+      body: reveal(won) + dailySummary(results),
       rewards,
       actions: [
-        { label: t("modes.daily.playMore"), icon: "play", primary: true, href: playMoreLink(results) },
-        shareAction(() => dailyShareText(results), false, () => dailyCard(results)),
+        shareAction(() => dailyShareText(results), true, () => dailyCard(results)),
+        { label: t("modes.daily.playMore"), icon: "play", href: playMoreLink(results) },
         { label: t("common.done"), icon: "check", onClick: () => { closeResult(); daily.showDone(); } },
       ],
     });
   },
   showDone() {
     const entry = data.daily.history[today];
+    const results = entry.results || [];
+    const total = entry.stars ?? dailyStars(results).reduce((sum, value) => sum + value, 0);
     subtitleEl.textContent = t("modes.daily.comeBack");
-    hintButton.hidden = true;
     boardEl.hidden = true;
     setupEl.hidden = false;
     setupEl.innerHTML = `
       <div class="daily-done">
         <p class="eyebrow">${t("modes.daily.titleNumber", { number: dailyNumber })}</p>
-        <h2>${t("modes.daily.doneTitle", { solved: entry.solved, total: entry.total })}</h2>
-        ${dailySummary(entry.results, true)}
+        <h2>${t("modes.daily.starsOf", { stars: total, max: entry.total * MAX_STARS })}</h2>
+        <p class="share-line">${starLine(dailyStars(results))}</p>
+        ${dailySummary(results, true)}
         <div class="daily-done-stats">
           <div><strong>${currentDailyStreak()}</strong><span>${t("stats.dayStreak")}</span></div>
           <div><strong id="next-daily" class="countdown">--:--:--</strong><span>${t("modes.daily.next")}</span></div>
         </div>
         <div class="result-actions">
-          <a class="button button-primary" href="${playMoreLink(entry.results)}">${icon("play")}<span>${t("modes.daily.playMore")}</span></a>
-          <button class="button button-secondary" type="button" id="share-daily">${icon("share")}<span>${t("result.shareResult")}</span></button>
+          <button class="button button-primary" type="button" id="share-daily">${icon("share")}<span>${t("result.shareResult")}</span></button>
+          <a class="button button-secondary" href="${playMoreLink(results)}">${icon("play")}<span>${t("modes.daily.playMore")}</span></a>
         </div>
       </div>`;
     startCountdown(document.getElementById("next-daily"), () => location.reload());
-    setupEl.querySelector("#share-daily").addEventListener("click", shareAction(() => dailyShareText(entry.results), false, () => dailyCard(entry.results)).onClick);
+    setupEl.querySelector("#share-daily").addEventListener("click", shareAction(() => dailyShareText(results), false, () => dailyCard(results)).onClick);
   },
 };
 
@@ -989,7 +1028,7 @@ function dailySummary(results, showWords = false) {
     <li class="${r.won ? "is-won" : "is-lost"}">
       ${icon(r.won ? "check" : "close")}
       <span>${showWords ? `<strong>${r.word}</strong> · ${getCategoryName(r.category)}` : t("modes.daily.wordNumber", { number: i + 1 })}</span>
-      <span class="muted">${r.won ? missesText(r.misses) : t("modes.daily.notSolved")}</span>
+      <span class="muted">${r.won ? starLine([r.stars || 0]) : t("modes.daily.notSolved")}</span>
     </li>`).join("")}</ul>`;
 }
 
@@ -1000,110 +1039,6 @@ function playMoreLink(results) {
   return `./play.html?mode=classic&start=1&category=${category}`;
 }
 
-// The share picture of a Daily
-function dailyCard(results) {
-  const solved = results.filter((r) => r.won).length;
-  return {
-    title: t("modes.daily.titleNumber", { number: dailyNumber }),
-    subtitle: t("modes.daily.solvedOf", { solved, total: results.length }),
-    rows: results,
-  };
-}
-
-// Spoiler-free: only shows solved or not and how many misses
-function dailyShareText(results) {
-  const solved = results.filter((r) => r.won).length;
-  const lines = results.map((r) => {
-    const marks = "●".repeat(r.misses) + "○".repeat(Math.max(0, r.lives - r.misses));
-    return `${r.won ? "✅" : "❌"} ${marks}`;
-  });
-  return `${t("share.daily", { number: dailyNumber, solved, total: results.length })}\n${lines.join("\n")}\n${shareLink()}`;
-}
-
-// ---------- Mode: Time Attack ----------
-
-const TIME_LIMIT = 120; // seconds
-let timerId = null;
-let endTime = 0;
-let timedScore = 0;
-
-const timed = {
-  title: () => t("modes.timed.title"),
-  start() {
-    subtitleEl.textContent = t("modes.timed.subtitle");
-    statusEl.innerHTML = "";
-    showSetup(t("setup.timedIntro"), t("setup.startClock"), () => timed.begin());
-  },
-  begin() {
-    closeResult();
-    timedScore = 0;
-    endTime = Date.now() + TIME_LIMIT * 1000;
-    subtitleEl.textContent = optionsSummary();
-    statusEl.innerHTML = `
-      <div class="timer" role="timer" aria-label="${t("modes.timed.timeLeft")}">
-        <span class="timer-bar"><span id="timer-fill"></span></span>
-        <span class="timer-text" id="timer-text">2:00</span>
-      </div>
-      <span class="score-chip" id="timed-score" aria-live="polite">${t("modes.timed.solved", { count: 0 })}</span>`;
-    hintButton.hidden = false;
-    timed.next();
-    clearInterval(timerId);
-    timerId = setInterval(timed.tick, 250);
-    timed.tick();
-  },
-  next() {
-    const { category, length } = data.settings.options;
-    const pick = pickWord(category, length, data.stats.recentWords);
-    data.stats.recentWords = [pick.word, ...data.stats.recentWords].slice(0, 40);
-    startRound(pick);
-  },
-  tick() {
-    const left = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
-    const fill = document.getElementById("timer-fill");
-    const text = document.getElementById("timer-text");
-    fill.style.transform = `scaleX(${left / TIME_LIMIT})`;
-    text.textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
-    statusEl.querySelector(".timer").classList.toggle("is-urgent", left <= 10);
-    if (left <= 10 && left > 0 && text.dataset.last !== String(left)) playSound("tick");
-    text.dataset.last = left;
-    if (left === 0) timed.finish();
-  },
-  onRoundEnd(won) {
-    showMissionPops(trackMission({
-      type: "word", won, misses: round.misses, length: round.word.length, category: round.category, hintsUsed: round.hintsUsed,
-    }));
-    if (won) {
-      timedScore++;
-      document.getElementById("timed-score").textContent = t("modes.timed.solved", { count: timedScore });
-    }
-    // Short pause so the player sees the word, then the next one
-    setTimeout(() => {
-      if (Date.now() < endTime) timed.next();
-    }, won ? 700 : 1400);
-  },
-  finish() {
-    clearInterval(timerId);
-    busy = true;
-    keyboard.setLocked(true);
-    updateHintButton();
-    const rewards = recordTimed(timedScore);
-    playSound(timedScore > 0 ? "win" : "lose");
-    showResult({
-      won: timedScore > 0,
-      eyebrow: rewards.isBest ? t("modes.timed.newBest") : t("modes.timed.best", { count: data.timed.best }),
-      title: tn("modes.timed.result", timedScore),
-      body: `<p class="result-text">${t("modes.timed.timeUp")}</p>${round && !round.isWon() ? wordReveal(round.word, round.description) : ""}`,
-      rewards,
-      actions: [
-        { label: t("result.playAgain"), icon: "refresh", primary: true, onClick: () => timed.begin() },
-        { label: t("result.options"), icon: "sliders", onClick: () => { closeResult(); timed.start(); } },
-        shareAction(() => t("share.timed", { count: timedScore, link: shareLink() }), false,
-          () => ({ title: t("modes.timed.title"), subtitle: tn("modes.timed.result", timedScore), big: timedScore })),
-      ],
-    });
-  },
-};
-
 // ---------- Mode: Challenge from a friend ----------
 
 const challengeData = decodeChallenge(params.get("c"));
@@ -1112,8 +1047,7 @@ const challenge = {
   title: () => t("modes.challenge.title"),
   start() {
     if (!challengeData) {
-      subtitleEl.textContent = "";
-      hintButton.hidden = true;
+      boardEl.hidden = true;
       setupEl.hidden = false;
       setupEl.innerHTML = `
         <div class="daily-done">
@@ -1128,22 +1062,24 @@ const challenge = {
     subtitleEl.textContent = challengeData.name
       ? t("challenge.from", { name: challengeData.name })
       : t("challenge.fromFriend");
-    hintButton.hidden = false;
-    startRound({ word: challengeData.word, category: "challenge", description: challengeData.hint });
+    startRound({ word: challengeData.word, category: "challenge", clues: challengeData.clues });
   },
   onRoundEnd(won) {
     const name = challengeData.name || t("challenge.someone");
+    const stars = round.stars();
+    const rewards = recordWord(roundResult(won));
     showResult({
       won,
       eyebrow: challengeData.name ? t("challenge.from", { name: challengeData.name }) : t("challenge.fromFriend"),
-      title: won ? t("result.solved") : t("result.notThisTime"),
-      body: wordReveal(round.word, challengeData.hint),
+      title: resultTitle(won),
+      body: reveal(won),
+      rewards,
       actions: [
         { label: t("challenge.makeOwn"), icon: "play", primary: true, href: "./challenge.html" },
         shareAction(() => (won
-          ? t("challenge.solvedShare", { name, misses: missesText(round.misses), link: shareLink() })
+          ? t("challenge.solvedShare", { name, stars: starLine([stars]), link: shareLink() })
           : t("challenge.lostShare", { name, link: shareLink() })), false,
-        () => ({ title: t("modes.challenge.title"), subtitle: name, rows: [{ won, misses: round.misses, lives: round.lives }] })),
+        () => ({ title: t("modes.challenge.title"), subtitle: name, stars })),
         { label: t("common.home"), icon: "home", href: "./index.html" },
       ],
     });
@@ -1152,15 +1088,25 @@ const challenge = {
 
 // ---------- Start ----------
 
-const MODES = { classic, levels, daily, timed, kids, challenge };
+const MODES = { classic, levels, daily, kids, challenge };
 const mode = MODES[modeName];
 
 document.title = `${mode.title()} – Hanglet`;
 titleEl.textContent = mode.title();
-hintButton.innerHTML = isKids
-  ? `${icon("smile")}<span>${t("kids.help")}</span>`
-  : `${icon("bulb")}<span>${t("hints.button")}</span>`;
-hintButton.addEventListener("click", openHintSheet);
+knowButton.innerHTML = `${icon("bulb")}<span>${t("play.knowIt")}</span>`;
+knowButton.addEventListener("click", openGuessForm);
+guessForm.addEventListener("submit", checkWord);
+document.getElementById("guess-cancel").addEventListener("click", () => {
+  closeGuessForm();
+  knowButton.focus();
+});
+guessInput.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    closeGuessForm();
+    knowButton.focus();
+  }
+});
 
 // Background music: off by default, remembered in the settings
 function updateMusicButton() {
@@ -1186,10 +1132,6 @@ if (data.settings.music) {
   window.addEventListener("pointerdown", startOnce);
   window.addEventListener("keydown", startOnce);
 }
-hintSheet.addEventListener("click", (event) => {
-  // Clicking the dark area outside the sheet closes it
-  if (event.target === hintSheet) hintSheet.close();
-});
 
 // Play with the real keyboard too
 document.addEventListener("keydown", (event) => {

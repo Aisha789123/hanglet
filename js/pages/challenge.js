@@ -44,7 +44,7 @@ form.addEventListener("submit", (event) => {
 
   const code = encodeChallenge({
     word,
-    hint: document.getElementById("challenge-hint").value,
+    clues: [1, 2, 3].map((n) => document.getElementById(`challenge-clue${n}`).value),
     name: document.getElementById("challenge-name").value,
     lang: language,
   });

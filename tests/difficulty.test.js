@@ -10,10 +10,16 @@ test("new players start on Easy", () => {
   assert.equal(DEFAULT_DIFFICULTY, "easy");
 });
 
-test("Easy and Normal show the riddle, Hard does not", () => {
-  assert.equal(getDifficulty("easy").riddle, true);
-  assert.equal(getDifficulty("normal").riddle, true);
-  assert.equal(getDifficulty("hard").riddle, false);
+test("Easy and Normal have 3 clues, Hard never shows clue 3", () => {
+  assert.equal(getDifficulty("easy").maxClues, 3);
+  assert.equal(getDifficulty("normal").maxClues, 3);
+  assert.equal(getDifficulty("hard").maxClues, 2);
+});
+
+test("8, 7 and 6 lives", () => {
+  assert.equal(getLives("easy"), 8);
+  assert.equal(getLives("normal"), 7);
+  assert.equal(getLives("hard"), 6);
 });
 
 test("only Easy gives the first letter for free", () => {
@@ -43,7 +49,6 @@ test("the free first letter fills every tile with that letter", () => {
   for (const letter of freeLetters(round.word, "easy")) round.giveLetter(letter);
   assert.deepEqual(round.guessed, ["b"]);
   assert.equal(round.misses, 0);
-  assert.equal(round.hintsUsed, 0);
   assert.equal(round.revealedCount(), 1);
 });
 

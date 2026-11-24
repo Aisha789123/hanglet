@@ -1,38 +1,44 @@
 // Service worker: saves all game files so Hanglet works offline.
 // Change the version number after updating files, so players get the new ones.
-const CACHE_NAME = "hanglet-v4";
+// A new version waits until the player taps "Refresh" (see js/ui/layout.js).
+const CACHE_NAME = "hanglet-v5";
 
 const FILES = [
   "./",
-  "./index.html",
   "./404.html",
   "./about.html",
   "./badges.html",
   "./challenge.html",
   "./dictionary.html",
   "./how-to-play.html",
+  "./index.html",
   "./kids.html",
   "./levels.html",
+  "./manifest-nl.webmanifest",
+  "./manifest.webmanifest",
   "./play.html",
   "./privacy.html",
   "./settings.html",
   "./stats.html",
-  "./manifest.webmanifest",
+  "./assets/apple-touch-icon.png",
+  "./assets/favicon.svg",
+  "./assets/icon-192.png",
+  "./assets/icon-512.png",
+  "./assets/icon-maskable-512.png",
+  "./assets/logo.svg",
   "./css/base.css",
   "./css/components.css",
   "./css/figures.css",
   "./css/game.css",
   "./css/pages.css",
-  "./data/kids.js",
   "./data/i18n/en.json",
   "./data/i18n/nl.json",
+  "./data/kids.js",
   "./data/words/en.js",
   "./data/words/nl.js",
   "./js/analytics.js",
-  "./js/theme-init.js",
   "./js/core/achievements.js",
   "./js/core/challenge.js",
-  "./js/core/chest.js",
   "./js/core/daily.js",
   "./js/core/dates.js",
   "./js/core/difficulty.js",
@@ -40,7 +46,6 @@ const FILES = [
   "./js/core/i18n.js",
   "./js/core/kids.js",
   "./js/core/levels.js",
-  "./js/core/missions.js",
   "./js/core/progress.js",
   "./js/core/random.js",
   "./js/core/round.js",
@@ -48,7 +53,6 @@ const FILES = [
   "./js/core/storage.js",
   "./js/core/themes.js",
   "./js/core/words.js",
-  "./js/core/xp.js",
   "./js/pages/badges.js",
   "./js/pages/challenge.js",
   "./js/pages/dictionary.js",
@@ -59,13 +63,20 @@ const FILES = [
   "./js/pages/settings.js",
   "./js/pages/static.js",
   "./js/pages/stats.js",
+  "./js/theme-init.js",
   "./js/ui/appearance.js",
   "./js/ui/celebrations.js",
   "./js/ui/confetti.js",
   "./js/ui/countdown.js",
   "./js/ui/effects.js",
   "./js/ui/feedback.js",
-  "./js/ui/home-rewards.js",
+  "./js/ui/figures/balloon.js",
+  "./js/ui/figures/classic.js",
+  "./js/ui/figures/flower.js",
+  "./js/ui/figures/index.js",
+  "./js/ui/figures/rocket.js",
+  "./js/ui/figures/snowman.js",
+  "./js/ui/figures/steps.js",
   "./js/ui/icons.js",
   "./js/ui/illustrations.js",
   "./js/ui/install.js",
@@ -79,28 +90,16 @@ const FILES = [
   "./js/ui/toast.js",
   "./js/ui/tutorial.js",
   "./js/ui/welcome.js",
-  "./js/ui/figures/balloon.js",
-  "./js/ui/figures/classic.js",
-  "./js/ui/figures/flower.js",
-  "./js/ui/figures/index.js",
-  "./js/ui/figures/rocket.js",
-  "./js/ui/figures/snowman.js",
-  "./js/ui/figures/steps.js",
-  "./assets/apple-touch-icon.png",
-  "./assets/favicon.svg",
-  "./assets/icon-192.png",
-  "./assets/icon-512.png",
-  "./assets/icon-maskable-512.png",
-  "./assets/logo.svg",
 ];
 
 // Save all files when the service worker is installed
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(FILES))
-      .then(() => self.skipWaiting())
-  );
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES)));
+});
+
+// The player tapped "Refresh": the new version takes over
+self.addEventListener("message", (event) => {
+  if (event.data === "skip-waiting") self.skipWaiting();
 });
 
 // Remove caches of older versions

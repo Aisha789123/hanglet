@@ -40,7 +40,7 @@ function lookup(source, key) {
   return key.split(".").reduce((value, part) => (value == null ? undefined : value[part]), source);
 }
 
-// t("result.solved") → "Solved!", t("hints.cost", { coins: 20 }) → "20 coins"
+// t("play.knowIt") → "I know it!", t("play.clue", { number: 2 }) → "Clue 2"
 export function t(key, params = {}) {
   let text = lookup(strings, key) ?? lookup(fallback, key) ?? key;
   if (typeof text !== "string") return key;

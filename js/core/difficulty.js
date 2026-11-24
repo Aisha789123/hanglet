@@ -1,14 +1,14 @@
 // The three difficulties and what they change. Every mode (Daily, Classic,
-// Levels, Time Attack) follows the difficulty the player picked.
+// Levels) follows the difficulty the player picked.
 // This file has no DOM code and no imports, so it is easy to test.
-//   easy:   riddle on screen + the first letter is filled in for free
-//   normal: riddle on screen
-//   hard:   no riddle, only the category
+//   easy:   8 lives + the first letter is filled in for free
+//   normal: 7 lives
+//   hard:   6 lives, and clue 3 (almost the answer) never comes
 
 export const DIFFICULTIES = [
-  { id: "easy", lives: 8, riddle: true, freeFirstLetter: true },
-  { id: "normal", lives: 7, riddle: true, freeFirstLetter: false },
-  { id: "hard", lives: 6, riddle: false, freeFirstLetter: false },
+  { id: "easy", lives: 8, freeFirstLetter: true, maxClues: 3 },
+  { id: "normal", lives: 7, freeFirstLetter: false, maxClues: 3 },
+  { id: "hard", lives: 6, freeFirstLetter: false, maxClues: 2 },
 ];
 
 // New players start on Easy

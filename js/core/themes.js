@@ -1,24 +1,20 @@
-// Color themes. Ocean is free, the others are unlocked as a reward.
+// Color themes. Ocean is free, the others are unlocked with stars.
 // The colors themselves live in css/base.css ([data-theme="..."]).
-import { getLevelInfo } from "./xp.js";
+// Themes a player unlocked in an older version stay unlocked (data.unlocked).
 
 export const THEMES = [
-  { id: "ocean", unlock: null },
-  { id: "lagoon", unlock: { level: 2 } },
-  { id: "forest", unlock: { level: 3 } },
-  { id: "coral", unlock: { level: 4 } },
-  { id: "sunset", unlock: { level: 5 } },
-  { id: "berry", unlock: { level: 8 } },
-  { id: "slate", unlock: { level: 12 } },
-  { id: "gold", unlock: { achievement: "daily-streak-7" } },
+  { id: "ocean", stars: 0 },
+  { id: "lagoon", stars: 10 },
+  { id: "forest", stars: 25 },
+  { id: "coral", stars: 45 },
+  { id: "sunset", stars: 70 },
+  { id: "berry", stars: 100 },
+  { id: "slate", stars: 140 },
+  { id: "gold", stars: 200 },
 ];
 
 export function isThemeUnlocked(theme, data) {
-  if (!theme.unlock) return true;
-  if (theme.unlock.level) {
-    return getLevelInfo(data.player.xp).level >= theme.unlock.level;
-  }
-  return Boolean(data.achievements[theme.unlock.achievement]);
+  return data.player.stars >= theme.stars || data.unlocked.themes.includes(theme.id);
 }
 
 export function getUnlockedThemes(data) {

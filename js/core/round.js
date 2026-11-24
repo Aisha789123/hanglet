@@ -1,37 +1,56 @@
-// One round of the game: one word, a number of lives and the guessed letters.
+// One round of the game: one word, its clues, a number of lives and the guesses.
+// The riddle gets clearer: you start with clue 1, and every few lost lives
+// open the next clue. You can also type the whole word ("I know it!").
 // This file has no DOM code, so it is easy to test and reuse in every mode.
 
-const ALPHABET = "abcdefghijklmnopqrstuvwxyz".split("");
+export const MAX_STARS = 3;
+export const MISSES_PER_CLUE = 2; // a new clue after every 2 lost lives
+export const WRONG_WORD_COST = 2; // a wrong "I know it!" costs 2 lives
 
 export class Round {
-  constructor({ word, category, lives, description = "", picture = null }) {
+  // maxClues: how many clues can open (Hard: 2). missesPerClue: Kids use 1.
+  constructor({ word, category, lives, clues = [], maxClues = MAX_STARS, missesPerClue = MISSES_PER_CLUE, picture = null }) {
     this.word = word;
     this.category = category;
     this.lives = lives;
-    this.description = description;
+    this.clues = clues;
+    this.maxClues = Math.max(1, Math.min(maxClues, clues.length || 1));
+    this.missesPerClue = missesPerClue;
     this.picture = picture;
     this.guessed = [];
-    this.removed = []; // wrong letters taken away by a hint
     this.misses = 0;
-    this.hintsUsed = 0;
-    this.descriptionShown = false;
+    this.wordGuesses = 0; // wrong "I know it!" guesses
+    this.solvedByWord = false; // solved with "I know it!"
   }
 
-  // Returns "correct", "wrong", or "ignored" (game over, already guessed or removed)
+  // Returns "correct", "wrong", or "ignored" (game over or already guessed)
   guess(letter) {
-    if (this.isOver() || this.guessed.includes(letter) || this.removed.includes(letter)) {
-      return "ignored";
-    }
+    if (this.isOver() || this.guessed.includes(letter)) return "ignored";
     this.guessed.push(letter);
-    if (this.word.includes(letter)) {
-      return "correct";
-    }
+    if (this.word.includes(letter)) return "correct";
     this.misses++;
     return "wrong";
   }
 
+  // "I know it!": the whole word at once.
+  // Returns "correct", "wrong" (costs lives), "length" (wrong length, free) or "ignored".
+  guessWord(text) {
+    if (this.isOver() || !text) return "ignored";
+    if (text.length !== this.word.length) return "length";
+    if (text === this.word) {
+      for (const letter of new Set(this.word)) {
+        if (!this.guessed.includes(letter)) this.guessed.push(letter);
+      }
+      this.solvedByWord = true;
+      return "correct";
+    }
+    this.wordGuesses++;
+    this.misses = Math.min(this.lives, this.misses + WRONG_WORD_COST);
+    return "wrong";
+  }
+
   // Fill in a letter for free: the first letter on Easy, or Tilo's help in Kids.
-  // It is not a hint and not a miss. The last hidden letter is never given away.
+  // It is not a miss. The last hidden letter is never given away.
   giveLetter(letter) {
     if (this.isOver() || this.guessed.includes(letter) || !this.word.includes(letter)) return false;
     if (this.hiddenLetters().length < 2) return false;
@@ -39,64 +58,34 @@ export class Round {
     return true;
   }
 
-  // ---------- Hints ----------
+  // ---------- Clues and stars ----------
 
-  canRevealLetter() {
-    return !this.isOver() && this.hiddenLetters().length >= 2;
+  // How many clues are open: 1, 2 or 3
+  openClues() {
+    return Math.min(this.maxClues, 1 + Math.floor(this.misses / this.missesPerClue));
   }
 
-  // Reveal one random hidden letter (never the last one)
-  revealLetter() {
-    if (!this.canRevealLetter()) return null;
-    const hidden = this.hiddenLetters();
-    const letter = hidden[Math.floor(Math.random() * hidden.length)];
-    this.guessed.push(letter);
-    this.hintsUsed++;
-    return letter;
+  // Wrong letters until the next clue opens, or 0 when no clue is left
+  missesToNextClue() {
+    if (this.openClues() >= this.maxClues) return 0;
+    return this.openClues() * this.missesPerClue - this.misses;
   }
 
-  // Wrong letters that are still on the keyboard
-  unusedWrongLetters() {
-    return ALPHABET.filter(
-      (letter) => !this.word.includes(letter) && !this.guessed.includes(letter) && !this.removed.includes(letter)
-    );
+  // Stars if you solve it now: clue 1 = 3, clue 2 = 2, clue 3 = 1
+  starsNow() {
+    return MAX_STARS + 1 - this.openClues();
   }
 
-  canRemoveLetters() {
-    return !this.isOver() && this.unusedWrongLetters().length >= 3;
-  }
-
-  // Take away 3 wrong letters. They don't count as misses.
-  removeWrongLetters(count = 3) {
-    if (!this.canRemoveLetters()) return [];
-    const letters = this.unusedWrongLetters();
-    const picked = [];
-    while (picked.length < count) {
-      const index = Math.floor(Math.random() * letters.length);
-      picked.push(letters.splice(index, 1)[0]);
-    }
-    this.removed.push(...picked);
-    this.hintsUsed++;
-    return picked;
-  }
-
-  canShowDescription() {
-    return !this.isOver() && !this.descriptionShown && this.description !== "";
-  }
-
-  showDescription() {
-    if (!this.canShowDescription()) return false;
-    this.descriptionShown = true;
-    this.hintsUsed++;
-    return true;
+  // Stars for the finished round (0 when lost)
+  stars() {
+    return this.isWon() ? this.starsNow() : 0;
   }
 
   // ---------- State ----------
 
   // The different letters of the word that are not guessed yet
   hiddenLetters() {
-    const letters = [...new Set(this.word)];
-    return letters.filter((letter) => !this.guessed.includes(letter));
+    return [...new Set(this.word)].filter((letter) => !this.guessed.includes(letter));
   }
 
   // How many letter tiles are filled in (for the rocket figure)

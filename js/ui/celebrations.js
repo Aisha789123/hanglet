@@ -1,9 +1,7 @@
-// Celebrations on top of everything: level up, badges that pop and finished missions.
+// Celebrations on top of everything: badges and new figures or themes that pop.
 import { t } from "../core/i18n.js";
 import { icon } from "./icons.js";
-import { mascotSvg } from "./mascot.js";
 import { playSound } from "./feedback.js";
-import { launchConfetti } from "./confetti.js";
 
 let popLayer = null;
 let queue = Promise.resolve();
@@ -57,46 +55,13 @@ export function showBadgePops(achievements) {
   }
 }
 
-export function showMissionPops(missions) {
-  for (const mission of missions) {
+// A new figure or theme, unlocked with stars
+export function showUnlockPops(unlocks) {
+  for (const unlock of unlocks) {
+    const isTheme = unlock.type === "theme";
+    const name = isTheme ? t(`themes.${unlock.id}`) : t(`figures.${unlock.id}.name`);
     pop(`
-      <span class="pop-medal">${icon(mission.icon)}</span>
-      <span class="pop-text"><small>${t("missions.done")}</small><strong>${t(`missions.${mission.id}`, { count: mission.target, category: t(`categories.${mission.category}`) })}</strong></span>`, "mission");
+      <span class="pop-medal">${icon(isTheme ? "palette" : "figure")}</span>
+      <span class="pop-text"><small>${isTheme ? t("result.newTheme") : t("result.newFigure")}</small><strong>${name}</strong></span>`, "unlock");
   }
-}
-
-// A big "Level up!" screen with the mascot. Resolves when it is closed.
-export function showLevelUp(level, themes = []) {
-  return new Promise((resolve) => {
-    const dialog = document.createElement("dialog");
-    dialog.className = "dialog level-up";
-    dialog.setAttribute("aria-labelledby", "level-up-title");
-    const themeNotes = themes.map((theme) =>
-      `<p class="unlock-note">${icon("palette")}${t("result.theme")} <strong>${t(`themes.${theme.id}`)}</strong></p>`).join("");
-    dialog.innerHTML = `
-      <div class="level-up-rays" aria-hidden="true"></div>
-      <div class="level-up-mascot">${mascotSvg("cheering")}</div>
-      <p class="eyebrow">${t("levelUp.eyebrow")}</p>
-      <h2 id="level-up-title">${t("levelUp.title")}</h2>
-      <div class="level-up-number" aria-label="${t("home.playerLevel", { level })}">${level}</div>
-      <p>${t("levelUp.text")}</p>
-      ${themeNotes}
-      <button class="button button-sun button-large" type="button">${t("levelUp.button")}</button>`;
-    document.body.appendChild(dialog);
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      if (dialog.open) dialog.close();
-      dialog.remove();
-      resolve();
-    };
-    // The button finishes right away; "close" also covers the Escape key
-    dialog.querySelector("button").addEventListener("click", finish);
-    dialog.addEventListener("close", finish);
-    dialog.showModal();
-    dialog.querySelector("button").focus();
-    playSound("unlock");
-    launchConfetti();
-  });
 }

@@ -71,7 +71,7 @@
         </form>
       </section>
 
-      <section class="card" aria-labelledby="look-title">
+      <section class="card" id="looks" aria-labelledby="look-title">
         <div class="card-header"><h2 id="look-title" data-i18n="settings.appearance"></h2></div>
         <form id="color-mode">
           <fieldset class="option-group">
@@ -84,7 +84,7 @@
           </fieldset>
         </form>
         <h3 class="subheading" data-i18n="settings.themes"></h3>
-        <p class="muted card-text" data-i18n="settings.themesHelp"></p>
+        <p class="muted card-text"><span data-i18n="settings.themesHelp"></span> <strong id="stars-have"></strong></p>
         <ul class="theme-list" id="theme-list"></ul>
       </section>
 
@@ -144,11 +144,23 @@
         <div class="card-header"><h2 id="data-title" data-i18n="settings.data"></h2></div>
         <p class="muted" data-i18n="settings.dataHelp"></p>
         <div class="dialog-actions actions-start">
+          <button class="button button-secondary" id="export-button" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span data-i18n="settings.export"></span></button>
+          <button class="button button-secondary" id="import-button" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></svg><span data-i18n="settings.import"></span></button>
+          <input type="file" id="import-file" accept=".json,application/json" hidden>
           <button class="button button-danger" id="reset-button" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg><span data-i18n="settings.reset"></span></button>
         </div>
       </section>
     </div>
   </main>
+
+  <dialog class="dialog" id="import-dialog" aria-labelledby="import-title">
+    <h2 id="import-title" data-i18n="settings.importTitle"></h2>
+    <p data-i18n="settings.importText"></p>
+    <div class="dialog-actions">
+      <button class="button button-secondary" id="import-cancel" type="button" data-i18n="common.cancel"></button>
+      <button class="button button-primary" id="import-confirm" type="button" data-i18n="settings.importConfirm"></button>
+    </div>
+  </dialog>
 
   <dialog class="dialog" id="reset-dialog" aria-labelledby="reset-title">
     <h2 id="reset-title" data-i18n="settings.resetTitle"></h2>

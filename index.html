@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Hanglet – A playful word game for every day</title>
-  <meta name="description" content="Solve the riddles of Tilo letter by letter. Daily challenge, 40 levels, Time Attack, a Kids world for ages 6 to 9 and challenges for friends. Free, in English and Dutch.">
+  <title>Hanglet – The riddle gets clearer</title>
+  <meta name="description" content="Tilo gives you a tricky clue, and every mistake makes the riddle clearer. Three new riddles every day, 40 levels and a Kids world for ages 6 to 9. Free, in English and Dutch.">
   <meta name="theme-color" content="#f6f7f9">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hanglet">
-  <meta property="og:title" content="Hanglet – A playful word game for every day">
-  <meta property="og:description" content="Solve the riddles of Tilo letter by letter. Daily challenge, 40 levels, Time Attack, a Kids world for ages 6 to 9 and challenges for friends. Free, in English and Dutch.">
+  <meta property="og:title" content="Hanglet – The riddle gets clearer">
+  <meta property="og:description" content="Tilo gives you a tricky clue, and every mistake makes the riddle clearer. Three new riddles every day, 40 levels and a Kids world for ages 6 to 9. Free, in English and Dutch.">
   <meta property="og:image" content="assets/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -35,63 +35,30 @@
 <body class="page-home">
   <main id="main" class="container home">
 
-    <section class="hero-card" aria-labelledby="hero-title">
+    <section class="hero-card daily-hero" aria-labelledby="hero-title">
       <div class="hero-mascot">
         <p class="speech" id="hero-speech" aria-live="polite"></p>
         <div class="mascot-big" id="hero-mascot"></div>
       </div>
       <div class="hero-content">
-        <div class="word-drop" id="word-drop" aria-hidden="true"></div>
-        <h1 id="hero-title" data-i18n="home.title">Guess the word, one letter at a time.</h1>
-        <p class="hero-intro" data-i18n="home.intro"></p>
+        <p class="eyebrow hero-eyebrow" id="daily-number"></p>
+        <h1 id="hero-title" data-i18n="home.title">Today's riddles</h1>
+        <div class="daily-rings" id="daily-rings"></div>
+        <p class="hero-status" id="daily-status"></p>
         <a class="button button-play" id="play-button" href="play.html?mode=daily">
           <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-          <span data-i18n="home.play">Play</span>
+          <span id="play-label">Play</span>
         </a>
-        <p class="play-sub" id="play-sub"></p>
+        <p class="hero-countdown"><span data-i18n="home.newWordsIn"></span> <strong class="countdown" id="daily-countdown">--:--:--</strong></p>
       </div>
     </section>
 
-    <section class="daily-card" aria-labelledby="daily-title">
-      <div class="daily-rings" id="daily-rings"></div>
-      <div class="daily-info">
-        <p class="eyebrow" id="daily-number"></p>
-        <h2 id="daily-title" data-i18n="home.dailyTitle"></h2>
-        <p id="daily-status"></p>
-        <p class="daily-countdown"><span data-i18n="home.newWordsIn"></span> <strong class="countdown" id="daily-countdown">--:--:--</strong></p>
-      </div>
-      <a class="button button-sun" id="daily-cta" href="play.html?mode=daily"><span data-i18n="home.playDaily"></span></a>
-    </section>
-
-    <div class="home-rewards" id="home-rewards"></div>
-
-    <section class="kids-banner" id="kids-banner" aria-labelledby="kids-banner-title">
-      <div class="kids-banner-art" id="kids-banner-art" aria-hidden="true"></div>
-      <div class="kids-banner-text">
-        <p class="eyebrow" data-i18n="home.kidsStatus"></p>
-        <h2 id="kids-banner-title" data-i18n="home.kidsTitle"></h2>
-        <p data-i18n="home.kidsText"></p>
-        <p class="kids-banner-stickers" id="kids-banner-stickers"></p>
-      </div>
-      <a class="button button-sun button-large" href="kids.html"><span data-i18n="home.kidsButton"></span></a>
-    </section>
-
-    <section aria-labelledby="modes-title">
-      <h2 class="section-title" id="modes-title" data-i18n="home.chooseMode"></h2>
+    <section aria-labelledby="more-title">
+      <h2 class="section-title" id="more-title" data-i18n="home.moreTitle"></h2>
       <div class="mode-tiles" id="mode-tiles"></div>
     </section>
 
-    <section class="home-bottom">
-      <div class="card player-card" id="player-card" data-i18n-attr="aria-label: home.progressLabel"></div>
-      <div class="card teaser-card" aria-labelledby="dictionary-title">
-        <div class="teaser-icon tone-teal"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5M19 19v2H6"/></svg></div>
-        <div class="teaser-body">
-          <h2 class="section-title" id="dictionary-title" data-i18n="home.dictionaryTitle"></h2>
-          <div id="dictionary-teaser"></div>
-        </div>
-        <a class="button button-secondary" href="dictionary.html" data-i18n="home.openDictionary"></a>
-      </div>
-    </section>
+    <section class="home-strip" id="home-strip" data-i18n-attr="aria-label: home.starsLabel"></section>
 
   </main>
 </body>

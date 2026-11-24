@@ -1,7 +1,6 @@
-// Statistics page: numbers, misses chart, Daily calendar and badges.
+// Statistics page: numbers, "at which clue" chart, Daily calendar and badges.
 import { data } from "../core/storage.js";
 import { formatDate, language, t } from "../core/i18n.js";
-import { getLevelInfo } from "../core/xp.js";
 import { currentDailyStreak } from "../core/progress.js";
 import { ACHIEVEMENTS } from "../core/achievements.js";
 import { completedLevels, LEVEL_COUNT } from "../core/levels.js";
@@ -14,12 +13,16 @@ initPage("stats");
 const stats = data.stats;
 
 // ---------- Number tiles ----------
-const winPercent = stats.played > 0 ? Math.round((stats.wins / stats.played) * 100) : 0;
+// The star numbers only count riddles played with clues (since version 2)
+const solvedPercent = stats.played > 0 ? Math.round((stats.wins / stats.played) * 100) : 0;
+const solvedWithClues = stats.solvedAtClue.reduce((sum, count) => sum + count, 0);
+const averageStars = stats.starWords > 0 ? (stats.starsEarned / stats.starWords).toFixed(1) : "0";
+const clue1Percent = solvedWithClues > 0 ? Math.round((stats.solvedAtClue[0] / solvedWithClues) * 100) : 0;
 const tiles = [
+  ["stats.avgStars", averageStars.replace(".", language === "nl" ? "," : "."), "yellow"],
+  ["stats.clue1Percent", clue1Percent, "green"],
+  ["stats.solvedPercent", solvedPercent, "blue"],
   ["stats.played", stats.played, "blue"],
-  ["stats.winPercent", winPercent, "green"],
-  ["stats.winStreak", stats.winStreak, "teal"],
-  ["stats.bestWinStreak", stats.bestWinStreak, "teal"],
   ["stats.dayStreak", currentDailyStreak(), "orange"],
   ["stats.bestDayStreak", data.daily.bestStreak, "orange"],
 ];
@@ -27,24 +30,19 @@ document.getElementById("stat-tiles").innerHTML = tiles
   .map(([label, value, tone]) => `<div class="stat-tile tone-${tone}"><strong>${value}</strong><span>${t(label)}</span></div>`)
   .join("");
 
-// ---------- Player progress ----------
-const level = getLevelInfo(data.player.xp);
+// ---------- Progress ----------
 const dictionaryCount = Object.keys(data.dictionary[language] || {}).length;
 document.getElementById("progress-list").innerHTML = `
-  <li>${icon("star")}<span>${t("stats.playerLevel")}</span><strong>${level.level}</strong></li>
-  <li>${icon("spark")}<span>${t("stats.totalXp")}</span><strong>${data.player.xp}</strong></li>
-  <li>${icon("coin")}<span>${t("home.coins")}</span><strong>${data.player.coins}</strong></li>
+  <li>${icon("star")}<span>${t("stats.totalStars")}</span><strong>${data.player.stars}</strong></li>
+  <li>${icon("spark")}<span>${t("stats.bestWinStreak")}</span><strong>${stats.bestWinStreak}</strong></li>
+  <li>${icon("bulb")}<span>${t("stats.knowItWins")}</span><strong>${stats.knowItWins}</strong></li>
+  <li>${icon("calendar")}<span>${t("stats.perfectDailies")}</span><strong>${stats.perfectDailies}</strong></li>
   <li>${icon("path")}<span>${t("stats.levelsDone")}</span><strong>${completedLevels(data.levels.stars)} / ${LEVEL_COUNT}</strong></li>
-  <li>${icon("timer")}<span>${t("stats.timedBest")}</span><strong>${data.timed.best}</strong></li>
-  <li>${icon("book")}<span>${t("stats.wordsCollected")}</span><strong>${dictionaryCount}</strong></li>
-  <li>${icon("bulb")}<span>${t("stats.hintsUsed")}</span><strong>${stats.hintsUsed}</strong></li>`;
+  <li>${icon("book")}<span>${t("stats.wordsCollected")}</span><strong>${dictionaryCount}</strong></li>`;
 
-// ---------- Misses chart: how many misses in won games, plus losses ----------
-const rows = stats.missesInWins.map((count, misses) => ({
-  label: misses === stats.missesInWins.length - 1 ? `${misses}+` : String(misses),
-  count,
-}));
-rows.push({ label: t("stats.lost"), count: stats.losses, isLost: true });
+// ---------- Chart: at which clue did you solve it? ----------
+const rows = stats.solvedAtClue.map((count, i) => ({ label: t("stats.clueRow", { number: i + 1 }), count, stars: 3 - i }));
+rows.push({ label: t("stats.notSolved"), count: stats.losses, isLost: true });
 const biggest = Math.max(1, ...rows.map((row) => row.count));
 const chart = document.getElementById("misses-chart");
 if (stats.played === 0) {
@@ -56,8 +54,7 @@ if (stats.played === 0) {
       <span class="bar-track"><span class="bar-fill" style="width:${Math.max(4, (row.count / biggest) * 100)}%"></span></span>
       <span class="bar-value">${row.count}</span>
     </div>`).join("");
-  chart.setAttribute("aria-label", rows.map((row) =>
-    `${row.isLost ? row.label : t("stats.missesLabel", { count: row.label })}: ${row.count}`).join(", "));
+  chart.setAttribute("aria-label", rows.map((row) => `${row.label}: ${row.count}`).join(", "));
 }
 
 // ---------- Daily calendar ----------
@@ -87,7 +84,8 @@ function renderCalendar() {
     let label = t("stats.noDaily");
     if (entry) {
       state = entry.solved === entry.total ? "is-perfect" : entry.solved > 0 ? "is-played" : "is-missed";
-      label = t("stats.dailyDone", { solved: entry.solved, total: entry.total });
+      label = t("stats.dailyDone", { solved: entry.solved, total: entry.total })
+        + (entry.stars !== undefined ? `, ${entry.stars}/${entry.total * 3}` : "");
     }
     const isToday = key === today ? " is-today" : "";
     html += `<span class="calendar-day ${state}${isToday}" aria-label="${formatDate(key)}: ${label}">${day}</span>`;

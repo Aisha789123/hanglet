@@ -1,4 +1,4 @@
-// Small "juicy" effects: particles, floating combo text and flying coins.
+// Small "juicy" effects: particles, floating combo text and flying stars.
 // Nothing happens when the player asked for less motion.
 import { isReducedMotion } from "./appearance.js";
 import { bringToFront } from "./celebrations.js";
@@ -51,17 +51,17 @@ export function floatText(container, text, tone = "sun") {
   setTimeout(() => label.remove(), isReducedMotion() ? 900 : 1300);
 }
 
-// Coins that fly from an element to the coin counter in the header.
-// Calls onArrive once, when the first coin lands.
-export function flyCoins(fromElement, amount, onArrive) {
-  const target = document.getElementById("header-coins");
+// Stars that fly from an element to the star counter in the header.
+// Calls onArrive once, when the first star lands.
+export function flyStars(fromElement, amount, onArrive) {
+  const target = document.getElementById("header-stars");
   if (!fromElement || !target || isReducedMotion()) {
     onArrive?.();
     return;
   }
   const from = fromElement.getBoundingClientRect();
   const to = target.getBoundingClientRect();
-  const count = Math.min(10, Math.max(3, Math.round(amount / 5)));
+  const count = Math.min(6, Math.max(1, amount));
   let arrived = false;
   const effects = getLayer();
   const arrive = () => {
@@ -73,21 +73,21 @@ export function flyCoins(fromElement, amount, onArrive) {
   setTimeout(arrive, 1400);
 
   for (let i = 0; i < count; i++) {
-    const coin = document.createElement("span");
-    coin.className = "flying-coin";
-    coin.style.left = `${from.left + from.width / 2 + (Math.random() - 0.5) * 40}px`;
-    coin.style.top = `${from.top + from.height / 2 + (Math.random() - 0.5) * 20}px`;
-    effects.appendChild(coin);
+    const star = document.createElement("span");
+    star.className = "flying-star";
+    star.style.left = `${from.left + from.width / 2 + (Math.random() - 0.5) * 40}px`;
+    star.style.top = `${from.top + from.height / 2 + (Math.random() - 0.5) * 20}px`;
+    effects.appendChild(star);
 
-    const dx = to.left + to.width / 2 - parseFloat(coin.style.left);
-    const dy = to.top + to.height / 2 - parseFloat(coin.style.top);
+    const dx = to.left + to.width / 2 - parseFloat(star.style.left);
+    const dy = to.top + to.height / 2 - parseFloat(star.style.top);
     const delay = i * 70;
-    coin.animate([
+    star.animate([
       { transform: "translate(0, 0) scale(0.6)", opacity: 0 },
       { transform: `translate(${dx * 0.3}px, ${dy * 0.3 - 60}px) scale(1.1)`, opacity: 1, offset: 0.35 },
       { transform: `translate(${dx}px, ${dy}px) scale(0.7)`, opacity: 1 },
     ], { duration: 750, delay, easing: "cubic-bezier(0.5, 0, 0.7, 1)", fill: "both" }).onfinish = () => {
-      coin.remove();
+      star.remove();
       target.classList.remove("is-bumped");
       void target.offsetWidth;
       target.classList.add("is-bumped");

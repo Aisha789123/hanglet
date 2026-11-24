@@ -1,13 +1,15 @@
-// Plays Hanglet automatically to check how hard it is.
+// Plays Hanglet automatically to check how hard it is (the rules of v5:
+// 3 clues that get clearer, "I know it!" and 3/2/1 stars).
 //   node tools/simulate.js [rounds] [difficulty] [seed]
 // Three simple players, all on the same words:
-//   "letters":  guesses the most common letters of the language first and
-//               ignores the riddle (the simple strategy, a worst case)
-//   "riddle":   the same, but with the riddle on screen the player recognises
-//               the word once half of the tiles are filled in (an assumption,
-//               change RECOGNISE below to try other players)
-//   "category": knows the category, the length and the whole word list, and
-//               guesses the letter that fits most words left (a best case)
+//   "letters": guesses the most common letters of the language first and
+//              never reads the clues (a worst case)
+//   "clues":   the same, but recognises the word from the clues and then
+//              types it with "I know it!". How many tiles must be visible
+//              depends on the open clue (RECOGNISE below, an assumption:
+//              change it to try other players)
+//   "list":    knows the category, the length and the whole word list, and
+//              guesses the letter that fits most words left (a best case)
 // Words are picked like the Daily: a third short, a third medium, a third long.
 import EN from "../data/words/en.js";
 import NL from "../data/words/nl.js";
@@ -25,12 +27,15 @@ const ORDER = {
   nl: "enatirodslgvhkmubpwjczfxyq",
 };
 const LISTS = { en: EN, nl: NL };
-const CATEGORIES = ["animals", "food", "countries", "sports", "nature", "jobs", "science", "music", "colors", "clothing"];
 const BUCKETS = [[4, 5], [6, 7], [8, 99]];
-const RECOGNISE = 0.5; // part of the tiles that must be visible before the riddle "clicks"
+// Part of the tiles that must be visible before the word "clicks", with clue 1, 2 or 3 open
+const RECOGNISE = [0.75, 0.5, 0.25];
 
+// Every word except the season list (like the Daily)
 function allWords(lang) {
-  return CATEGORIES.flatMap((category) => LISTS[lang][category].map(([word]) => ({ word, category })));
+  return Object.entries(LISTS[lang])
+    .filter(([category]) => category !== "winter")
+    .flatMap(([category, words]) => words.map((item) => ({ ...item, category })));
 }
 
 function pickWords(lang, count) {
@@ -43,7 +48,7 @@ function pickWords(lang, count) {
 }
 
 function startRound(item) {
-  const round = new Round({ ...item, lives: difficulty.lives });
+  const round = new Round({ ...item, lives: difficulty.lives, maxClues: difficulty.maxClues });
   for (const letter of freeLetters(item.word, difficulty.id)) round.giveLetter(letter);
   return round;
 }
@@ -54,18 +59,20 @@ function playByLetters(item, lang) {
     if (round.isOver()) break;
     round.guess(letter);
   }
-  return round.isWon();
+  return round;
 }
 
-function playByRiddle(item, lang) {
+function playByClues(item, lang) {
   const round = startRound(item);
-  if (!difficulty.riddle) return playByLetters(item, lang);
   for (const letter of ORDER[lang]) {
     if (round.isOver()) break;
-    if (round.revealedCount() / round.word.length >= RECOGNISE) return true;
+    if (round.revealedCount() / round.word.length >= RECOGNISE[round.openClues() - 1]) {
+      round.guessWord(round.word);
+      break;
+    }
     round.guess(letter);
   }
-  return round.isWon();
+  return round;
 }
 
 // Does a word fit what is on the board so far?
@@ -77,9 +84,9 @@ function fits(word, round) {
   });
 }
 
-function playByCategory(item, lang) {
+function playByList(item, lang) {
   const round = startRound(item);
-  const pool = LISTS[lang][item.category].map(([word]) => word).filter((word) => word.length === item.word.length);
+  const pool = LISTS[lang][item.category].map(({ word }) => word).filter((word) => word.length === item.word.length);
   while (!round.isOver()) {
     const left = pool.filter((word) => fits(word, round));
     const counts = {};
@@ -91,22 +98,22 @@ function playByCategory(item, lang) {
     const best = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || ORDER[lang].indexOf(a) - ORDER[lang].indexOf(b))[0];
     round.guess(best || [...ORDER[lang]].find((letter) => !round.guessed.includes(letter)));
   }
-  return round.isWon();
+  return round;
 }
 
-const results = [];
+// Win %, stars per word and % solved at clue 1
+function summary(played) {
+  const won = played.filter((round) => round.isWon());
+  const stars = played.reduce((sum, round) => sum + round.stars(), 0);
+  const atClue1 = won.filter((round) => round.openClues() === 1).length;
+  const percent = (n, total) => `${Math.round((n / Math.max(1, total)) * 100)}%`;
+  return `${percent(won.length, played.length)} won, ${(stars / played.length).toFixed(1)}★, ${percent(atClue1, won.length)} at clue 1`.padEnd(32);
+}
+
+console.log(`Hanglet simulation: ${rounds} rounds per language on ${difficulty.id} (${difficulty.lives} lives, ${difficulty.maxClues} clues)\n`);
+console.log("language | common letters first             | + reads the clues                | knows the word list");
 for (const lang of ["en", "nl"]) {
   const words = pickWords(lang, rounds);
-  const letters = words.filter((item) => playByLetters(item, lang)).length;
-  const riddle = words.filter((item) => playByRiddle(item, lang)).length;
-  const category = words.filter((item) => playByCategory(item, lang)).length;
-  results.push({ lang, letters, riddle, category });
-}
-
-const percent = (n) => `${Math.round((n / rounds) * 100)}%`;
-console.log(`Hanglet simulation: ${rounds} rounds per language on ${difficulty.id} (${difficulty.lives} lives)\n`);
-const cell = (n) => `${n}/${rounds} = ${percent(n)}`.padEnd(20);
-console.log("language | common letters first | + reads the riddle   | knows the word list");
-for (const { lang, letters, riddle, category } of results) {
-  console.log(`${lang.padEnd(8)} | ${cell(letters)} | ${cell(riddle)} | ${cell(category)}`);
+  const row = [playByLetters, playByClues, playByList].map((player) => summary(words.map((item) => player(item, lang))));
+  console.log(`${lang.padEnd(8)} | ${row.join(" | ")}`);
 }

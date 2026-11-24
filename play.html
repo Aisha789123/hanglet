@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Play – Hanglet</title>
-  <meta name="description" content="Play Hanglet: read the riddle and find the word, letter by letter.">
+  <meta name="description" content="Play Hanglet: read Tilo's clues and find the word. The riddle gets clearer with every mistake.">
   <meta name="theme-color" content="#f6f7f9">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hanglet">
   <meta property="og:title" content="Play – Hanglet">
-  <meta property="og:description" content="Play Hanglet: read the riddle and find the word, letter by letter.">
+  <meta property="og:description" content="Play Hanglet: read Tilo's clues and find the word. The riddle gets clearer with every mistake.">
   <meta property="og:image" content="assets/og-image.png">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -42,7 +42,7 @@
         <p id="mode-subtitle"></p>
       </div>
       <button class="icon-button music-button" id="music-button" type="button" aria-pressed="false" data-i18n-attr="aria-label: music.label"></button>
-      <button class="hint-button" id="hint-button" type="button" hidden></button>
+      <button class="hint-button" id="help-button" type="button" hidden></button>
     </div>
 
     <section class="setup card" id="setup" hidden></section>
@@ -54,15 +54,31 @@
         <div class="lives" id="lives" role="img"></div>
       </div>
       <div class="board-main">
-        <div class="stage-card" id="stage-card">
+        <div class="stage-card clue-stage" id="stage-card">
           <div class="figure-stage">
             <div class="figure-box" id="figure"></div>
             <div class="stage-mascot" id="stage-mascot"></div>
           </div>
-          <div class="riddle" id="clue" aria-live="polite"></div>
+          <div class="clue-panel" id="clue-panel">
+            <p class="clue-worth" id="clue-worth"></p>
+            <ol class="clue-list" id="clue-list" aria-live="polite" data-i18n-attr="aria-label: play.cluesLabel"></ol>
+            <p class="tilo-says" id="tilo-says" aria-hidden="true"></p>
+          </div>
           <div class="combo-area" id="combo" aria-hidden="true"></div>
         </div>
         <div class="word" id="word" role="img"></div>
+        <div class="know-area">
+          <button class="button button-sun know-button" id="know-button" type="button"></button>
+          <form class="guess-form" id="guess-form" hidden>
+            <label class="field-label" for="guess-input" data-i18n="play.guessLabel"></label>
+            <div class="guess-row">
+              <input type="text" id="guess-input" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="guess-note">
+              <button class="button button-primary" type="submit" data-i18n="play.check"></button>
+              <button class="button button-secondary" id="guess-cancel" type="button" data-i18n="common.cancel"></button>
+            </div>
+            <p class="guess-note" id="guess-note" aria-live="polite"></p>
+          </form>
+        </div>
         <div class="keyboard" id="keyboard" role="group" data-i18n-attr="aria-label: keyboard.label"></div>
       </div>
     </section>
@@ -71,7 +87,6 @@
     <noscript><p>Hanglet needs JavaScript to run.</p></noscript>
   </main>
 
-  <dialog class="dialog result" id="result-dialog" aria-labelledby="result-title"></dialog>
-  <dialog class="dialog sheet" id="hint-sheet" aria-labelledby="hint-title"></dialog>
+  <dialog class="dialog result" id="result-dialog" aria-labelledby="result-title"></dialog>
 </body>
 </html>

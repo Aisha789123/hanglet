@@ -1,89 +1,118 @@
 # Hanglet
 
-**A cheerful riddle word game for everyone from 8 years old, in English and Dutch.**
+**A cheerful riddle game for everyone from 8 years old, in English and Dutch.
+The riddle gets clearer.**
 Playful like Duolingo, but grown-ups enjoy it too. Younger kids (6–9) get their own Kids world.
 
-**Tilo**, the little letter tile with a hook on his head, gives you a riddle
-("You wrap it around your neck when it is cold"). You find the word letter by
-letter before your hearts run out. Play the Daily (three words, the same for
-everyone), endless Classic games, a level map with 40 levels through four
-landscapes, a 2-minute Time Attack, or challenge a friend with your own secret
-word. Open your daily treasure chest, finish daily missions, collect badges and
-fill your own dictionary.
+**Tilo**, the little letter tile with a hook on his head, gives you a smart,
+tricky clue ("I'm a spy who never leaves the garden"). Guess letters, or type the
+whole word with **I know it!**. Every 2 wrong letters open a clearer clue. Solve it
+at clue 1 for 3 stars, at clue 2 for 2 stars, at clue 3 for 1 star. Play three
+Daily riddles (the same for everyone), endless Classic riddles, a level map with
+40 levels, or challenge a friend with your own word and clues. Stars unlock
+figures and color themes.
 
 Inspired by the Codédex Python tutorial, rebuilt as a full web game.
 
 ![Hanglet preview](assets/og-image.png)
 
+## The core rules (all modes)
+
+- Every word has **3 clues**: 1 = smart and tricky (wordplay, "I" form), 2 = clearer, 3 = almost the answer
+- You start with clue 1. After every **2 wrong letters** the next clue opens
+- **I know it!**: type the whole word. Wrong = **2 lives**. A word with the wrong length is free
+- Solved at clue 1 = ⭐⭐⭐, clue 2 = ⭐⭐, clue 3 = ⭐, not solved = 0
+- Difficulty (Settings or before Classic):
+  - **Easy** – 8 lives and the first letter for free (the default for new players)
+  - **Normal** – 7 lives
+  - **Hard** – 6 lives, and clue 3 never comes
+- Lose 2 words in a row and Tilo kindly offers an easier difficulty
+
+The rules live in one place: `js/core/round.js` (clues, I know it!, stars) and
+`js/core/difficulty.js` (lives, free letter, number of clues).
+
 ## Features
 
-**Look and feel**
-- Own mascot **Tilo** (SVG) with five moods: happy, thinking, surprised, sad and cheering. He greets you on the home page, reacts to every letter and cheers or comforts you on the result screen
-- Logo made of colored letter tiles, rounded **Fredoka** font for headings and **Nunito** for text
-- Bright, friendly palette with a soft illustrated background, in light and dark mode
-- Chunky 3D buttons, keys and tiles that press down
-- Smooth page transitions (View Transitions API, with a fade-in fallback)
-- Juicy feedback: tiles that flip in, particles on right letters, shaking on misses, combo texts ("Nice! Combo x3")
-- Optional cheerful background music made with the Web Audio API (off by default), plus sound effects
-- Winter season look from 1 December to 6 January: snow, Tilo with a hat and an extra Winter word list
+**Modes**
+- **Daily** – 3 riddles a day (short, medium, long), the same for everyone with the same language, also during the winter season. Share text: `Hanglet #330 ⭐⭐⭐ ⭐⭐ ⭐ (6/9)`
+- **Classic** – endless riddles, choose category and length
+- **Levels** – 40 levels on an illustrated map, 3 to 6 riddles per level. Level stars come from the stars you earn: on average 2.5+ per riddle = 3 level stars, 1.75+ = 2, else 1. Missing one riddle fails the level
+- **Kids world (6–9)** – words of 3–5 letters with a picture and 3 easy, funny clues, a small keyboard, and no losing: every wrong letter opens an easier clue and Tilo helps. No stars, but a sticker per word
+- **Challenge a friend** – pick a secret word, write 1 to 3 clues, send the link (WhatsApp too). The word is scrambled in the link, no server needed
 
-**The riddle game**
-- The description of the word is the riddle. It is always free and big on screen, next to a small figure; the word tiles sit in the middle
-- Three difficulties for every mode (Daily, Classic, Levels, Time Attack), set in Settings or before a Classic game:
-  - **Easy** – riddle + the first letter for free + 8 lives (the default for new players)
-  - **Normal** – riddle + 7 lives
-  - **Hard** – only the category + 6 lives (the riddle can be bought as a hint; wins give bonus XP and coins)
-- Lose 2 words in a row and Tilo kindly offers an easier difficulty
-- Lives are hearts with a text: "5 lives left"
-- The figure starts empty and only builds up on mistakes. New players get the friendly balloon; the classic figure can be picked in Settings
-
-**Game modes**
-- **Daily** – three words per day, the same for everyone with the same language, with progress rings and a countdown. Afterwards "Play more" goes straight to Classic
-- **Classic** – endless play with your own category, length and difficulty
-- **Levels** – 40 levels on an illustrated map: a meadow, a forest with a river, a desert and snowy mountains. Every level has 3 to 6 words, stars count the misses of the whole level
-- **Time Attack** – as many words as you can in 2 minutes
-- **Challenge a friend** – type a secret word (and a hint), get a link and send it, also via WhatsApp. The word is scrambled inside the link, so no server is needed
-
-**Kids world (ages 6–9)**
-- Its own start page (`kids.html`) with its own button on the home page; "Kids" in the welcome dialog goes straight there
-- Words of 3–5 letters, always with a picture and a riddle
-- A small keyboard: only the letters of the word plus 4–6 extra letters, big and colorful
-- No losing: after a wrong letter a key lights up, after that Tilo fills in a letter with you. The last letter is always yours, and every word ends with a compliment
-- No coins or XP, but a sticker for every word, in a sticker book
-
-**Rewards**
-- XP, player levels with a level-up screen, coins that fly to the counter
-- Daily treasure chest: 20–60 coins and sometimes a free hint
-- Three daily missions (for example "Solve 2 words without a miss") with coin rewards
-- 21 badges that pop up when you earn them, and a badge page with progress
-- 5 figures (classic, balloon, flower, snowman, rocket) and 8 color themes to unlock
-- "My dictionary" with every word you solved and its meaning
-- Share card: a picture of your result (made on a canvas), without spoilers
-
-**Words**
-- English and Dutch, each with its own word list of real words (no translations)
-- 10 categories with 27–43 well-known words each (over 350 per language), every word with a clear riddle: animals, food, countries, sports, nature, jobs, science, music, colors and clothing. Rare, ambiguous and very hard words were taken out in v4
-- An extra Winter list (31–39 words) in the winter season, and 45+ Kids words per language with own pictures
+**Rewards (only stars, no coins)**
+- Stars unlock 3 figures (flower 25, snowman 60, rocket 120) and 7 color themes (lagoon 10 … gold 200)
+- 24 badges, for example "10 riddles at the first clue", "Daily 9/9", "100 stars". Badges from earlier versions stay visible
+- **My dictionary** shows every solved word with its 3 clues; the clue where you solved it is yellow
+- **Statistics**: stars per riddle, % solved at clue 1, solved per clue, streaks and a Daily calendar
 
 **For everyone**
-- Welcome dialog (language, who is playing, large text) and an interactive tour
-- Large text, high contrast and reduce motion (also follows the device setting)
-- Keyboard play, screen reader labels and live messages, visible focus
+- English and Dutch, each with its own word list and own wordplay (not translations)
+- Welcome dialog and an interactive tour
+- Large text, high contrast, reduce motion, keyboard play, screen reader labels and live messages
+- Installable app (PWA, manifest in English and Dutch) that works offline. A new version shows "A new version of Hanglet is ready – Refresh"
+- Download your progress as a file and load it again (Settings)
+- Winter look from 1 December to 6 January with an extra Winter list in Classic
 
-**Website and app**
-- Home, How to play, About, Privacy and 404 pages in English and Dutch
-- Installable as an app (PWA) and works offline
-- Title, description and Open Graph tags, translated per language
-- Optional, cookie-free visitor statistics with GoatCounter
+**Removed in v5:** coins, buying hints, the treasure chest, daily missions, Time
+Attack, XP and player levels. Old links to Time Attack open Classic.
+
+## Words
+
+- `data/words/en.js` and `data/words/nl.js`: 11 categories (animals, food, at home,
+  nature, jobs, sports, music, clothing, science, countries, mystery) plus a winter list.
+  Now 238 English and 259 Dutch words (+ 14 / 12 winter words)
+- `data/kids.js`: Kids words per picture, with 3 clues per language
+
+Add a word like this, in the right category:
+
+```js
+{ word: "giraffe", clues: [
+  "I'm always the first to know when it starts to rain.",  // 1: smart, "I" form
+  "I eat leaves from the tops of trees on the savanna.",    // 2: clearer
+  "The animal with the longest neck.",                      // 3: almost the answer
+] },
+```
+
+Rules (checked by `tests/words.test.js`): lowercase a–z only (no accents), at least
+4 letters, exactly 3 different clues, the word never appears in its own clues, and
+every category keeps at least 6 short (4–5), 6 medium (6–7) and 6 long (8+) words.
+Clue 1 must be smart and original: wordplay or a double meaning, not a famous
+internet riddle. Leave a word out rather than keep a weak riddle.
+Kids words: 3–5 letters, a picture from `js/ui/pictures.js`, 3 easy clues.
 
 ## How to run
 
 Hanglet uses JavaScript modules, so it needs a web server (double-clicking
 `index.html` will not work). There is no build step.
 
-- **VS Code:** install *Live Server*, right-click `index.html` → *Open with Live Server*
 - **Python:** `python -m http.server 8000` in this folder, then open <http://localhost:8000>
 - **Node:** `npx serve` in this folder
+- **VS Code:** *Live Server* → *Open with Live Server* on `index.html`
+
+Useful while testing: `?season=winter` / `?season=off` on any page (remembered until
+the tab closes). The Daily stays the same either way.
+
+### Tests and the difficulty check
+
+The tests use Node.js 22 or newer:
+
+```
+npm test                          # all tests in tests/
+node tools/simulate.js 50 normal  # plays 50 words per language automatically
+```
+
+- `core.test.js` – clues, I know it!, stars, levels, challenge link, rewards and unlocks
+- `daily.test.js` – the Daily is the same every time, never uses the winter list, also with `?season=winter`; share text
+- `storage.test.js` – players from version 1 keep streaks, badges, dictionary, levels and looks; export and import
+- `words.test.js`, `kids.test.js` – word list rules
+- `difficulty.test.js` – Easy, Normal, Hard and the "make it easier?" offer
+- `files.test.js` – English and Dutch texts match, every text key in the HTML exists, the service worker lists every file, both manifests
+
+`tools/simulate.js` plays with three simple players: "common letters first" (never
+reads the clues, a worst case), "reads the clues" (recognises the word once enough
+tiles are visible: 75% with clue 1, 50% with clue 2, 25% with clue 3 – an assumption)
+and "knows the word list" (a best case). It is a model, not real players.
 
 ### Publish on GitHub Pages
 
@@ -91,116 +120,63 @@ Hanglet uses JavaScript modules, so it needs a web server (double-clicking
 2. *Settings → Pages* → *Deploy from a branch*, branch `main`, folder `/ (root)`.
 3. The game is live at `https://<username>.github.io/<repository>/`.
 
-All paths are relative, so a subfolder works too. For link previews, change
-`assets/og-image.png` in the `og:image` tags to the full URL of your site.
+**After changing files:** raise `CACHE_NAME` in `sw.js` (now `hanglet-v5`) and add new
+files to `FILES`. `tests/files.test.js` fails when a file is missing from the list.
+Players then see the "New version – Refresh" message.
 
-### Turn on visitor statistics (GoatCounter)
+### Visitor statistics (GoatCounter)
 
-Open `js/analytics.js` and fill in your GoatCounter code:
-
-```js
-export const GOATCOUNTER_CODE = "your-code";
-```
-
+Fill in your code in `js/analytics.js` (`export const GOATCOUNTER_CODE = "your-code";`).
 Leave it empty to keep statistics off. GoatCounter uses no cookies.
-
-### Try the winter look
-
-The winter season starts automatically on 1 December. To see it earlier, open
-any page with `?season=winter` (and `?season=off` to go back). The choice is
-remembered until you close the tab.
-
-### After changing files
-
-The service worker (`sw.js`) saves all files for offline use. Raise the version
-in `CACHE_NAME` (now `hanglet-v4`) and add new files to `FILES`, so players get
-the new version.
-
-### Adding words
-
-Add a line like `["giraffe", "The animal with the longest neck"]` to the right
-category in `data/words/en.js` or `data/words/nl.js`. Use lowercase letters a–z
-only (no accents), at least 4 letters, and don't use the word itself in the
-description. The description is the riddle players see, so it must point clearly
-to one well-known word. Kids words go in `data/kids.js` (3–5 letters, with a
-picture from `js/ui/pictures.js`). Run the tests afterwards.
-
-### Tests and the difficulty check
-
-The game itself has no build step. The tests use Node.js (version 22 or newer):
-
-```
-npm test                          # all tests in tests/
-node tools/simulate.js 50 normal  # plays 50 words per language automatically
-```
-
-`tools/simulate.js` plays with three simple players: one that only guesses the
-most common letters first (a worst case), one that also recognises the word
-from the riddle once half of the tiles are visible, and one that knows the
-whole word list (a best case).
 
 ## Folder structure
 
 ```
 word-guessing-web/
-├── index.html            Home: mascot, Play button, Daily, chest, missions, Kids world, modes
-├── play.html             Game screen (?mode=daily|classic|levels|timed|kids|challenge)
+├── index.html            Home: today's Daily in the middle, then Classic, Levels, Kids
+├── play.html             Game screen (?mode=daily|classic|levels|kids|challenge)
 ├── levels.html           Level map
 ├── kids.html             Kids world: start page and sticker book
-├── challenge.html        Make a challenge for a friend
-├── badges.html           All badges
-├── dictionary.html       My dictionary
-├── stats.html            Statistics and calendar
-├── settings.html         Language, look, accessibility, figures, sound, music, reset
+├── challenge.html        Make a challenge (word + up to 3 clues)
+├── badges.html           All badges (and badges from earlier versions)
+├── dictionary.html       My dictionary with the 3 clues per word
+├── stats.html            Statistics and Daily calendar
+├── settings.html         Language, difficulty, look, figures, sound, progress file, reset
 ├── how-to-play.html, about.html, privacy.html, 404.html   (English + Dutch)
-├── manifest.webmanifest  PWA settings
-├── sw.js                 Service worker (offline)
-├── css/
-│   ├── base.css          Tokens, palette, themes, accessibility, header, footer
-│   ├── components.css    Buttons, cards, switches, dialogs, hint menu, tour
-│   ├── pages.css         Game board, levels, dictionary, stats, settings
-│   ├── figures.css       The five figures and their animations
-│   └── game.css          The v3 game look: fonts, colors, depth, mascot, home,
-│                         effects, rewards, badges, challenge, share, winter
+├── manifest.webmanifest, manifest-nl.webmanifest   App settings in English and Dutch
+├── sw.js                 Service worker (offline, "new version" message)
+├── css/                  base, components, pages, figures, game (game.css ends with the v5 styles)
 ├── data/
 │   ├── i18n/en.json, nl.json   Interface text
-│   ├── words/en.js, nl.js      Word lists with descriptions (incl. the Winter list)
-│   └── kids.js                 Kids words + picture names
+│   ├── words/en.js, nl.js      Words with 3 clues each (incl. the Winter list)
+│   └── kids.js                 Kids words + pictures + 3 easy clues
 ├── js/
-│   ├── theme-init.js     Colors, text size, language and season before the page shows
-│   ├── analytics.js      GoatCounter setup (fill in your code here)
-│   ├── core/             Game logic without page code
-│   │   ├── round.js, words.js, daily.js, levels.js, progress.js, achievements.js
-│   │   ├── missions.js     Daily missions
-│   │   ├── chest.js        Daily treasure chest
-│   │   ├── challenge.js    Challenge links (scramble and unscramble)
-│   │   ├── season.js       Winter season
-│   │   ├── difficulty.js   Easy / Normal / Hard and the "make it easier?" offer
-│   │   ├── kids.js         Kids world: small keyboard and Tilo's help
-│   │   └── i18n.js, storage.js, figures.js, themes.js, xp.js, dates.js, random.js
-│   ├── ui/
-│   │   ├── mascot.js       Tilo and his moods
-│   │   ├── effects.js      Particles, combo text, flying coins
-│   │   ├── celebrations.js Level up, badge and mission pops
-│   │   ├── home-rewards.js Chest and missions on the home page
-│   │   ├── share.js        Share card (canvas) and share window
-│   │   ├── music.js        Background music (Web Audio)
-│   │   ├── illustrations.js Pictures for the mode tiles and the chest
-│   │   ├── map-scenery.js  Landscapes of the level map
-│   │   ├── figures/        classic, balloon, flower, snowman, rocket
-│   │   └── layout.js, keyboard.js, feedback.js, tutorial.js, welcome.js, …
+│   ├── theme-init.js     Colors, text size, language, season and manifest before the page shows
+│   ├── analytics.js      GoatCounter setup
+│   ├── core/             Game logic without page code (testable in Node)
+│   │   ├── round.js        One riddle: clues, I know it!, stars
+│   │   ├── difficulty.js   Easy / Normal / Hard
+│   │   ├── words.js        Word lists, categories, picking words
+│   │   ├── daily.js        Daily words and the share line
+│   │   ├── levels.js       40 levels and level stars
+│   │   ├── progress.js     Stats, stars, dictionary, badges, unlocks
+│   │   ├── storage.js      localStorage, migration from version 1, export/import
+│   │   ├── achievements.js, figures.js, themes.js, challenge.js, kids.js, season.js
+│   │   └── i18n.js, dates.js, random.js
+│   ├── ui/               Shared page parts (Tilo, keyboard, figures, share card, effects, …)
 │   └── pages/            One script per page
-├── assets/               Logo, favicon, app icons, preview image
-├── tests/                Tests (node --test), see "Tests and the difficulty check"
+├── tests/                Tests (node --test)
 ├── tools/simulate.js     Plays automatically to check the difficulty
-└── package.json          Only for `npm test`, the game needs no packages
+├── PLAN.md … PLAN-v5.md  Build plans per version
+└── package.json          Only for `npm test`
 ```
 
 ## Privacy
 
-No account and no cookies. All progress is saved in the browser's
-`localStorage` on the player's own device. The fonts are loaded from Google
-Fonts. Visitor statistics with GoatCounter are off until you add your code.
+No account and no cookies. All progress is saved in the browser's `localStorage`
+on the player's own device; the progress file you can download stays with you.
+The fonts are loaded from Google Fonts. Visitor statistics with GoatCounter are off
+until you add your code.
 
 ## Credits
 

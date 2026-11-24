@@ -1,7 +1,7 @@
 // Badge page: every badge as a medal, with progress for the ones you don't have yet.
 import { data } from "../core/storage.js";
 import { formatDate, t } from "../core/i18n.js";
-import { ACHIEVEMENTS, ACHIEVEMENT_COINS } from "../core/achievements.js";
+import { ACHIEVEMENTS, LEGACY_ACHIEVEMENTS } from "../core/achievements.js";
 import { initPage } from "../ui/layout.js";
 import { icon } from "../ui/icons.js";
 
@@ -17,7 +17,6 @@ document.getElementById("badge-summary").innerHTML = `
   <div class="badge-summary-text">
     <strong>${t("badges.collected", { count: unlocked.length, total: ACHIEVEMENTS.length })}</strong>
     <div class="progress" role="progressbar" aria-label="${t("badges.title")}" aria-valuemin="0" aria-valuemax="${ACHIEVEMENTS.length}" aria-valuenow="${unlocked.length}"><span style="width:${percent}%"></span></div>
-    <small>${t("badges.reward", { coins: ACHIEVEMENT_COINS })}</small>
   </div>`;
 
 // Unlocked badges first, then the ones closest to done
@@ -54,3 +53,20 @@ document.getElementById("badge-grid").innerHTML = sorted.map((achievement) => {
       ${date ? `<small class="badge-date">${t("stats.unlockedOn", { date: formatDate(date) })}</small>` : progress}
     </li>`;
 }).join("");
+
+// Badges from earlier versions (Time Attack, hints, player levels) stay visible
+const legacy = LEGACY_ACHIEVEMENTS.filter((achievement) => data.achievements[achievement.id]);
+if (legacy.length > 0) {
+  document.getElementById("badge-grid").insertAdjacentHTML("afterend", `
+    <section class="legacy-badges" aria-labelledby="legacy-title">
+      <h2 class="section-title" id="legacy-title">${t("badges.legacyTitle")}</h2>
+      <p class="muted">${t("badges.legacyText")}</p>
+      <ul class="badge-grid">${legacy.map((achievement) => `
+        <li class="badge-card is-unlocked">
+          <div class="medal medal-sky">${icon(achievement.icon)}<span class="medal-ribbon" aria-hidden="true"></span></div>
+          <strong>${t(`achievements.${achievement.id}.name`)}</strong>
+          <span class="badge-description">${t(`achievements.${achievement.id}.description`)}</span>
+          <small class="badge-date">${t("stats.unlockedOn", { date: formatDate(data.achievements[achievement.id]) })}</small>
+        </li>`).join("")}</ul>
+    </section>`);
+}

@@ -1,20 +1,19 @@
 // The figures a player can choose. The drawings live in js/ui/figures/.
+// Classic and balloon are free, the others are unlocked with stars.
+// Figures a player had in an older version stay unlocked (data.unlocked).
 
 export const FIGURES = [
-  { id: "classic", price: 0 },
-  { id: "balloon", price: 0 },
-  { id: "flower", price: 150 },
-  { id: "snowman", achievement: "wins-10" },
-  { id: "rocket", price: 300 },
+  { id: "classic", stars: 0 },
+  { id: "balloon", stars: 0 },
+  { id: "flower", stars: 25 },
+  { id: "snowman", stars: 60 },
+  { id: "rocket", stars: 120 },
 ];
 
 export function getFigure(id) {
   return FIGURES.find((figure) => figure.id === id) || FIGURES[0];
 }
 
-// Free figures and figures unlocked by a badge are always owned
 export function isFigureOwned(figure, data) {
-  if (figure.price === 0) return true;
-  if (figure.achievement) return Boolean(data.achievements[figure.achievement]);
-  return data.figures.includes(figure.id);
+  return data.player.stars >= figure.stars || data.unlocked.figures.includes(figure.id);
 }

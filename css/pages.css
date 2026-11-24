@@ -395,12 +395,12 @@
   height: 18px;
 }
 
-.reward-coins {
+.reward-stars {
   background: var(--coin-soft);
   color: var(--text);
 }
 
-.reward-coins .icon {
+.reward-stars .icon {
   color: var(--coin);
 }
 

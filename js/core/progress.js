@@ -1,58 +1,41 @@
-// Everything that changes the player's progress: stats, streaks, XP, coins,
-// the dictionary, achievements, figures and themes. Every function saves at the end.
+// Everything that changes the player's progress: stats, streaks, stars,
+// the dictionary, badges and unlocked looks. Every function saves at the end.
 import { data, save } from "./storage.js";
 import { language } from "./i18n.js";
-import { ACHIEVEMENTS, ACHIEVEMENT_COINS } from "./achievements.js";
-import { getUnlockedThemes } from "./themes.js";
+import { ACHIEVEMENTS } from "./achievements.js";
+import { THEMES, isThemeUnlocked } from "./themes.js";
 import { FIGURES, isFigureOwned } from "./figures.js";
-import { getLevelInfo } from "./xp.js";
 import { addDays, toDateKey } from "./dates.js";
-import { trackMission } from "./missions.js";
+import { MAX_STARS } from "./round.js";
 
-// The three kinds of hints and what they cost. The description hint is only
-// offered on Hard: on Easy and Normal the riddle is always on screen for free.
-export const HINTS = [
-  { id: "description", cost: 10, icon: "quote" },
-  { id: "letter", cost: 20, icon: "bulb" },
-  { id: "remove", cost: 15, icon: "eraser" },
-];
-
-// Rewards for one word. Hard games and games without misses give a bonus.
-export function rewardForWord(won, misses, lives, difficulty = "normal") {
-  if (!won) return { xp: 5, coins: 0 };
-  const hard = difficulty === "hard";
-  return {
-    xp: 20 + (lives - misses) * 5 + (hard ? 15 : 0),
-    coins: 10 + (hard ? 5 : 0) + (misses === 0 ? 5 : 0),
-  };
-}
-
-// Save the result of one word (Daily, Classic, Levels). Returns the rewards.
-export function recordWord({ won, misses, lives, word, category, difficulty = "normal", hintsUsed = 0 }) {
+// Save the result of one riddle (Daily, Classic, Levels, Challenge). Returns the rewards.
+// clue = the clue the player was on at the end (1, 2 or 3)
+export function recordWord({ won, stars, clue, misses, word, category, difficulty = "normal", solvedByWord = false }) {
   const stats = data.stats;
   stats.played++;
-  stats.recentWords = [word, ...stats.recentWords].slice(0, 40);
+  stats.starWords++;
+  stats.recentWords = [word, ...stats.recentWords].slice(0, 60);
 
   if (won) {
     stats.wins++;
     stats.winStreak++;
     stats.lossStreak = 0;
     stats.bestWinStreak = Math.max(stats.bestWinStreak, stats.winStreak);
-    const index = Math.min(misses, stats.missesInWins.length - 1);
-    stats.missesInWins[index]++;
+    stats.starsEarned += stars;
+    stats.solvedAtClue[Math.min(MAX_STARS, Math.max(1, clue)) - 1]++;
+    if (solvedByWord) stats.knowItWins++;
     if (misses === 0) stats.flawless++;
     if (difficulty === "hard") stats.hardWins++;
     stats.longestWord = Math.max(stats.longestWord, word.length);
     stats.categoriesWon[category] = (stats.categoriesWon[category] || 0) + 1;
-    addToDictionary(word, category);
+    data.player.stars += stars;
+    addToDictionary(word, category, null, clue);
   } else {
     stats.losses++;
     stats.winStreak = 0;
     stats.lossStreak = (stats.lossStreak || 0) + 1;
   }
-
-  const missionsDone = trackMission({ type: "word", won, misses, length: word.length, category, hintsUsed });
-  return { ...giveRewards(rewardForWord(won, misses, lives, difficulty)), missionsDone };
+  return { stars: won ? stars : 0, ...checkRewards() };
 }
 
 // The player said yes to "make it easier?" or changed the difficulty
@@ -62,51 +45,52 @@ export function setDifficulty(id) {
   save();
 }
 
-// Kids world: every word is solved (together with Tilo). No XP or coins,
+// Kids world: every word is solved (together with Tilo). No stars,
 // but a sticker of the picture. Returns true when the sticker is new.
-export function recordKidsWord({ word, category, picture }) {
+export function recordKidsWord({ word, category, picture }, clue = 1) {
   const kids = data.kids;
   const isNew = !kids.stickers[picture];
   kids.stickers[picture] = (kids.stickers[picture] || 0) + 1;
   kids.solved++;
   data.stats.kidsWins++;
-  data.stats.recentWords = [word, ...data.stats.recentWords].slice(0, 40);
-  addToDictionary(word, category, picture);
+  data.stats.recentWords = [word, ...data.stats.recentWords].slice(0, 60);
+  addToDictionary(word, category, picture, clue);
   // Only badges (like "first Kids word") are checked, no rewards are shown
-  giveRewards({ xp: 0, coins: 0 });
+  checkRewards();
   return isNew;
 }
 
-// Remember a solved word in "My dictionary"
-export function addToDictionary(word, category, picture = null) {
+// Remember a solved word in "My dictionary", with the best clue it was solved at
+export function addToDictionary(word, category, picture = null, clue = null) {
   if (!data.dictionary[language]) data.dictionary[language] = {};
   const words = data.dictionary[language];
   const entry = words[word];
   if (entry) {
     entry.count++;
+    if (clue) {
+      entry.clue = entry.clue ? Math.min(entry.clue, clue) : clue;
+      entry.last = clue;
+    }
   } else {
-    words[word] = { category, picture, first: toDateKey(), count: 1 };
+    words[word] = { category, picture, first: toDateKey(), count: 1, clue, last: clue };
   }
 }
 
-export function countHint() {
-  data.stats.hintsUsed++;
-  save();
-}
-
-// Save a finished Daily and update the Daily streak
+// Save a finished Daily and update the Daily streak.
+// results: [{ won, stars, word, category }]
 export function recordDaily(dateKey, results) {
   const daily = data.daily;
-  if (daily.history[dateKey]) return;
+  if (daily.history[dateKey]) return checkRewards();
 
   const solved = results.filter((result) => result.won).length;
-  daily.history[dateKey] = { solved, total: results.length, results };
+  const stars = results.reduce((sum, result) => sum + (result.stars || 0), 0);
+  daily.history[dateKey] = { solved, total: results.length, stars, results };
   daily.streak = daily.lastDate === addDays(dateKey, -1) ? daily.streak + 1 : 1;
   daily.bestStreak = Math.max(daily.bestStreak, daily.streak);
   daily.lastDate = dateKey;
   daily.progress = null;
-  save();
-  return trackMission({ type: "daily" });
+  if (stars === results.length * MAX_STARS) data.stats.perfectDailies++;
+  return checkRewards();
 }
 
 // The streak only counts if the last Daily was today or yesterday
@@ -119,79 +103,39 @@ export function currentDailyStreak() {
   return 0;
 }
 
-// Save a finished level. Returns the missions that just got done.
+// Save a finished level (keeps the best result)
 export function recordLevel(number, stars) {
   const old = data.levels.stars[number] || 0;
   data.levels.stars[number] = Math.max(old, stars);
-  save();
-  return trackMission({ type: "level" });
+  return checkRewards();
 }
 
-// Save a finished Time Attack. Returns the rewards and if it is a new best.
-export function recordTimed(score) {
-  const timed = data.timed;
-  const isBest = score > timed.best;
-  timed.best = Math.max(timed.best, score);
-  timed.sessions++;
-  timed.totalWords += score;
-  const missionsDone = trackMission({ type: "timed", score });
-  const result = giveRewards({ xp: score * 12, coins: score * 4 });
-  return { ...result, isBest, missionsDone };
+// The figure or theme that comes next, for "12 more stars for the rocket"
+export function nextUnlock() {
+  const locked = [
+    ...FIGURES.filter((figure) => !isFigureOwned(figure, data)).map((figure) => ({ type: "figure", id: figure.id, stars: figure.stars })),
+    ...THEMES.filter((theme) => !isThemeUnlocked(theme, data)).map((theme) => ({ type: "theme", id: theme.id, stars: theme.stars })),
+  ];
+  return locked.sort((a, b) => a.stars - b.stars)[0] || null;
 }
 
-export function spendCoins(amount) {
-  if (data.player.coins < amount) return false;
-  data.player.coins -= amount;
-  save();
-  return true;
-}
-
-// Buy a figure with coins. Returns true when it worked.
-export function buyFigure(id) {
-  const figure = FIGURES.find((item) => item.id === id);
-  if (!figure || isFigureOwned(figure, data) || !figure.price) return false;
-  if (!spendCoins(figure.price)) return false;
-  data.figures.push(id);
-  save();
-  return true;
-}
-
-// Add XP and coins, then look for new achievements and themes
-function giveRewards({ xp, coins }) {
-  const levelBefore = getLevelInfo(data.player.xp).level;
-  data.player.xp += xp;
-  data.player.coins += coins;
-
+// Look for new badges and newly unlocked figures and themes, then save
+export function checkRewards() {
   const newAchievements = [];
-  let foundNew = true;
-  // Achievements give coins and XP can unlock others, so check until nothing changes
-  while (foundNew) {
-    foundNew = false;
-    for (const achievement of ACHIEVEMENTS) {
-      if (!data.achievements[achievement.id] && achievement.check(data)) {
-        data.achievements[achievement.id] = toDateKey();
-        data.player.coins += ACHIEVEMENT_COINS;
-        newAchievements.push(achievement);
-        foundNew = true;
-      }
+  for (const achievement of ACHIEVEMENTS) {
+    if (!data.achievements[achievement.id] && achievement.check(data)) {
+      data.achievements[achievement.id] = toDateKey();
+      newAchievements.push(achievement);
     }
   }
 
-  const newThemes = getUnlockedThemes(data).filter((theme) => !data.seenThemes.includes(theme.id));
-  data.seenThemes.push(...newThemes.map((theme) => theme.id));
+  const unlockedNow = [
+    ...FIGURES.filter((figure) => figure.stars > 0 && isFigureOwned(figure, data)).map((figure) => ({ type: "figure", id: figure.id })),
+    ...THEMES.filter((theme) => theme.stars > 0 && isThemeUnlocked(theme, data)).map((theme) => ({ type: "theme", id: theme.id })),
+  ];
+  const newUnlocks = unlockedNow.filter((item) => !data.seenUnlocks.includes(`${item.type}:${item.id}`));
+  data.seenUnlocks.push(...newUnlocks.map((item) => `${item.type}:${item.id}`));
 
   save();
-  return {
-    xp,
-    coins,
-    levelBefore,
-    levelAfter: getLevelInfo(data.player.xp).level,
-    newAchievements,
-    newThemes,
-  };
-}
-
-// Achievements that only depend on things like streaks (e.g. after a Daily)
-export function checkAchievements() {
-  return giveRewards({ xp: 0, coins: 0 });
+  return { newAchievements, newUnlocks };
 }

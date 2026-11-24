@@ -37,9 +37,21 @@ function unscramble(code) {
   return new TextDecoder().decode(bytes);
 }
 
-// { word, hint, name, lang } → code for the link
-export function encodeChallenge({ word, hint = "", name = "", lang = "en" }) {
-  const payload = JSON.stringify({ w: cleanWord(word), h: hint.trim().slice(0, 80), n: name.trim().slice(0, 20), l: lang });
+export const MAX_CLUES = 3;
+export const MAX_CLUE_LENGTH = 80;
+
+// Up to 3 clues, without empty ones. Older links had one hint as a text.
+function cleanClues(clues) {
+  const list = Array.isArray(clues) ? clues : [clues];
+  return list
+    .map((clue) => String(clue || "").trim().slice(0, MAX_CLUE_LENGTH))
+    .filter((clue) => clue !== "")
+    .slice(0, MAX_CLUES);
+}
+
+// { word, clues, name, lang } → code for the link
+export function encodeChallenge({ word, clues = [], name = "", lang = "en" }) {
+  const payload = JSON.stringify({ w: cleanWord(word), h: cleanClues(clues), n: name.trim().slice(0, 20), l: lang });
   return VERSION + scramble(payload);
 }
 
@@ -52,7 +64,7 @@ export function decodeChallenge(code) {
     if (!isValidWord(word)) return null;
     return {
       word,
-      hint: String(payload.h || "").slice(0, 80),
+      clues: cleanClues(payload.h),
       name: String(payload.n || "").slice(0, 20),
       lang: payload.l === "nl" ? "nl" : "en",
     };

@@ -1,7 +1,7 @@
 // The shared parts of every page: header, mobile tab bar, footer,
 // translations, the welcome dialog and the service worker.
 import { data, save } from "../core/storage.js";
-import { currentDailyStreak } from "../core/progress.js";
+import { checkRewards, currentDailyStreak } from "../core/progress.js";
 import { LANGUAGES, language, t, translatePage } from "../core/i18n.js";
 import { icon, logoMark, logoWordmark } from "./icons.js";
 import { applyAppearance, watchSystemChanges } from "./appearance.js";
@@ -35,7 +35,7 @@ function headerHtml(activePage) {
         <nav class="main-nav" aria-label="${t("nav.main")}">${navLinks(activePage, false)}</nav>
         <div class="header-stats">
           <a class="pill pill-streak" href="./stats.html" id="header-streak"></a>
-          <span class="pill pill-coins" id="header-coins"></span>
+          <a class="pill pill-stars" href="./settings.html#looks" id="header-stars"></a>
           <a class="icon-button header-settings" href="./settings.html" aria-label="${t("nav.settings")}"${activePage === "settings" ? ' aria-current="page"' : ""}>${icon("sliders")}</a>
         </div>
       </div>
@@ -76,20 +76,20 @@ export function setLanguage(id) {
   location.reload();
 }
 
-// Update the streak and coin counters in the header
+// Update the streak and star counters in the header
 export function refreshHeader() {
   const streak = currentDailyStreak();
-  const coins = data.player.coins;
+  const stars = data.player.stars;
   const streakLink = document.getElementById("header-streak");
-  const coinsPill = document.getElementById("header-coins");
+  const starsPill = document.getElementById("header-stars");
   if (streakLink) {
     streakLink.innerHTML = `${icon("flame")}<span>${streak}</span>`;
     streakLink.setAttribute("aria-label", t("header.streak", { count: streak }));
     streakLink.classList.toggle("is-active", streak > 0);
   }
-  if (coinsPill) {
-    coinsPill.innerHTML = `${icon("coin")}<span>${coins}</span>`;
-    coinsPill.setAttribute("aria-label", t("header.coins", { count: coins }));
+  if (starsPill) {
+    starsPill.innerHTML = `${icon("star")}<span>${stars}</span>`;
+    starsPill.setAttribute("aria-label", t("header.stars", { count: stars }));
   }
 }
 
@@ -123,6 +123,8 @@ export function initPage(activePage) {
     });
   });
 
+  // Badges that were earned without a pop (for example right after an update) are given now
+  checkRewards();
   refreshHeader();
   registerServiceWorker();
   startAnalytics();
@@ -132,12 +134,49 @@ export function initPage(activePage) {
   }
 }
 
+// ---------- Service worker: offline play and updates ----------
+
+let updateAsked = false;
+
 function registerServiceWorker() {
-  if ("serviceWorker" in navigator && location.protocol !== "file:") {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("./sw.js").catch(() => {
-        // Offline support is optional, the game works without it
+  if (!("serviceWorker" in navigator) || location.protocol === "file:") return;
+  window.addEventListener("load", async () => {
+    try {
+      const registration = await navigator.serviceWorker.register("./sw.js");
+      // A new version is ready and waits until the player says "refresh"
+      if (registration.waiting && navigator.serviceWorker.controller) {
+        showUpdateMessage(registration.waiting);
+      }
+      registration.addEventListener("updatefound", () => {
+        const worker = registration.installing;
+        worker?.addEventListener("statechange", () => {
+          if (worker.state === "installed" && navigator.serviceWorker.controller) showUpdateMessage(worker);
+        });
       });
-    });
-  }
+    } catch {
+      // Offline support is optional, the game works without it
+    }
+  });
+  // The new version took over: load the page again with the new files
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (updateAsked) location.reload();
+  });
+}
+
+// "A new version of Hanglet is ready. Refresh"
+function showUpdateMessage(worker) {
+  if (document.querySelector(".update-banner")) return;
+  const banner = document.createElement("div");
+  banner.className = "update-banner";
+  banner.setAttribute("role", "status");
+  banner.innerHTML = `
+    <span>${icon("refresh")}${t("update.available")}</span>
+    <button type="button" class="button button-sun">${t("update.refresh")}</button>`;
+  banner.querySelector("button").addEventListener("click", () => {
+    updateAsked = true;
+    worker.postMessage("skip-waiting");
+    // Safety net: reload even if the new version doesn't say it took over
+    setTimeout(() => location.reload(), 3000);
+  });
+  document.body.appendChild(banner);
 }

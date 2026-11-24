@@ -6,6 +6,7 @@ import {
 } from "../js/core/kids.js";
 import { seededRandom } from "../js/core/random.js";
 import KIDS from "../data/kids.js";
+import { PICTURE_NAMES } from "../js/ui/pictures.js";
 
 const SAMPLE = ["cat", "bee", "zon", "moon", "apple", "pizza", "boek", "trein"];
 
@@ -65,16 +66,19 @@ test("the next hidden letter follows the reading order", () => {
   assert.equal(nextHiddenLetter("moon", ["m", "o", "n"]), null);
 });
 
-test("every Kids word is 3 to 5 letters, a to z, with a picture and a description", () => {
+test("every Kids word is 3 to 5 letters, a to z, with a picture and exactly 3 clues", () => {
   for (const item of KIDS) {
-    assert.ok(item.picture, "picture");
+    assert.ok(PICTURE_NAMES.includes(item.picture), `picture ${item.picture} exists`);
     for (const lang of ["en", "nl"]) {
       if (!item[lang]) continue;
-      const [word, description] = item[lang];
+      const [word, clues] = item[lang];
       assert.match(word, /^[a-z]+$/);
       assert.ok(word.length >= KIDS_MIN_LENGTH && word.length <= KIDS_MAX_LENGTH, `${lang} ${word}`);
-      assert.ok(description.length > 5);
-      assert.ok(!description.toLowerCase().includes(word), `${lang} ${word} is in its own description`);
+      assert.equal(clues.length, 3, `${lang} ${word} has 3 clues`);
+      for (const clue of clues) {
+        assert.ok(clue.length > 5, `${lang} ${word}: a real clue`);
+        assert.ok(!clue.toLowerCase().includes(word), `${lang} ${word} is in its own clue: "${clue}"`);
+      }
     }
   }
 });

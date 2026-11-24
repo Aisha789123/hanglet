@@ -337,7 +337,7 @@ main {
   color: var(--danger);
 }
 
-.pill-coins .icon {
+.pill-stars .icon {
   color: var(--coin);
 }
 

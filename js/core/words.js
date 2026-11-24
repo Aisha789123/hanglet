@@ -1,4 +1,5 @@
 // Picking words based on the language and the player's options.
+// Every word has 3 clues (see data/words/en.js and data/words/nl.js).
 import EN_WORDS from "../../data/words/en.js";
 import NL_WORDS from "../../data/words/nl.js";
 import KIDS from "../../data/kids.js";
@@ -7,11 +8,12 @@ import { pickRandom } from "./random.js";
 import { isWinterSeason } from "./season.js";
 import { isKidsLength } from "./kids.js";
 
-const WORD_LISTS = { en: EN_WORDS, nl: NL_WORDS };
+export const WORD_LISTS = { en: EN_WORDS, nl: NL_WORDS };
 
-export const CATEGORY_IDS = ["animals", "food", "countries", "sports", "nature", "jobs", "science", "music", "colors", "clothing"];
+// The categories that are always there. The Daily only uses these.
+export const CATEGORY_IDS = ["animals", "food", "home", "nature", "jobs", "sports", "music", "clothing", "science", "countries", "mystery"];
 
-// In the winter season there is one extra category, shown first
+// In the winter season there is one extra category, shown first (not in the Daily)
 export const SEASON_CATEGORY = isWinterSeason() ? "winter" : null;
 export const PLAYABLE_CATEGORIES = SEASON_CATEGORY ? [SEASON_CATEGORY, ...CATEGORY_IDS] : CATEGORY_IDS;
 
@@ -21,26 +23,26 @@ export const LENGTHS = [
   { id: "long", min: 8, max: 99 },
 ];
 
-// Every word of a language with its category and description
-export function getAllWords(lang = language) {
+// Every word of some categories in a language: { word, clues, category }
+export function getWords(lang = language, categories = PLAYABLE_CATEGORIES) {
   const list = WORD_LISTS[lang] || WORD_LISTS.en;
-  return PLAYABLE_CATEGORIES.flatMap((category) =>
-    list[category].map(([word, description]) => ({ word, description, category }))
+  return categories.flatMap((category) =>
+    (list[category] || []).map((item) => ({ word: item.word, clues: item.clues, category }))
   );
 }
 
-// Kids words: short words (3-5 letters) with a picture.
+// Kids words: short words (3-5 letters) with a picture and 3 easy clues.
 // A picture without a word in this language is skipped.
 export function getKidsWords(lang = language) {
   return KIDS.filter((item) => item[lang] && isKidsLength(item[lang][0])).map((item) => ({
     word: item[lang][0],
-    description: item[lang][1],
+    clues: item[lang][1],
     category: item.category,
     picture: item.picture,
   }));
 }
 
-export const ALL_WORDS = getAllWords();
+export const ALL_WORDS = getWords();
 export const KIDS_WORDS = getKidsWords();
 
 export function getCategoryName(id) {
@@ -57,7 +59,7 @@ export function getWordPool(categoryId, lengthId) {
     (item) => item.word.length >= length.min && item.word.length <= length.max
   );
   // Every category has words of every length, but stay safe just in case
-  return pool.length > 0 ? pool : inCategory;
+  return pool.length > 0 ? pool : inCategory.length > 0 ? inCategory : ALL_WORDS;
 }
 
 // Pick a random word, but not one of the recently played words
@@ -74,13 +76,13 @@ function pickFresh(pool, recentWords) {
   return pickRandom(fresh.length > 0 ? fresh : pool);
 }
 
-// Find the description and picture of a word (used by the dictionary)
-// Searches every list of the language, also the season list outside the season
-export function findWord(word) {
-  const list = WORD_LISTS[language] || WORD_LISTS.en;
+// Find a word with its clues (used by the dictionary). Searches every list of
+// the language, also the season list outside the season, and the Kids words.
+export function findWord(word, lang = language) {
+  const list = WORD_LISTS[lang] || WORD_LISTS.en;
   for (const [category, words] of Object.entries(list)) {
-    const found = words.find(([item]) => item === word);
-    if (found) return { word, description: found[1], category };
+    const found = words.find((item) => item.word === word);
+    if (found) return { word, clues: found.clues, category };
   }
-  return KIDS_WORDS.find((item) => item.word === word);
+  return getKidsWords(lang).find((item) => item.word === word) || null;
 }

@@ -16,12 +16,12 @@
     "badges": "Badges"
   },
   "footer": {
-    "tagline": "A cheerful word game, one riddle at a time.",
+    "tagline": "A cheerful riddle game: the riddle gets clearer.",
     "note": "Your progress stays on this device."
   },
   "header": {
     "streak": "Day streak: {count}. Open statistics",
-    "coins": "{count} coins"
+    "stars": "{count} stars. See what you can unlock"
   },
   "common": {
     "close": "Close",
@@ -36,11 +36,15 @@
     "lives": {
       "one": "1 life",
       "other": "{count} lives"
+    },
+    "stars": {
+      "one": "1 star",
+      "other": "{count} stars"
     }
   },
   "welcome": {
     "title": "Welcome to Hanglet",
-    "text": "A playful word game for everyone from 8 years old. Let's set it up for you.",
+    "text": "A playful riddle game for everyone from 8 years old. Let's set it up for you.",
     "language": "Language",
     "who": "Who is playing?",
     "everyone": "Everyone (8+)",
@@ -54,16 +58,15 @@
     "done": "Got it",
     "step": "Step {step} of {total}",
     "word": "This is the hidden word. Every tile is one letter.",
-    "category": "The category is your first clue.",
-    "picture": "Look at the picture and read the riddle. They help you find the word!",
+    "picture": "Look at the picture and read Tilo's clue. They help you find the word!",
     "keyboard": "Tap a letter to guess. Try one now!",
     "goodGuess": "Nice! That letter is in the word.",
     "wrongGuess": "That letter is not in the word. No problem, keep trying!",
     "figure": "Every wrong letter costs a heart. Find the word before your hearts run out!",
-    "hints": "Stuck? Use a hint: reveal a letter or remove wrong letters.",
     "hintsFree": "Stuck? Tap Help and Tilo will help you.",
-    "riddle": "This is Tilo's riddle. It tells you what the word is!",
-    "kidsKeyboard": "Only these letters! Tap one to try."
+    "kidsKeyboard": "Only these letters! Tap one to try.",
+    "clues": "These are Tilo's clues. The first one is tricky! After every 2 wrong letters a clearer clue opens. The sooner you solve it, the more stars.",
+    "knowIt": "Know the word? Tap here and type it. A wrong word costs 2 lives."
   },
   "keyboard": {
     "label": "Letters",
@@ -86,7 +89,9 @@
     "colors": "Colors",
     "clothing": "Clothing",
     "winter": "Winter",
-    "challenge": "Challenge"
+    "challenge": "Challenge",
+    "home": "At home",
+    "mystery": "Mystery"
   },
   "lengths": {
     "short": "Short",
@@ -100,22 +105,20 @@
     "easy": "Easy",
     "normal": "Normal",
     "hard": "Hard",
-    "easyDetail": "Riddle + first letter free · 8 lives",
-    "normalDetail": "Riddle on screen · 7 lives",
-    "hardDetail": "Only the category · 6 lives"
+    "easyDetail": "8 lives · first letter free",
+    "normalDetail": "7 lives · 3 clues",
+    "hardDetail": "6 lives · only 2 clues"
   },
   "setup": {
     "category": "Category",
     "length": "Word length",
     "difficulty": "Difficulty",
     "start": "Start playing",
-    "startClock": "Start the clock",
-    "classicIntro": "Pick your options and play as many words as you like.",
-    "timedIntro": "The clock starts as soon as you press start. A missed word costs no time, just move on!"
+    "classicIntro": "Pick your options and solve as many riddles as you like."
   },
   "play": {
     "board": "Game board",
-    "newWord": "New word with {count} letters. Category: {category}.",
+    "newWord": "New riddle with {count} letters. Clue 1: {clue}",
     "letterRight": "{letter} is in the word.",
     "letterWrong": "{letter} is not in the word. {count} lives left.",
     "blank": "blank",
@@ -125,86 +128,59 @@
       "one": "{count} life left",
       "other": "{count} lives left"
     },
-    "riddle": "Riddle",
-    "noRiddle": "No riddle on Hard, only the category. Stuck? You can buy the riddle as a hint.",
     "freeLetter": "Easy: the first letter is a gift.",
-    "noChallengeRiddle": "Your friend did not add a riddle. Good luck!"
-  },
-  "hints": {
-    "button": "Hint",
-    "buttonLabel": "Hints. You have {coins} coins.",
-    "title": "Pick a hint",
-    "free": "Free",
-    "cost": "{coins} coins",
-    "notEnough": "You need {coins} coins for this hint.",
-    "letterShown": "Hint: {letter} is in the word.",
-    "lettersRemoved": "Hint: {letters} are not in the word.",
-    "description": {
-      "title": "Show the riddle",
-      "text": "A short sentence about the word"
+    "cluesLabel": "Clues",
+    "clue": "Clue {number}",
+    "lockedNext": {
+      "one": "Opens after 1 more wrong letter",
+      "other": "Opens after {count} more wrong letters"
     },
-    "letter": {
-      "title": "Reveal a letter",
-      "text": "One letter is filled in"
-    },
-    "remove": {
-      "title": "Remove 3 wrong letters",
-      "text": "Three letters that are not in the word disappear"
-    },
-    "tokens": {
-      "one": "You have 1 free hint from your chest",
-      "other": "You have {count} free hints from your chest"
-    }
+    "lockedLater": "Opens after clue {number}",
+    "lockedHard": "Not on Hard. You're on your own!",
+    "worth": "Solve it now for",
+    "newClue": "New clue! Clue {number} is open.",
+    "knowIt": "I know it!",
+    "guessLabel": "Type the whole word",
+    "check": "Check",
+    "costNote": "A wrong word costs {cost} lives.",
+    "lastLives": "Careful: you only have {count} lives left.",
+    "wrongLength": "The word has {count} letters. Try again, this one is free.",
+    "wrongWord": "Not \"{guess}\". That costs {cost} lives.",
+    "noChallengeClue": "Your friend didn't add a clue. Good luck!"
   },
   "modes": {
     "daily": {
       "titleNumber": "Daily #{number}",
-      "progress": "Word {index} of {total}",
-      "wordOf": "Word {index} of {total}",
-      "solvedOf": "{solved} of {total} solved",
-      "comeBack": "Come back tomorrow for new words",
-      "doneTitle": "You solved {solved} of {total} today",
+      "progress": "Riddle {index} of {total}",
+      "wordOf": "Riddle {index} of {total}",
+      "comeBack": "Come back tomorrow for new riddles",
       "next": "Next Daily",
       "dotsLabel": "Daily progress",
-      "dotSolved": "solved",
       "dotMissed": "missed",
       "dotCurrent": "now playing",
       "dotTodo": "to do",
-      "wordNumber": "Word {number}",
+      "wordNumber": "Riddle {number}",
       "notSolved": "not solved",
-      "playMore": "Play more"
+      "playMore": "Play more",
+      "starsOf": "{stars} of {max} stars"
     },
     "classic": {
       "title": "Classic",
-      "subtitle": "Endless play, word after word",
-      "text": "Endless play. Choose category, length and difficulty."
+      "subtitle": "Endless riddles, one after another",
+      "text": "Endless riddles. You pick the category."
     },
     "levels": {
       "title": "Levels",
-      "text": "Follow the map through 40 levels, from easy to tough."
-    },
-    "timed": {
-      "title": "Time Attack",
-      "subtitle": "Solve as many words as you can in 2 minutes",
-      "text": "Solve as many words as you can before the clock runs out.",
-      "timeLeft": "Time left",
-      "solved": "{count} solved",
-      "newBest": "New personal best!",
-      "best": "Best: {count}",
-      "result": {
-        "one": "1 word solved",
-        "other": "{count} words solved"
-      },
-      "timeUp": "Time is up!"
+      "text": "40 levels on a map, from easy to tough."
     },
     "kids": {
       "title": "Kids world",
       "subtitle": "Short words with a picture",
-      "text": "Short words with a picture. You can't lose, and you collect stickers."
+      "text": "For ages 6–9. Easy, funny clues and a picture."
     },
     "challenge": {
       "title": "Challenge a friend",
-      "text": "Type a secret word and let a friend guess it."
+      "text": "Pick a secret word, write 3 clues, send the link."
     }
   },
   "kids": {
@@ -212,7 +188,7 @@
     "win": "You found it!",
     "next": "Next word",
     "world": "Kids world",
-    "intro": "Short words with a picture. Tilo helps you, and every word gives you a sticker!",
+    "intro": "Short words with a picture and funny clues. Tilo helps you, and every word gives you a sticker!",
     "play": "Let's play!",
     "hello": "Hi! Shall we find some words together?",
     "stickers": "My stickers",
@@ -228,19 +204,16 @@
     "fill": "I'll help you: here comes the {letter}!",
     "help": "Help",
     "helpLabel": "Ask Tilo for help",
-    "forParents": "For parents: no coins, no clock and you can't lose. Words have 3 to 5 letters and always come with a picture and a short sentence.",
-    "backToHanglet": "Back to Hanglet"
+    "forParents": "For parents: no stars, no clock and you can't lose. Words have 3 to 5 letters, always with a picture and 3 easy clues. After a wrong letter an easier clue appears and Tilo helps.",
+    "backToHanglet": "Back to Hanglet",
+    "lockedNext": "Comes when you need it"
   },
   "result": {
-    "solved": "Solved!",
     "notThisTime": "Not this time",
     "outOfLives": "Out of lives",
-    "niceOne": "Nice one!",
-    "missedIt": "Missed it",
     "nextWord": "Next word",
     "options": "Options",
     "tryAgain": "Try again",
-    "playAgain": "Play again",
     "share": "Share",
     "shareResult": "Share result",
     "copied": "Result copied. Paste it anywhere!",
@@ -249,24 +222,29 @@
     "dayStreak": "Day streak {count}",
     "wordWas": "The word was {word}",
     "badge": "Badge unlocked:",
-    "theme": "New theme:",
-    "tryIt": "Try it"
+    "tryIt": "Try it",
+    "solvedAt": "Solved at clue {number}!",
+    "allClues": "All clues",
+    "totalStars": {
+      "one": "You now have 1 star",
+      "other": "You now have {count} stars"
+    },
+    "newTheme": "New theme:",
+    "newFigure": "New figure:"
   },
   "share": {
-    "classic": "I solved a {count}-letter word in Hanglet with {misses}. {link}",
-    "level": "I finished level {number} in Hanglet with {stars} of 3 stars. {link}",
-    "daily": "Hanglet Daily #{number} · {solved}/{total}",
-    "timed": "I solved {count} words in 2 minutes in Hanglet Time Attack. {link}",
+    "classic": "I solved a {count}-letter riddle in Hanglet at clue {number}!",
+    "level": "Hanglet level {number}:",
     "title": "Share your result",
     "imageAlt": "Your result as a picture, without the word",
     "copyText": "Copy text",
     "download": "Save picture",
     "cardFooter": "Play along on Hanglet!",
-    "letters": "A word with {count} letters"
+    "letters": "A riddle with {count} letters"
   },
   "levels": {
     "title": "Level map",
-    "intro": "Every level has a few words. Solve them all to unlock the next level. Fewer misses means more stars.",
+    "intro": "Every level has a few riddles. Solve them all to open the next level. The more stars per riddle, the more stars for the level.",
     "progress": "{done} of {total} levels complete.",
     "level": "Level {number}",
     "map": "Level map",
@@ -277,8 +255,9 @@
     "starsLabel": "{count} of 3 stars",
     "lockedLabel": "Level {number}, locked",
     "nodeLabel": "Level {number}, {category}, {stars} of 3 stars",
-    "failedText": "One word missed. Try the level again, you can do it!",
-    "wordsShort": "{count} words"
+    "failedText": "One riddle missed. Try the level again, you can do it!",
+    "wordsShort": "{count} riddles",
+    "earned": "{count} of {max} stars"
   },
   "stages": {
     "warmup": "Warm-up",
@@ -287,57 +266,42 @@
     "summit": "Summit"
   },
   "home": {
-    "title": "Solve the riddle, letter by letter.",
-    "intro": "Tilo gives you a riddle, you find the letters. A cheerful word game for everyone from 8, with three new Daily words every day.",
-    "playDaily": "Play today's Daily",
-    "progressLabel": "Your progress",
-    "chooseMode": "Choose a mode",
-    "playerLevel": "Player level {level}",
-    "xpLabel": "XP to the next level",
-    "coins": "Coins",
-    "dailyBusy": "In progress · word {index} of 3",
-    "dailyDone": "Done today · {solved}/{total}",
-    "seeResult": "See today's result",
-    "continueDaily": "Continue the Daily",
-    "levelsAllDone": "All levels complete",
-    "timedBest": "Best: {count} words",
-    "timedNew": "2 minutes on the clock",
-    "kidsStatus": "For ages 6 to 9",
-    "dictionaryTitle": "My dictionary",
-    "dictionaryCount": "You collected {count} words.",
-    "dictionaryEmpty": "Every word you solve is saved here, with its meaning.",
-    "openDictionary": "Open",
-    "offlineTitle": "Play offline",
-    "offlineText": "Add Hanglet to your home screen. It works without internet.",
-    "play": "Play",
-    "playSubDaily": "Today's Daily #{number} · 3 words",
-    "playSubClassic": "Daily done! Keep going with Classic",
+    "title": "Today's riddles",
+    "dailyBusy": "In progress · riddle {index} of 3",
+    "dailyDone": "Done today: {stars} of 9 stars",
+    "seeResult": "See your result",
+    "continueDaily": "Continue",
     "morning": "Good morning!",
     "afternoon": "Hi there!",
     "evening": "Good evening!",
-    "speechReady": "Your Daily words are ready.",
+    "speechReady": "I have three new riddles for you!",
     "speechBusy": "Shall we finish your Daily?",
-    "speechDone": "Great job today! Up for more?",
-    "dropWords": "PLAY,GUESS,WORDS,SMILE,HELLO",
-    "dailyTitle": "Daily challenge",
-    "dailyReadyText": "Three new words, the same for everyone.",
-    "newWordsIn": "New words in",
-    "classicStatus": "Pick your own category",
+    "speechDone": "Well done! Up for more riddles?",
+    "newWordsIn": "New riddles in",
     "levelsNext": "Next: level {next}",
-    "challengeStatus": "Pick a word, send a link",
     "kidsTitle": "Kids world",
-    "kidsText": "Short words with a picture. Tilo helps, you can't lose and you collect stickers.",
-    "kidsButton": "Go to the Kids world",
     "kidsStickers": "{count} stickers collected",
-    "offlineShort": "Play offline: add Hanglet to your home screen."
+    "dailyEyebrow": "Daily #{number} · 3 riddles",
+    "dailyReady": "Three new riddles, the same for everyone.",
+    "playButton": "Play the Daily",
+    "moreTitle": "More to play",
+    "levelsDone": "All levels done!",
+    "starsLabel": "Your stars",
+    "nextUnlock": "{count} more for {name}",
+    "allUnlocked": "Everything unlocked!",
+    "wordsCollected": {
+      "one": "1 word in your dictionary",
+      "other": "{count} words in your dictionary"
+    },
+    "challenge": "Challenge a friend"
   },
   "dictionary": {
     "title": "My dictionary",
-    "intro": "Every word you solved, with its meaning. Can you collect them all?",
+    "intro": "Every word you solved, with Tilo's 3 clues. The yellow one is where you got it.",
     "collected": "{count} of {total} words collected",
     "progressLabel": "Words collected",
     "search": "Search",
-    "searchPlaceholder": "Search a word or meaning",
+    "searchPlaceholder": "Search a word or clue",
     "all": "All",
     "empty": "Your dictionary is still empty. Solve a word to add it here.",
     "startPlaying": "Start playing",
@@ -346,29 +310,24 @@
       "one": "Solved once",
       "other": "Solved {count} times"
     },
-    "since": "since {date}"
+    "since": "since {date}",
+    "solvedAt": "Best: clue {number}",
+    "earlier": "Solved before the clues came"
   },
   "stats": {
     "title": "Statistics",
     "intro": "Everything you have done so far. Saved on this device only.",
     "overview": "Overview",
-    "played": "Played",
-    "winPercent": "Win %",
+    "played": "Riddles played",
     "winStreak": "Win streak",
     "bestWinStreak": "Best win streak",
     "dayStreak": "Day streak",
     "bestDayStreak": "Best day streak",
-    "chartTitle": "Misses per game",
-    "chartEmpty": "Play a game to see your chart.",
-    "missesLabel": "{count} misses",
-    "lost": "Lost",
+    "chartTitle": "At which clue did you solve it?",
+    "chartEmpty": "Solve a riddle to see your chart.",
     "progress": "Progress",
-    "playerLevel": "Player level",
-    "totalXp": "Total XP",
     "levelsDone": "Levels complete",
-    "timedBest": "Time Attack best",
     "wordsCollected": "Words collected",
-    "hintsUsed": "Hints used",
     "calendar": "Daily calendar",
     "previousMonth": "Previous month",
     "nextMonth": "Next month",
@@ -379,7 +338,15 @@
     "legendNone": "None solved",
     "badges": "Badges",
     "badgeCount": "{count} of {total}",
-    "unlockedOn": "Unlocked {date}"
+    "unlockedOn": "Unlocked {date}",
+    "solvedPercent": "Solved %",
+    "avgStars": "Stars per riddle",
+    "clue1Percent": "% at clue 1",
+    "totalStars": "Stars",
+    "clueRow": "Clue {number}",
+    "notSolved": "Not solved",
+    "knowItWins": "Solved with \"I know it!\"",
+    "perfectDailies": "Daily 9/9"
   },
   "settings": {
     "title": "Settings",
@@ -393,10 +360,8 @@
     "light": "Light",
     "dark": "Dark",
     "themes": "Color themes",
-    "themesHelp": "Unlock new themes by leveling up and keeping your streak.",
+    "themesHelp": "Earn stars to unlock new themes.",
     "free": "Free",
-    "reachLevel": "Reach level {level}",
-    "unlockStreak": "Get a 7-day streak",
     "locked": "locked",
     "inUse": "In use",
     "choose": "Choose",
@@ -408,10 +373,7 @@
     "reduceMotion": "Reduce motion",
     "reduceMotionHelp": "Turn off animations and confetti",
     "figures": "Figures",
-    "figuresHelp": "Choose what happens on the board. Unlock new figures with coins or badges.",
-    "unlockBadge": "Badge: {badge}",
-    "buyFor": "Buy for {coins}",
-    "bought": "{name} is yours!",
+    "figuresHelp": "Choose what happens on the board. Earn stars to unlock new figures.",
     "soundAndFeel": "Sound and feel",
     "sound": "Sound effects",
     "soundHelp": "Short tones for right and wrong letters",
@@ -422,16 +384,32 @@
     "replayTutorial": "Show the tour again",
     "install": "Install app",
     "data": "Your data",
-    "dataHelp": "Your progress is saved in this browser only. Resetting removes your stats, coins, levels, badges, figures, dictionary and settings.",
+    "dataHelp": "Your progress is saved in this browser only. Download it as a file to keep it safe or to move it to another device.",
     "reset": "Reset progress",
     "resetTitle": "Reset all progress?",
-    "resetText": "This removes everything and can't be undone.",
+    "resetText": "This removes your stars, streaks, badges, levels, dictionary and settings. Tip: download your progress first.",
     "resetConfirm": "Yes, reset",
     "resetDone": "Your progress has been reset.",
     "music": "Background music",
     "musicHelp": "Cheerful, bouncy music while you play",
     "difficulty": "Difficulty",
-    "difficultyHelp": "For the Daily, Classic, Levels and Time Attack. New players start on Easy."
+    "difficultyHelp": "For the Daily, Classic and Levels. New players start on Easy.",
+    "needStars": {
+      "one": "1 star",
+      "other": "{count} stars"
+    },
+    "youHave": {
+      "one": "You have 1 star.",
+      "other": "You have {count} stars."
+    },
+    "export": "Download my progress",
+    "import": "Load progress from a file",
+    "importTitle": "Replace your progress?",
+    "importText": "The progress in the file replaces everything on this device: stars, streaks, badges, levels, dictionary and settings.",
+    "importConfirm": "Yes, load it",
+    "importDone": "Your progress is loaded.",
+    "importFailed": "This is not a Hanglet progress file.",
+    "exportDone": "Your progress file is downloaded."
   },
   "themes": {
     "ocean": "Ocean",
@@ -467,24 +445,24 @@
   },
   "achievements": {
     "first-win": {
-      "name": "First win",
-      "description": "Win your first game"
+      "name": "First riddle",
+      "description": "Solve your first riddle"
     },
     "wins-10": {
       "name": "Getting good",
-      "description": "Win 10 games"
+      "description": "Solve 10 riddles"
     },
     "wins-50": {
       "name": "Word master",
-      "description": "Win 50 games"
+      "description": "Solve 50 riddles"
     },
     "flawless": {
       "name": "Flawless",
-      "description": "Win a game without a single miss"
+      "description": "Solve a riddle without a wrong letter"
     },
     "hard-win": {
       "name": "Brave",
-      "description": "Win a game on Hard"
+      "description": "Solve a riddle on Hard"
     },
     "long-word": {
       "name": "Long haul",
@@ -504,11 +482,11 @@
     },
     "win-streak-5": {
       "name": "Hot hand",
-      "description": "Win 5 games in a row"
+      "description": "Solve 5 riddles in a row"
     },
     "win-streak-10": {
       "name": "Unstoppable",
-      "description": "Win 10 games in a row"
+      "description": "Solve 10 riddles in a row"
     },
     "levels-10": {
       "name": "Climber",
@@ -520,7 +498,7 @@
     },
     "timed-10": {
       "name": "Speed reader",
-      "description": "Solve 10 words in one Time Attack"
+      "description": "Solve 10 words in one Time Attack (an earlier game mode)"
     },
     "hint-used": {
       "name": "A little help",
@@ -528,7 +506,7 @@
     },
     "explorer": {
       "name": "Explorer",
-      "description": "Win a game in every category"
+      "description": "Solve a riddle in every category"
     },
     "player-level-5": {
       "name": "Rising star",
@@ -549,6 +527,30 @@
     "bilingual": {
       "name": "Bilingual",
       "description": "Solve words in English and in Dutch"
+    },
+    "clue1-10": {
+      "name": "Mind reader",
+      "description": "Solve 10 riddles at the first clue"
+    },
+    "clue1-50": {
+      "name": "Riddle master",
+      "description": "Solve 50 riddles at the first clue"
+    },
+    "know-it-10": {
+      "name": "I knew it!",
+      "description": "Solve 10 riddles with \"I know it!\""
+    },
+    "daily-perfect": {
+      "name": "Daily 9/9",
+      "description": "Get all 9 stars in one Daily"
+    },
+    "stars-100": {
+      "name": "Star collector",
+      "description": "Collect 100 stars"
+    },
+    "stars-500": {
+      "name": "Galaxy",
+      "description": "Collect 500 stars"
     }
   },
   "mascot": {
@@ -564,49 +566,20 @@
     "count": "Combo x{count}",
     "double": "{count} letters at once!"
   },
-  "chest": {
-    "title": "Daily treasure",
-    "ready": "Your chest is ready. What's inside today?",
-    "opened": "You opened today's chest.",
-    "next": "New chest in",
-    "open": "Open",
-    "freeHint": "Free hint!"
-  },
-  "missions": {
-    "title": "Daily missions",
-    "count": "{done}/{total} done",
-    "done": "Mission complete!",
-    "win3": "Win {count} games",
-    "flawless2": "Solve {count} words without a miss",
-    "long1": "Solve a word with 8 or more letters",
-    "daily": "Finish today's Daily",
-    "combo4": "Get a combo of 4 right letters",
-    "timed5": "Solve 5 words in one Time Attack",
-    "level1": "Complete a level",
-    "nohint3": "Win {count} games without hints",
-    "category2": "Win {count} games in {category}"
-  },
-  "levelUp": {
-    "eyebrow": "Well done!",
-    "title": "Level up!",
-    "text": "You're getting better and better.",
-    "button": "Awesome!"
-  },
   "badges": {
     "title": "Badges",
-    "intro": "Collect them all! Every badge gives you coins.",
+    "intro": "Collect them all!",
     "collected": "{count} of {total} badges",
-    "reward": "+{coins} coins for every badge",
-    "open": "See all badges"
+    "open": "See all badges",
+    "legacyTitle": "Badges from earlier versions",
+    "legacyText": "You earned these in an earlier version of Hanglet. They stay yours."
   },
   "challenge": {
-    "intro": "Type a secret word. You get a link: send it to a friend and see if they can guess it!",
+    "intro": "Pick a secret word and write up to 3 clues: a tricky one first, then clearer ones. Send the link and see if your friend can solve it!",
     "word": "Your secret word",
     "wordHelp": "{min} to {max} letters, only A to Z",
     "previewLabel": "Your word has {count} letters",
     "invalid": "Use {min} to {max} letters, without numbers or spaces.",
-    "hint": "A hint for your friend (optional)",
-    "hintPlaceholder": "For example: something you eat",
     "name": "Your name (optional)",
     "make": "Make my link",
     "ready": "Your challenge is ready!",
@@ -615,15 +588,21 @@
     "copy": "Copy link",
     "copied": "Link copied. Send it to a friend!",
     "another": "Make another one",
-    "message": "{name} challenges you in Hanglet! Can you guess my word of {count} letters?",
     "someone": "A friend",
     "from": "A challenge from {name}",
     "fromFriend": "A challenge from a friend",
     "makeOwn": "Make your own challenge",
     "broken": "This link doesn't work",
     "brokenText": "The challenge link is broken or incomplete. Ask your friend to send it again.",
-    "solvedShare": "I guessed {name}'s word in Hanglet with {misses}! {link}",
-    "lostShare": "{name}'s word was too hard for me this time. {link}"
+    "solvedShare": "I solved {name}'s riddle in Hanglet! {stars} {link}",
+    "lostShare": "{name}'s word was too hard for me this time. {link}",
+    "clue1": "Clue 1: tricky",
+    "clue2": "Clue 2: clearer (optional)",
+    "clue3": "Clue 3: almost the answer (optional)",
+    "clue1Placeholder": "For example: I have a mouth but never eat",
+    "clue2Placeholder": "For example: boats sail on me",
+    "clue3Placeholder": "For example: a long stream of water",
+    "message": "{name} challenges you in Hanglet! Can you solve my riddle of {count} letters?"
   },
   "season": {
     "title": "Winter special",
@@ -636,20 +615,20 @@
       "description": "This page does not exist."
     },
     "index": {
-      "title": "Hanglet – A playful word game for every day",
-      "description": "Solve Tilo's riddles letter by letter. Daily challenge, 40 levels, Time Attack, a Kids world for ages 6 to 9 and challenges for friends. Free, in English and Dutch."
+      "title": "Hanglet – The riddle gets clearer",
+      "description": "Tilo gives you a tricky clue, and every mistake makes the riddle clearer. Three new riddles every day, 40 levels and a Kids world for ages 6 to 9. Free, in English and Dutch."
     },
     "play": {
       "title": "Play – Hanglet",
-      "description": "Read the riddle and find the word, letter by letter, before your hearts run out."
+      "description": "Read Tilo's clues and find the word. The riddle gets clearer with every mistake."
     },
     "levels": {
       "title": "Level map – Hanglet",
-      "description": "Follow the map through 40 Hanglet levels with more words and fewer lives as you climb."
+      "description": "Follow the map through 40 Hanglet levels with more riddles as you climb."
     },
     "dictionary": {
       "title": "My dictionary – Hanglet",
-      "description": "Every word you solved in Hanglet, with a short meaning."
+      "description": "Every word you solved in Hanglet, with its 3 clues."
     },
     "badges": {
       "title": "Badges – Hanglet",
@@ -657,23 +636,23 @@
     },
     "stats": {
       "title": "Statistics – Hanglet",
-      "description": "Your games, win rate, streaks and Daily calendar in Hanglet."
+      "description": "Your riddles, stars, streaks and Daily calendar in Hanglet."
     },
     "settings": {
       "title": "Settings – Hanglet",
-      "description": "Language, colors, figure, text size, contrast, sound and music in Hanglet."
+      "description": "Language, difficulty, colors, figure, text size, sound and your progress file in Hanglet."
     },
     "challenge": {
       "title": "Challenge a friend – Hanglet",
-      "description": "Type a secret word, send the link and see if your friend can guess it."
+      "description": "Pick a secret word, write 3 clues, send the link and see if your friend can solve it."
     },
     "how-to-play": {
       "title": "How to play – Hanglet",
-      "description": "How Hanglet works: letters, hints, figures, modes and rewards."
+      "description": "How Hanglet works: 3 clues, stars, \"I know it!\", difficulty and modes."
     },
     "about": {
       "title": "About – Hanglet",
-      "description": "About Hanglet, a cheerful riddle word game for everyone from 8, with a Kids world for ages 6 to 9."
+      "description": "About Hanglet, a cheerful riddle game for everyone from 8, with a Kids world for ages 6 to 9."
     },
     "privacy": {
       "title": "Privacy – Hanglet",
@@ -681,16 +660,20 @@
     },
     "kids": {
       "title": "Kids world – Hanglet",
-      "description": "The Hanglet Kids world for ages 6 to 9: short words with a picture, help from Tilo, no losing and stickers to collect."
+      "description": "The Hanglet Kids world for ages 6 to 9: short words with a picture, funny clues, help from Tilo, no losing and stickers to collect."
     }
   },
   "adapt": {
     "title": "Shall we make it a bit easier?",
     "text": "Two in a row that didn't work out. That happens to everyone! On {level} you get {extra}.",
-    "easyExtra": "the first letter for free and 8 lives",
-    "normalExtra": "the riddle on screen and 7 lives",
+    "easyExtra": "8 lives and the first letter for free",
+    "normalExtra": "7 lives and all 3 clues",
     "yes": "Yes, make it easier",
     "no": "No thanks",
     "done": "Done! You now play on {level}."
+  },
+  "update": {
+    "available": "A new version of Hanglet is ready.",
+    "refresh": "Refresh"
   }
 }

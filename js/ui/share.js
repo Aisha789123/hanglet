@@ -94,12 +94,14 @@ export async function drawShareCard(card) {
   ctx.fillText(card.subtitle || "", SIZE / 2, 410);
 
   if (card.big !== undefined) {
-    // One big number, e.g. words in Time Attack
+    // One big score, e.g. "6/9" stars in the Daily. Longer texts get a wider box.
+    const text = String(card.big);
+    const width = text.length > 2 ? 420 : 260;
     ctx.fillStyle = "#ffc531";
-    roundedRect(ctx, SIZE / 2 - 130, 470, 260, 230, 50); ctx.fill();
+    roundedRect(ctx, SIZE / 2 - width / 2, 470, width, 230, 50); ctx.fill();
     ctx.fillStyle = "#26243a";
-    ctx.font = font(150);
-    ctx.fillText(String(card.big), SIZE / 2, 595);
+    ctx.font = font(text.length > 2 ? 130 : 150);
+    ctx.fillText(text, SIZE / 2, 595);
   } else {
     if (card.stars !== undefined) {
       [0, 1, 2].forEach((i) => drawStar(ctx, SIZE / 2 + (i - 1) * 120, 495, 52, i < card.stars));

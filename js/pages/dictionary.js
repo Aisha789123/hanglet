@@ -1,4 +1,5 @@
-// "My dictionary": every word the player has solved, with its description.
+// "My dictionary": every word the player has solved, with its 3 clues.
+// The clue where the player solved it (the best time) is yellow.
 import { data } from "../core/storage.js";
 import { formatDate, language, t, tn } from "../core/i18n.js";
 import { ALL_WORDS, CATEGORY_IDS, KIDS_WORDS, findWord, getCategoryName } from "../core/words.js";
@@ -11,7 +12,7 @@ initPage("dictionary");
 const entries = Object.entries(data.dictionary[language] || {}).map(([word, entry]) => ({
   word,
   ...entry,
-  description: findWord(word)?.description || "",
+  clues: findWord(word)?.clues || [],
 }));
 const totalWords = new Set([...ALL_WORDS, ...KIDS_WORDS].map((item) => item.word)).size;
 
@@ -21,13 +22,13 @@ const filterEl = document.getElementById("category-filter");
 const countEl = document.getElementById("dictionary-count");
 
 // Collected words out of all words in this language
-const percent = Math.round((entries.length / totalWords) * 100);
+const percent = Math.min(100, Math.round((entries.length / totalWords) * 100));
 countEl.innerHTML = `
   <strong>${t("dictionary.collected", { count: entries.length, total: totalWords })}</strong>
   <div class="progress" role="progressbar" aria-label="${t("dictionary.progressLabel")}" aria-valuemin="0" aria-valuemax="${totalWords}" aria-valuenow="${entries.length}"><span style="width:${percent}%"></span></div>`;
 
-// Category filter: only categories that have words
-const usedCategories = ["all", ...CATEGORY_IDS, "winter", "things"].filter(
+// Category filter: only categories that have words (old ones from earlier versions too)
+const usedCategories = ["all", ...CATEGORY_IDS, "winter", "things", "colors", "challenge"].filter(
   (id) => id === "all" || entries.some((entry) => entry.category === id)
 );
 filterEl.innerHTML = usedCategories.map((id, index) => `
@@ -36,12 +37,19 @@ filterEl.innerHTML = usedCategories.map((id, index) => `
     <span>${id === "all" ? t("dictionary.all") : getCategoryName(id)}</span>
   </label>`).join("");
 
+// The 3 clues, with the one where the word was solved in yellow
+function cluesHtml(entry) {
+  if (entry.clues.length === 0) return "";
+  return `<ol class="word-clues">${entry.clues.map((clue, i) =>
+    `<li class="${entry.clue === i + 1 ? "is-solved-here" : ""}"><strong>${i + 1}</strong><span>${clue}</span></li>`).join("")}</ol>`;
+}
+
 function render() {
   const search = searchEl.value.trim().toLowerCase();
   const category = filterEl.querySelector("input:checked")?.value || "all";
   const shown = entries
     .filter((entry) => category === "all" || entry.category === category)
-    .filter((entry) => entry.word.includes(search) || entry.description.toLowerCase().includes(search))
+    .filter((entry) => entry.word.includes(search) || entry.clues.some((clue) => clue.toLowerCase().includes(search)))
     .sort((a, b) => a.word.localeCompare(b.word));
 
   if (entries.length === 0) {
@@ -60,8 +68,8 @@ function render() {
           <h2 class="word-card-word">${entry.word}</h2>
           <span class="chip chip-category" data-category="${entry.category}">${getCategoryName(entry.category)}</span>
         </div>
-        <p class="word-card-description">${entry.description}</p>
-        <p class="word-card-meta">${tn("dictionary.solvedTimes", entry.count)} · ${t("dictionary.since", { date: formatDate(entry.first) })}</p>
+        ${cluesHtml(entry)}
+        <p class="word-card-meta">${entry.clue ? `${t("dictionary.solvedAt", { number: entry.clue })} · ` : `${t("dictionary.earlier")} · `}${tn("dictionary.solvedTimes", entry.count)} · ${t("dictionary.since", { date: formatDate(entry.first) })}</p>
       </div>
     </li>`).join("");
 }

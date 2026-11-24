@@ -24,6 +24,10 @@
   }
 
   root.lang = language;
+
+  // The installed app gets its name and shortcuts in the chosen language
+  var manifest = document.querySelector('link[rel="manifest"]');
+  if (manifest && language === "nl") manifest.href = "manifest-nl.webmanifest";
   root.dataset.color = mode === "system" ? (prefersDark ? "dark" : "light") : mode;
   root.dataset.theme = settings.theme || "ocean";
   root.dataset.motion = reduceMotion ? "reduce" : "full";
