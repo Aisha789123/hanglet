@@ -17,7 +17,7 @@ export function launchConfetti() {
 
   // Use the colors of the current theme
   const styles = getComputedStyle(document.documentElement);
-  const colors = ["--accent", "--success", "--coin", "--danger"].map((name) =>
+  const colors = ["--accent", "--success", "--gold", "--danger"].map((name) =>
     styles.getPropertyValue(name).trim()
   );
 

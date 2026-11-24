@@ -26,7 +26,7 @@ export function createKeyboard(container, onPress) {
     });
   }
 
-  // state is "correct", "wrong" or "removed" (taken away by a hint)
+  // state is "correct" or "wrong"
   function mark(letter, state) {
     const button = buttons[letter];
     if (!button || state === "ignored") return;

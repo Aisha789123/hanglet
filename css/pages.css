@@ -20,78 +20,7 @@
 
 /* =================== Home =================== */
 
-/* Player summary */
-.player-card {
-  display: grid;
-  gap: var(--space-5);
-}
-
-.player-level {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-}
-
-.level-badge {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  flex-shrink: 0;
-  border-radius: var(--radius-lg);
-  background: var(--accent);
-  color: var(--on-accent);
-  font-size: var(--text-2xl);
-  font-weight: 800;
-}
-
-.player-level-text {
-  flex: 1;
-  display: grid;
-  gap: 6px;
-}
-
-.player-level-text small {
-  color: var(--text-muted);
-  font-weight: 700;
-}
-
-.player-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-2);
-}
-
-.player-stats div {
-  display: grid;
-  justify-items: center;
-  gap: 2px;
-  padding: var(--space-3) var(--space-2);
-  border-radius: var(--radius-md);
-  background: var(--surface-2);
-  text-align: center;
-}
-
-.player-stats .icon {
-  color: var(--accent);
-}
-
-.player-stats dt {
-  order: 2;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.player-stats dd {
-  margin: 0;
-  font-size: var(--text-xl);
-  font-weight: 800;
-}
-
 /* Mode cards */
-
-/* How it works */
 
 /* =================== Game =================== */
 .play-page {
@@ -141,7 +70,7 @@
 }
 
 .hint-button:hover:not(:disabled) {
-  border-color: var(--coin);
+  border-color: var(--gold);
 }
 
 .hint-button:disabled {
@@ -154,7 +83,7 @@
 }
 
 .hint-button > .icon {
-  color: var(--coin);
+  color: var(--gold);
 }
 
 /* Setup form */
@@ -318,54 +247,6 @@
   background: var(--danger);
 }
 
-/* Time Attack timer */
-.timer {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-width: 120px;
-}
-
-.timer-bar {
-  flex: 1;
-  height: 8px;
-  border-radius: var(--radius-full);
-  background: var(--surface-3);
-  overflow: hidden;
-}
-
-.timer-bar span {
-  display: block;
-  height: 100%;
-  background: var(--accent);
-  transform-origin: left;
-  transition: transform 250ms linear;
-}
-
-.timer-text {
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
-
-.timer.is-urgent .timer-bar span {
-  background: var(--danger);
-}
-
-.timer.is-urgent .timer-text {
-  color: var(--danger);
-}
-
-.score-chip {
-  padding: 2px 10px;
-  border-radius: var(--radius-full);
-  background: var(--success-soft);
-  color: var(--success);
-  font-weight: 800;
-  font-size: var(--text-sm);
-  white-space: nowrap;
-}
-
 /* Result dialog */
 
 .result-text {
@@ -396,12 +277,12 @@
 }
 
 .reward-stars {
-  background: var(--coin-soft);
+  background: var(--gold-soft);
   color: var(--text);
 }
 
 .reward-stars .icon {
-  color: var(--coin);
+  color: var(--gold);
 }
 
 .unlock-note {
@@ -436,7 +317,7 @@
 }
 
 .star-row .is-earned {
-  color: var(--coin);
+  color: var(--gold);
   animation: badge-pop 500ms var(--ease) both;
 }
 
@@ -849,12 +730,10 @@
 
 /* ---------- Colored mode cards and stats ---------- */
 
-.player-stats .icon,
 .progress-list .icon {
   color: var(--tone);
 }
 
-.player-stats div,
 .stat-tile {
   background: var(--tone-soft);
 }
@@ -865,62 +744,6 @@
 
 [data-contrast="high"] .stat-tile strong {
   color: var(--text);
-}
-
-.teaser-card {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-4);
-  align-items: center;
-  margin-bottom: var(--space-7);
-}
-
-.teaser-card > .button {
-  grid-column: 1 / -1;
-}
-
-.teaser-icon {
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: var(--radius-md);
-  background: var(--tone-soft);
-  color: var(--tone);
-}
-
-.teaser-body .section-title {
-  margin-bottom: var(--space-1);
-}
-
-.teaser-count {
-  font-weight: 800;
-}
-
-.teaser-word strong {
-  text-transform: capitalize;
-}
-
-.teaser-description {
-  color: var(--text-muted);
-}
-
-@media (min-width: 768px) {
-  .teaser-card {
-    grid-template-columns: auto 1fr auto;
-  }
-
-  .teaser-card > .button {
-    grid-column: auto;
-  }
-}
-
-/* ---------- Game: removed keys ---------- */
-.key.is-removed {
-  background: transparent;
-  box-shadow: none;
-  color: var(--text-muted);
-  opacity: 0.35;
 }
 
 .hint-button > .icon {
@@ -981,18 +804,6 @@ body.is-kids {
 
 .result.is-lose .result-tiles span {
   border-bottom-color: var(--danger);
-}
-
-.result-description {
-  margin-top: var(--space-3);
-  color: var(--text) !important;
-  font-weight: 600;
-}
-
-.result-picture .picture {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto var(--space-3);
 }
 
 .result .eyebrow {
@@ -1126,7 +937,7 @@ body.is-kids {
 }
 
 .node-stars .is-earned {
-  color: var(--coin);
+  color: var(--gold);
 }
 
 .map-node.is-locked .node-stars {
@@ -1199,10 +1010,6 @@ body.is-kids {
   font-size: var(--text-xl);
   letter-spacing: 0.04em;
   text-transform: capitalize;
-}
-
-.word-card-description {
-  margin-top: var(--space-1);
 }
 
 .word-card-meta {

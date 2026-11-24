@@ -74,7 +74,6 @@ h3,
 .eyebrow,
 .segment > span,
 .stat-tile strong,
-.level-badge,
 .node-circle,
 .result-tiles span,
 .theme-name,
@@ -628,20 +627,6 @@ main {
   text-shadow: 0 3px 0 rgba(0, 0, 0, 0.12);
 }
 
-.hero-intro {
-  max-width: 44ch;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: var(--text-lg);
-}
-
-/* Letter tiles that drop in */
-.word-drop {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  min-height: 52px;
-}
-
 .drop-tile {
   display: grid;
   place-items: center;
@@ -689,11 +674,6 @@ main {
   animation: none;
 }
 
-.play-sub {
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 700;
-}
-
 @media (min-width: 900px) {
   .hero-card {
     grid-template-columns: 300px 1fr;
@@ -707,9 +687,7 @@ main {
     justify-items: start;
   }
 
-  .word-drop {
-    justify-content: flex-start;
-  }
+  
 
   .mascot-big {
     width: 220px;
@@ -721,93 +699,10 @@ main {
   }
 }
 
-/* ---------- Daily card with progress rings ---------- */
-.daily-card {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-4);
-  align-items: center;
-  padding: var(--space-5);
-  border-radius: var(--radius-xl);
-  background: var(--surface);
-  border: 2px solid var(--border);
-  box-shadow: 0 5px 0 var(--card-edge);
-}
-
-.daily-card > .button {
-  grid-column: 1 / -1;
-}
-
 .daily-rings {
   display: flex;
   gap: 8px;
   order: 2;
-}
-
-.daily-info {
-  order: 1;
-}
-
-.daily-card > .button {
-  order: 3;
-}
-
-.ring {
-  position: relative;
-  width: 48px;
-  height: 48px;
-}
-
-.ring svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
-}
-
-.ring circle {
-  fill: none;
-  stroke-width: 6;
-}
-
-.ring-track {
-  stroke: var(--surface-3);
-}
-
-.ring-fill {
-  stroke: var(--accent);
-  stroke-linecap: round;
-  transition: stroke-dasharray 800ms var(--ease);
-}
-
-.ring.is-won .ring-fill { stroke: var(--c-mint); }
-.ring.is-lost .ring-fill { stroke: var(--c-coral); }
-
-.ring-inner {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-weight: 700;
-  color: var(--text-muted);
-}
-
-.ring.is-won .ring-inner { color: var(--success); }
-.ring.is-lost .ring-inner { color: var(--danger); }
-.ring.is-current .ring-inner { color: var(--accent); }
-
-.ring-inner .icon {
-  width: 20px;
-  height: 20px;
-  stroke-width: 3;
-}
-
-.daily-info h2 {
-  font-size: var(--text-xl);
-}
-
-.daily-info .eyebrow {
-  color: var(--c-coral-edge);
 }
 
 .daily-countdown {
@@ -841,24 +736,15 @@ main {
 }
 
 @media (min-width: 768px) {
-  .daily-card {
-    grid-template-columns: auto 1fr auto;
-  }
+  
 
-  .daily-rings,
-  .daily-info,
-  .daily-card > .button {
+  .daily-rings {
     order: 0;
   }
 
-  .daily-card > .button {
-    grid-column: auto;
-  }
+  
 
-  .ring {
-    width: 58px;
-    height: 58px;
-  }
+  
 }
 
 /* ---------- Mode tiles ---------- */
@@ -980,22 +866,6 @@ main {
   }
 }
 
-/* ---------- Bottom of the home page ---------- */
-.home-bottom {
-  display: grid;
-  gap: var(--space-4);
-}
-
-.home-bottom .teaser-card {
-  margin: 0;
-}
-
-@media (min-width: 900px) {
-  .home-bottom {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 /* ---------- Shared animations ---------- */
 @keyframes tile-drop {
   0% { opacity: 0; transform: translateY(-60px) rotate(-12deg); }
@@ -1063,7 +933,7 @@ main {
   animation: key-yes 300ms ease;
 }
 
-/* Particles and flying coins */
+/* Particles and flying stars */
 .effects-layer {
   position: fixed;
   inset: 0;
@@ -1199,7 +1069,7 @@ main {
 }
 
 /* =========================================================
-   Rewards: chest, missions, level up, pops, badge page
+   Rewards: pops and the badge page
    ========================================================= */
 
 /* Popover layers: no default popover look */
@@ -1283,250 +1153,6 @@ main {
   font-size: var(--text-lg);
 }
 
-/* ---------- Level up ---------- */
-.level-up {
-  overflow: hidden;
-  padding-top: var(--space-5);
-}
-
-.level-up > * {
-  position: relative;
-}
-
-.level-up-rays {
-  position: absolute !important;
-  inset: -40%;
-  background: repeating-conic-gradient(from 0deg, rgba(255, 197, 49, 0.18) 0 12deg, transparent 12deg 24deg);
-  animation: rays 12s linear infinite;
-}
-
-.level-up-mascot {
-  width: 120px;
-  height: 128px;
-  margin: 0 auto;
-}
-
-.level-up h2 {
-  font-size: 2.2rem;
-}
-
-.level-up-number {
-  display: grid;
-  place-items: center;
-  width: 96px;
-  height: 96px;
-  margin: var(--space-2) auto var(--space-3);
-  border-radius: 28px;
-  background: var(--c-sun);
-  box-shadow: 0 7px 0 var(--c-sun-edge);
-  color: var(--c-ink);
-  font-family: var(--font-display);
-  font-size: 3.2rem;
-  font-weight: 700;
-  animation: tile-drop 700ms cubic-bezier(0.3, 1.4, 0.5, 1) 200ms both;
-}
-
-.level-up .button {
-  width: 100%;
-  margin-top: var(--space-4);
-}
-
-/* ---------- Home: chest and missions ---------- */
-.home-rewards {
-  display: grid;
-  gap: var(--space-4);
-}
-
-.home-rewards .card {
-  padding: var(--space-4) var(--space-5);
-}
-
-.chest-card {
-  display: grid;
-  grid-template-columns: 96px 1fr;
-  gap: var(--space-3) var(--space-4);
-  align-items: center;
-}
-
-.chest-card > .button {
-  grid-column: 1 / -1;
-}
-
-.chest-card.is-ready {
-  background: linear-gradient(135deg, #fff6d8, var(--surface) 60%);
-}
-
-[data-color="dark"] .chest-card.is-ready {
-  background: linear-gradient(135deg, #3a2f12, var(--surface) 60%);
-}
-
-.chest-art .illustration {
-  width: 96px;
-  height: 80px;
-}
-
-.chest-art.is-wiggling .illustration {
-  animation: chest-wiggle 2.2s ease-in-out infinite;
-}
-
-.chest-art.is-opening .illustration {
-  animation: pop-in 500ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
-}
-
-.chest-text h2,
-.missions-header h2 {
-  font-size: var(--text-xl);
-}
-
-.chest-text p {
-  color: var(--text-muted);
-}
-
-.chest-next strong {
-  color: var(--text);
-  font-family: var(--font-display);
-}
-
-.chest-reward {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-right: var(--space-2);
-  padding: 2px 12px;
-  border-radius: var(--radius-full);
-  background: var(--coin-soft);
-  color: var(--text);
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
-  font-weight: 700;
-  animation: pop-in 400ms var(--ease) both;
-}
-
-.chest-reward .icon {
-  color: var(--coin);
-}
-
-.chest-hint {
-  background: var(--yellow-soft);
-}
-
-.missions-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-}
-
-.mission-list {
-  display: grid;
-  gap: var(--space-2);
-}
-
-.mission {
-  display: grid;
-  grid-template-columns: 40px 1fr auto;
-  gap: var(--space-3);
-  align-items: center;
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--surface-2);
-}
-
-.mission-icon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: var(--blue-soft);
-  color: var(--blue);
-}
-
-.mission.is-done .mission-icon,
-.mission.is-claimed .mission-icon {
-  background: var(--green-soft);
-  color: var(--green);
-}
-
-.mission-body p {
-  font-weight: 700;
-  line-height: 1.25;
-}
-
-.mission-body .progress {
-  height: 7px;
-  margin: 4px 0 1px;
-}
-
-.mission.is-done .progress span,
-.mission.is-claimed .progress span {
-  background: var(--c-mint);
-}
-
-.mission-body small {
-  color: var(--text-muted);
-  font-weight: 700;
-}
-
-.mission-reward {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-family: var(--font-display);
-  font-weight: 700;
-  color: var(--text-muted);
-}
-
-.mission-reward .icon {
-  width: 18px;
-  height: 18px;
-  color: var(--coin);
-}
-
-.mission-claim {
-  min-height: 40px;
-  padding: 0 var(--space-3);
-  animation: play-breathe 1.6s ease-in-out infinite;
-}
-
-.mission-check {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--c-mint);
-  color: #ffffff;
-}
-
-.mission.is-claimed p {
-  color: var(--text-muted);
-  text-decoration: line-through;
-}
-
-.token-note {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--yellow-soft);
-  font-weight: 700;
-}
-
-@media (min-width: 900px) {
-  .home-rewards {
-    grid-template-columns: 1fr 1.4fr;
-    align-items: stretch;
-  }
-
-  .chest-card {
-    grid-template-columns: 110px 1fr;
-  }
-}
-
 /* ---------- Badge page ---------- */
 .badge-summary {
   display: flex;
@@ -1597,7 +1223,7 @@ main {
   color: var(--text-muted);
 }
 
-/* A medal: a round coin with a ribbon */
+/* A medal: a round disc with a ribbon */
 .medal {
   position: relative;
   display: grid;
@@ -1671,26 +1297,6 @@ main {
   to { transform: rotate(360deg); }
 }
 
-@keyframes chest-wiggle {
-  0%, 70%, 100% { transform: rotate(0); }
-  75% { transform: rotate(-6deg); }
-  80% { transform: rotate(6deg); }
-  85% { transform: rotate(-4deg); }
-  90% { transform: rotate(3deg); }
-}
-
-@media (min-width: 900px) {
-  .chest-card {
-    grid-template-columns: 150px 1fr;
-    align-content: center;
-  }
-
-  .chest-art .illustration {
-    width: 150px;
-    height: 125px;
-  }
-}
-
 /* =========================================================
    New features: categories, challenge, share window, winter
    ========================================================= */
@@ -1698,6 +1304,8 @@ main {
 /* Colors for the new categories */
 [data-category="colors"] { --tone: var(--pink); --tone-soft: var(--pink-soft); }
 [data-category="clothing"] { --tone: var(--orange); --tone-soft: var(--orange-soft); }
+[data-category="home"] { --tone: var(--teal); --tone-soft: var(--teal-soft); }
+[data-category="mystery"] { --tone: var(--pink); --tone-soft: var(--pink-soft); }
 [data-category="winter"] { --tone: var(--blue); --tone-soft: var(--blue-soft); }
 [data-category="challenge"] { --tone: var(--teal); --tone-soft: var(--teal-soft); }
 
@@ -1976,46 +1584,6 @@ main {
   pointer-events: none;
 }
 
-/* The riddle itself: the most important text on the screen */
-.riddle {
-  display: grid;
-  gap: 4px;
-  min-width: 0;
-}
-
-.riddle-label {
-  display: inline-flex;
-  justify-self: start;
-  padding: 2px 10px;
-  border-radius: var(--radius-full);
-  background: var(--c-sun);
-  color: var(--c-ink);
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.riddle-text {
-  font-family: var(--font-display);
-  font-size: clamp(1.25rem, 5.2vw, 1.85rem);
-  font-weight: 600;
-  line-height: 1.22;
-  text-wrap: balance;
-}
-
-.riddle.is-hidden-riddle .riddle-label {
-  background: var(--surface-3);
-  color: var(--text);
-}
-
-.riddle-note {
-  color: var(--text-muted);
-  font-size: var(--text-sm);
-  font-weight: 700;
-}
-
 .tilo-says {
   color: var(--accent-strong);
   font-weight: 800;
@@ -2115,7 +1683,7 @@ main {
   animation: bump 600ms var(--ease) 2;
 }
 
-/* The Kids world feels like its own place: no coins, streaks or main menu */
+/* The Kids world feels like its own place: no stars, streaks or main menu */
 body.is-kids .header-stats .pill,
 body.is-kids .main-nav,
 body.is-kids .tab-bar {
@@ -2124,10 +1692,6 @@ body.is-kids .tab-bar {
 
 body.is-kids .stage-card {
   grid-template-columns: 132px minmax(0, 1fr);
-}
-
-body.is-kids .riddle-text {
-  font-size: clamp(1.2rem, 5vw, 1.9rem);
 }
 
 body.is-kids .word {
@@ -2517,194 +2081,6 @@ body.is-kids .tile {
   }
 }
 
-/* =========================================================
-   v4 home: compact chest + offline tip next to the missions,
-   the Kids world banner and four mode tiles
-   ========================================================= */
-.home-rewards {
-  grid-template-areas: "chest" "missions" "offline";
-}
-
-.chest-card { grid-area: chest; }
-.missions-card { grid-area: missions; }
-.offline-strip { grid-area: offline; }
-
-.home-rewards .chest-card {
-  grid-template-columns: 72px 1fr auto;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-}
-
-.chest-card > .button {
-  grid-column: auto;
-}
-
-.home-rewards .chest-art .illustration {
-  width: 72px;
-  height: 60px;
-}
-
-.chest-text h2 {
-  font-size: var(--text-lg);
-}
-
-.chest-text p {
-  font-size: var(--text-sm);
-  line-height: 1.35;
-}
-
-.offline-strip {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border: 2px dashed var(--border);
-  border-radius: 20px;
-  color: var(--text-muted);
-  font-size: var(--text-sm);
-  font-weight: 700;
-}
-
-.offline-strip p {
-  flex: 1;
-}
-
-.offline-strip .button {
-  min-height: 38px;
-  padding: 0 14px;
-  font-size: var(--text-sm);
-}
-
-.offline-icon {
-  display: grid;
-  place-items: center;
-  flex: 0 0 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: var(--accent-soft);
-  color: var(--accent-strong);
-}
-
-@media (max-width: 480px) {
-  .home-rewards .chest-card {
-    grid-template-columns: 60px 1fr;
-  }
-
-  .home-rewards .chest-card > .button {
-    grid-column: 1 / -1;
-  }
-}
-
-@media (min-width: 900px) {
-  .home-rewards {
-    grid-template-columns: 1fr 1.4fr;
-    grid-template-rows: auto 1fr auto;
-    grid-template-areas:
-      "chest missions"
-      "chest missions"
-      "offline missions";
-  }
-
-  .home-rewards .chest-card {
-    grid-template-columns: 110px 1fr;
-    align-content: center;
-  }
-
-  .home-rewards .chest-card > .button {
-    grid-column: 1 / -1;
-  }
-
-  .home-rewards .chest-art .illustration {
-    width: 110px;
-    height: 92px;
-  }
-}
-
-/* Kids world banner: its own sunny world with its own button */
-.kids-banner {
-  position: relative;
-  display: grid;
-  gap: var(--space-3);
-  justify-items: start;
-  padding: var(--space-5) var(--space-5) 64px;
-  border-radius: 28px;
-  background:
-    radial-gradient(ellipse 55% 46px at 18% 100%, #4cc27c 0 98%, transparent 100%),
-    radial-gradient(ellipse 65% 60px at 88% 100%, #2fae66 0 98%, transparent 100%),
-    linear-gradient(180deg, #ffb347, #ff8a5c);
-  box-shadow: 0 6px 0 #d9693e;
-  color: #ffffff;
-  overflow: hidden;
-}
-
-[data-color="dark"] .kids-banner {
-  background:
-    radial-gradient(ellipse 55% 46px at 18% 100%, #1f6b45 0 98%, transparent 100%),
-    radial-gradient(ellipse 65% 60px at 88% 100%, #195a3a 0 98%, transparent 100%),
-    linear-gradient(180deg, #8a4a2a, #5b2f22);
-  box-shadow: 0 6px 0 #2c160f;
-}
-
-.kids-banner h2 {
-  font-size: clamp(1.6rem, 6vw, 2.2rem);
-  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
-}
-
-.kids-banner .eyebrow {
-  color: #ffffff;
-  opacity: 0.9;
-}
-
-.kids-banner-text {
-  display: grid;
-  gap: 4px;
-  max-width: 46ch;
-  font-weight: 700;
-}
-
-.kids-banner-stickers:empty {
-  display: none;
-}
-
-.kids-banner-art {
-  display: flex;
-  gap: 6px;
-}
-
-.kids-banner-art .sticker {
-  width: 58px;
-  height: 58px;
-  border-width: 3px;
-}
-
-.kids-banner-art .sticker:nth-child(even) {
-  transform: rotate(7deg) translateY(4px);
-}
-
-.kids-banner-art .picture {
-  width: 40px;
-  height: 40px;
-}
-
-@media (min-width: 768px) {
-  .kids-banner {
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: var(--space-5);
-    padding: var(--space-5) var(--space-6) var(--space-7);
-  }
-
-  .kids-banner-art {
-    display: grid;
-    grid-template-columns: repeat(2, 64px);
-  }
-
-  .kids-banner-art .sticker {
-    width: 64px;
-    height: 64px;
-  }
-}
-
 /* Four mode tiles: 2 x 2, and one row on wide screens */
 @media (min-width: 768px) {
   .mode-tiles {
@@ -2724,19 +2100,6 @@ body.is-kids .tile {
   .mode-art {
     width: 110px;
     height: 92px;
-  }
-}
-
-/* Home bottom: the dictionary card stacks, so it fills its height without a gap */
-@media (min-width: 900px) {
-  .home-bottom .teaser-card {
-    grid-template-columns: auto 1fr;
-    align-content: space-between;
-  }
-
-  .home-bottom .teaser-card > .button {
-    grid-column: 1 / -1;
-    justify-self: start;
   }
 }
 
@@ -3073,7 +2436,7 @@ body.is-kids .tile {
 }
 
 .strip-stars .icon {
-  color: var(--coin);
+  color: var(--gold);
   fill: currentColor;
 }
 

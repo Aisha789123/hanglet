@@ -72,8 +72,7 @@
     "label": "Letters",
     "letter": "Letter {letter}",
     "correct": "Letter {letter}, zit in het woord",
-    "wrong": "Letter {letter}, zit niet in het woord",
-    "removed": "Letter {letter}, weggestreept door een hint"
+    "wrong": "Letter {letter}, zit niet in het woord"
   },
   "categories": {
     "mixed": "Gemengd",

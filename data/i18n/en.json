@@ -72,8 +72,7 @@
     "label": "Letters",
     "letter": "Letter {letter}",
     "correct": "Letter {letter}, in the word",
-    "wrong": "Letter {letter}, not in the word",
-    "removed": "Letter {letter}, removed by a hint"
+    "wrong": "Letter {letter}, not in the word"
   },
   "categories": {
     "mixed": "Mixed",

@@ -20,8 +20,8 @@
   --success-soft: #e3f4ea;
   --danger: #c93838;
   --danger-soft: #fbe9e9;
-  --coin: #c98a00;
-  --coin-soft: #fdf3dc;
+  --gold: #c98a00;
+  --gold-soft: #fdf3dc;
   --on-status: #ffffff;
 
   /* Accent: changed by the color themes below */
@@ -81,8 +81,8 @@
   --success-soft: #16301f;
   --danger: #f07171;
   --danger-soft: #3a1e1f;
-  --coin: #f0bf4a;
-  --coin-soft: #352a12;
+  --gold: #f0bf4a;
+  --gold-soft: #352a12;
   --on-status: #0f1318;
   --accent: #6ea4f7;
   --accent-strong: #9cc1fa;
@@ -338,7 +338,7 @@ main {
 }
 
 .pill-stars .icon {
-  color: var(--coin);
+  color: var(--gold);
 }
 
 /* ---------- Mobile tab bar ---------- */

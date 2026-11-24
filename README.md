@@ -1,5 +1,9 @@
 # Hanglet
 
+🚧 Work in progress – new features are being added.
+
+**Play it live:** <https://aisha789123.github.io/hanglet/>
+
 **A cheerful riddle game for everyone from 8 years old, in English and Dutch.
 The riddle gets clearer.**
 Playful like Duolingo, but grown-ups enjoy it too. Younger kids (6–9) get their own Kids world.
@@ -120,7 +124,7 @@ and "knows the word list" (a best case). It is a model, not real players.
 2. *Settings → Pages* → *Deploy from a branch*, branch `main`, folder `/ (root)`.
 3. The game is live at `https://<username>.github.io/<repository>/`.
 
-**After changing files:** raise `CACHE_NAME` in `sw.js` (now `hanglet-v5`) and add new
+**After changing files:** raise `CACHE_NAME` in `sw.js` (now `hanglet-v6`) and add new
 files to `FILES`. `tests/files.test.js` fails when a file is missing from the list.
 Players then see the "New version – Refresh" message.
 
@@ -167,7 +171,6 @@ word-guessing-web/
 │   └── pages/            One script per page
 ├── tests/                Tests (node --test)
 ├── tools/simulate.js     Plays automatically to check the difficulty
-├── PLAN.md … PLAN-v5.md  Build plans per version
 └── package.json          Only for `npm test`
 ```
 
