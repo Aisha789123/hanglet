@@ -15,12 +15,12 @@ export default {
       "Groot harig dier, zoals een grizzly.",
     ] },
     { word: "zwaan", clues: [
-      "Ik was ooit een lelijk eendje.",
+      "Ik zing pas mijn mooiste lied als het mijn allerlaatste is.",
       "Ik ben een grote witte vogel met een sierlijke hals.",
       "Witte watervogel met een lange nek.",
     ] },
     { word: "haai", clues: [
-      "Als ik mijn vin boven het water laat zien, rent iedereen het strand op.",
+      "Mijn tanden groeien steeds opnieuw: ik heb er in mijn leven duizenden versleten.",
       "Ik ben een grote vis met heel veel scherpe tanden.",
       "Gevaarlijke roofvis in de zee.",
     ] },
@@ -30,7 +30,7 @@ export default {
       "Klein dier met stekels.",
     ] },
     { word: "kraai", clues: [
-      "Een vogelverschrikker is speciaal voor mij gemaakt.",
+      "Ik ben zo slim dat ik nootjes op de weg leg, zodat auto's ze voor mij kraken.",
       "Ik ben een zwarte vogel die krast.",
       "Grote zwarte vogel.",
     ] },
@@ -45,7 +45,7 @@ export default {
       "Zwart-wit dier dat bamboe eet.",
     ] },
     { word: "geit", clues: [
-      "Ik eet bijna alles, zelfs je huiswerk als je niet oplet.",
+      "De beste vriendjes van Heidi op de berg waren van mijn soort.",
       "Ik heb een sikje en twee hoorntjes.",
       "Boerderijdier dat mekkert.",
     ] },
@@ -55,12 +55,12 @@ export default {
       "Klein dier dat een web maakt.",
     ] },
     { word: "pauw", clues: [
-      "Ik ben zo trots op mijn staart dat ik er een waaier van maak.",
+      "Ik ben zo ijdel dat er een uitdrukking naar mij is genoemd: zo trots als ik.",
       "Ik ben een vogel met een blauwgroene staart vol ogen.",
       "Vogel met een grote pronkstaart.",
     ] },
     { word: "konijn", clues: [
-      "Met Pasen verstop ik eieren, maar zelf leg ik er nooit een.",
+      "Ik ben de lievelingsassistent van elke goochelaar, want ik pas precies in een hoed.",
       "Ik heb lange oren en ik huppel.",
       "Knaagdier dat graag wortels eet.",
     ] },
@@ -75,17 +75,17 @@ export default {
       "Woestijndier met bulten.",
     ] },
     { word: "schaap", clues: [
-      "Als je niet kunt slapen, ga je mij tellen.",
+      "Als ik zwart ben, ben ik de buitenstaander van de familie.",
       "Ik heb een wollige vacht en zeg bè.",
       "Boerderijdier met wol.",
     ] },
     { word: "vlinder", clues: [
-      "Ik was eerst een rups, en in mijn slaapzak ben ik veranderd.",
+      "Als je verliefd bent, fladder ik rond in je buik.",
       "Ik heb kleurige vleugels en fladder van bloem naar bloem.",
       "Insect met mooie gekleurde vleugels.",
     ] },
     { word: "dolfijn", clues: [
-      "Ik ben slimmer dan de meeste vissen, maar ik ben zelf geen vis.",
+      "Ik slaap met maar een half brein, de andere helft houdt de wacht.",
       "Ik spring uit het water en maak klikgeluidjes.",
       "Slim zeezoogdier met een snuit.",
     ] },
@@ -95,7 +95,7 @@ export default {
       "Rood diertje dat nootjes verzamelt.",
     ] },
     { word: "papegaai", clues: [
-      "Ik praat je na, maar ik snap er geen woord van.",
+      "Piraten dragen mij als een levend schouderstuk.",
       "Ik ben een kleurige vogel uit het regenwoud.",
       "Vogel die woorden kan nazeggen.",
     ] },
@@ -110,7 +110,7 @@ export default {
       "Australisch springdier met een buidel.",
     ] },
     { word: "flamingo", clues: [
-      "Mijn lievelingseten maakt me roze.",
+      "In veel tuinen sta ik van plastic op één poot, maar mijn echte familie staat in zout water.",
       "Ik sta op één poot in het water.",
       "Roze vogel met lange poten.",
     ] },
@@ -173,7 +173,7 @@ export default {
       "Zoet goedje dat bijen maken.",
     ] },
     { word: "banaan", clues: [
-      "Een aap is gek op mij, en clowns glijden uit over mijn schil.",
+      "In tekenfilms bellen ze met mij, want ik lijk precies op een telefoonhoorn.",
       "Ik ben een gele, kromme vrucht.",
       "Gele vrucht die je pelt.",
     ] },
@@ -218,7 +218,7 @@ export default {
       "Klein bruin koekje dat je rond 5 december in je schoen vindt.",
     ] },
     { word: "pannenkoek", clues: [
-      "Ik word in de lucht gegooid en hoop weer in de pan te landen.",
+      "Als je iemand een sufferd vindt, noem je hem soms bij mijn naam.",
       "Ik ben rond en dun en je eet me met stroop.",
       "Platte koek uit de koekenpan.",
     ] },
@@ -228,7 +228,7 @@ export default {
       "Brood met kaas of jam voor de lunch.",
     ] },
     { word: "spaghetti", clues: [
-      "Ik ben lang en dun en ik draai me om je vork.",
+      "Sommige koks gooien me tegen de muur om te zien of ik klaar ben.",
       "Italianen eten me met tomatensaus en gehaktballetjes.",
       "Lange dunne pastaslierten.",
     ] },
@@ -246,7 +246,7 @@ export default {
       "Daarop lees je af hoe laat het is.",
     ] },
     { word: "fles", clues: [
-      "Zeelieden stoppen een brief in mij en gooien me in zee.",
+      "Een geest woonde eeuwenlang in mij, tot iemand mijn kurk eraf trok.",
       "Ik heb een hals en een dop.",
       "Van glas of plastic, je drinkt eruit.",
     ] },
@@ -281,7 +281,7 @@ export default {
       "Meubel om spullen in op te bergen.",
     ] },
     { word: "kaars", clues: [
-      "Op je verjaardag blaas je me uit en dan mag je iets wensen.",
+      "Ik huil warme tranen die hard worden voordat ze de tafel raken.",
       "Ik ben van was en geef een klein vlammetje.",
       "Een staafje was met een lontje.",
     ] },
@@ -326,12 +326,12 @@ export default {
       "Glad glas waarin je jezelf ziet.",
     ] },
     { word: "wekker", clues: [
-      "Ik maak iedereen wakker, maar zelf slaap ik nooit.",
+      "Ik ben de enige vriend die je elke ochtend een klap op zijn kop geeft.",
       "Elke ochtend ga ik veel te vroeg af.",
       "Klok die rinkelt als je moet opstaan.",
     ] },
     { word: "paraplu", clues: [
-      "Als de lucht gaat huilen, ga ik open.",
+      "Een toverachtige kinderjuf vloog aan mij de lucht in.",
       "Ik houd je droog en heb een krom handvat.",
       "Wat je boven je hoofd houdt als het regent.",
     ] },
@@ -356,12 +356,12 @@ export default {
       "Zachte doek om je af te drogen.",
     ] },
     { word: "magnetron", clues: [
-      "Ik maak je eten warm zonder vuur, en ik piep als ik klaar ben.",
+      "Popcorn knalt in mij open, maar ik heb nog nooit een vlammetje gezien.",
       "Ik ben een kastje in de keuken met een draaiend bord.",
       "Apparaat om eten snel op te warmen.",
     ] },
     { word: "stofzuiger", clues: [
-      "Ik ben de enige in huis die stof eet en daar blij van wordt.",
+      "Ik ben de enige in huis die echt blij wordt van kruimels.",
       "Ik maak lawaai en zuig kruimels op.",
       "Apparaat dat de vloer schoonmaakt met zuigkracht.",
     ] },
@@ -449,7 +449,7 @@ export default {
       "Heel hoge heuvel.",
     ] },
     { word: "brug", clues: [
-      "Met mij loop je over het water zonder nat te worden.",
+      "Ik ben ook het stukje van je bril dat op je neus rust, en een kunstje bij turnen.",
       "Ik verbind twee kanten en boten varen onder me door.",
       "Gebouwd over een rivier of gracht om over te steken.",
     ] },
@@ -489,7 +489,7 @@ export default {
       "Elektrische flits uit de wolken.",
     ] },
     { word: "schelp", clues: [
-      "Houd me tegen je oor en ik laat je de zee horen.",
+      "Als een heremietkreeft uit zijn huis groeit, verhuist hij naar een lege van mij.",
       "Je vindt me leeg en mooi op het strand.",
       "Het harde huisje van een zeediertje.",
     ] },
@@ -547,7 +547,7 @@ export default {
       "Bijenhouder.",
     ] },
     { word: "clown", clues: [
-      "Mijn werk is lachen, maar mijn schoenen zijn veel te groot.",
+      "Mijn neus is rood, maar ik ben helemaal niet verkouden.",
       "Ik heb een rode neus en werk in het circus.",
       "Grappenmaker in het circus.",
     ] },
@@ -632,7 +632,7 @@ export default {
       "Speurder die mysteries oplost.",
     ] },
     { word: "goochelaar", clues: [
-      "Ik laat dingen verdwijnen en daar krijg ik applaus voor.",
+      "Mijn assistent wordt elke avond doormidden gezaagd en staat lachend weer op.",
       "Ik haal konijnen uit een hoed.",
       "Iemand die toverkunstjes doet.",
     ] },
@@ -660,7 +660,7 @@ export default {
       "Pijltjes gooien als sport.",
     ] },
     { word: "beker", clues: [
-      "De winnaar steekt me in de lucht en geeft me een kus.",
+      "Ik word als prijs uitgereikt, maar je kunt er net zo goed limonade uit drinken.",
       "Ik ben de glimmende prijs voor de kampioen.",
       "Prijs in de vorm van een grote kop.",
     ] },
@@ -695,7 +695,7 @@ export default {
       "Sport met een korf zonder bodem.",
     ] },
     { word: "puzzel", clues: [
-      "Ik lig in duizend stukjes, en jij bent blij om me in elkaar te zetten.",
+      "Mijn laatste stukje is altijd zoek, en meestal ligt het onder de bank.",
       "Je past mijn stukjes in één plaatje.",
       "Spel van stukjes die in elkaar passen.",
     ] },
@@ -853,7 +853,7 @@ export default {
       "Ding dat je stem harder maakt.",
     ] },
     { word: "koptelefoon", clues: [
-      "Ik laat je muziek horen zonder dat je hem met iemand deelt.",
+      "Pubers dragen mij zodat ze kunnen doen alsof ze je niet horen.",
       "Je draagt me over je oren.",
       "Kleine luidsprekers voor je oren.",
     ] },
@@ -1069,7 +1069,7 @@ export default {
       "Iets dat elektriciteit opslaat.",
     ] },
     { word: "zuurstof", clues: [
-      "Je ziet me niet en je ruikt me niet, maar zonder mij leef je niet.",
+      "Ik ben de O in H2O.",
       "Bomen maken me en jij ademt me in.",
       "Gas dat we nodig hebben om te ademen.",
     ] },
@@ -1089,7 +1089,7 @@ export default {
       "Kijker voor dingen die heel ver weg zijn.",
     ] },
     { word: "microscoop", clues: [
-      "Ik maak de kleinste dingen zo groot als reuzen.",
+      "Door mij zag iemand voor het eerst dat er beestjes in een druppel water zwemmen.",
       "Wetenschappers bekijken cellen met mij.",
       "Apparaat om heel kleine dingen te zien.",
     ] },
@@ -1187,7 +1187,7 @@ export default {
       "Land ten zuiden van de Verenigde Staten.",
     ] },
     { word: "frankrijk", clues: [
-      "Mijn hoofdstad heeft een ijzeren dame van ruim 300 meter.",
+      "Bij mij zeggen ze 'oh là là', en mijn slakken eindigen op het menu.",
       "Croissants en stokbrood komen uit mij.",
       "Land met hoofdstad Parijs.",
     ] },

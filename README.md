@@ -124,7 +124,7 @@ and "knows the word list" (a best case). It is a model, not real players.
 2. *Settings → Pages* → *Deploy from a branch*, branch `main`, folder `/ (root)`.
 3. The game is live at `https://<username>.github.io/<repository>/`.
 
-**After changing files:** raise `CACHE_NAME` in `sw.js` (now `hanglet-v6`) and add new
+**After changing files:** raise `CACHE_NAME` in `sw.js` (now `hanglet-v7`) and add new
 files to `FILES`. `tests/files.test.js` fails when a file is missing from the list.
 Players then see the "New version – Refresh" message.
 

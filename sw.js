@@ -1,7 +1,7 @@
 // Service worker: saves all game files so Hanglet works offline.
 // Change the version number after updating files, so players get the new ones.
 // A new version waits until the player taps "Refresh" (see js/ui/layout.js).
-const CACHE_NAME = "hanglet-v6";
+const CACHE_NAME = "hanglet-v7";
 
 const FILES = [
   "./",

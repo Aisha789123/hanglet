@@ -30,7 +30,7 @@ export default {
       "A big animal you can ride with a saddle.",
     ] },
     { word: "tiger", clues: [
-      "I'm the biggest cat of all, so please don't try to put me on your lap.",
+      "Pooh's bounciest friend is one of me, but my wild cousins don't bounce, they pounce.",
       "I'm orange with black stripes and live in Asian jungles.",
       "The largest wild cat, with stripes.",
     ] },
@@ -60,8 +60,8 @@ export default {
       "A black and white bird that swims but cannot fly.",
     ] },
     { word: "octopus", clues: [
-      "Ask me for a hug and you'll get eight of them.",
-      "I squirt ink and squeeze through tiny gaps.",
+      "I squirt my own ink, but I've never written a single word.",
+      "I can squeeze my whole body through a hole the size of a coin.",
       "A sea animal with eight arms.",
     ] },
     { word: "giraffe", clues: [
@@ -85,7 +85,7 @@ export default {
       "The largest land animal, with a trunk.",
     ] },
     { word: "kangaroo", clues: [
-      "I'm a mother with a built-in pocket, and I never walk anywhere.",
+      "My country put me on its coat of arms, because I can't take a single step backwards.",
       "I hop around Australia on strong back legs.",
       "An Australian animal that carries its baby in a pouch.",
     ] },
@@ -100,7 +100,7 @@ export default {
       "A small red or grey animal that collects nuts.",
     ] },
     { word: "chameleon", clues: [
-      "I'm a master of disguise, and my eyes can look two ways at once.",
+      "I'm the one guest at every party who always matches the wallpaper.",
       "I catch insects with a super long, sticky tongue.",
       "A lizard that changes color.",
     ] },
@@ -123,7 +123,7 @@ export default {
       "Crunchy grilled bread for breakfast.",
     ] },
     { word: "pizza", clues: [
-      "I was born in Naples, and now I'm delivered to doors all over the world.",
+      "In Italy one of me is called Margherita, after a queen, but I've never worn a crown.",
       "I'm flat dough with tomato sauce and melted cheese.",
       "An Italian dish you cut into slices.",
     ] },
@@ -148,7 +148,7 @@ export default {
       "White grains you eat with curry.",
     ] },
     { word: "onion", clues: [
-      "I'm like an ogre: I have layers.",
+      "Peel me and there's another me underneath, and another, until there's nothing left at all.",
       "Chopping me makes your eyes water.",
       "A round vegetable with a papery brown skin.",
     ] },
@@ -158,8 +158,8 @@ export default {
       "A sour cucumber from a jar.",
     ] },
     { word: "pepper", clues: [
-      "I make you sneeze from a little shaker, and I'm also a crunchy vegetable.",
-      "I stand next to the salt on the table.",
+      "I'm the reason the salt is never lonely at dinner.",
+      "I make you sneeze, and I also come as a crunchy red, green or yellow vegetable.",
       "A black spice, or a red, green or yellow vegetable.",
     ] },
     { word: "cookie", clues: [
@@ -168,7 +168,7 @@ export default {
       "A small sweet baked treat.",
     ] },
     { word: "pancake", clues: [
-      "Throw me in the air and hope I land back in the pan.",
+      "One Tuesday a year I'm the guest of honour, and people race through the streets with me.",
       "I'm round and thin, and you eat me with syrup.",
       "A flat cake you bake in a frying pan.",
     ] },
@@ -198,7 +198,7 @@ export default {
       "A green vegetable with little tree-shaped florets.",
     ] },
     { word: "pineapple", clues: [
-      "I wear a crown, but I'm no king, and I'm neither a pine nor an apple.",
+      "A yellow sponge in square pants lives inside me, at the bottom of the sea.",
       "I'm a tropical fruit with spiky skin.",
       "A yellow tropical fruit some people put on pizza.",
     ] },
@@ -208,7 +208,7 @@ export default {
       "A round sweet treat with a hole in the middle.",
     ] },
     { word: "spaghetti", clues: [
-      "I'm long and thin, and I wrap myself around your fork.",
+      "Some cooks check if I'm ready by throwing me at the wall.",
       "Italians eat me with meatballs or tomato sauce.",
       "Long thin strings of pasta.",
     ] },
@@ -221,7 +221,7 @@ export default {
 
   home: [
     { word: "lamp", clues: [
-      "I stand on your desk all day and only shine when it gets dark.",
+      "A boy named Aladdin rubbed one of me and got three wishes.",
       "Flick my switch and the room gets bright.",
       "Something with a bulb that gives light.",
     ] },
@@ -271,7 +271,7 @@ export default {
       "The clock sound that wakes you up.",
     ] },
     { word: "candle", clues: [
-      "I'm at every birthday party, and in the end I always get blown out.",
+      "I cry warm tears that turn hard before they reach the table.",
       "I'm made of wax and give a little flame.",
       "A wax stick with a burning wick.",
     ] },
@@ -291,7 +291,7 @@ export default {
       "A soft yellow thing for washing dishes.",
     ] },
     { word: "bottle", clues: [
-      "Sailors put messages in me and throw me into the sea.",
+      "Spin me at a party, and someone might have to give a kiss.",
       "You fill me with water or juice and screw on a cap.",
       "A glass or plastic container for drinks.",
     ] },
@@ -316,7 +316,7 @@ export default {
       "A pot with a spout for brewing tea.",
     ] },
     { word: "umbrella", clues: [
-      "I'm useless on sunny days, but when the clouds cry I'm the hero.",
+      "A magical nanny flew away while holding on to me.",
       "Open me and hold me above your head.",
       "Something that keeps you dry in the rain.",
     ] },
@@ -331,7 +331,7 @@ export default {
       "A paper pocket for a letter.",
     ] },
     { word: "doorbell", clues: [
-      "Press my button and I'll tell everyone inside that you're here.",
+      "Pizza delivery people press me, and then the dog goes crazy.",
       "I ring when visitors arrive.",
       "The button next to the front door that rings.",
     ] },
@@ -419,7 +419,7 @@ export default {
       "A big area full of trees.",
     ] },
     { word: "bridge", clues: [
-      "I let you walk over water without getting your feet wet.",
+      "I'm also a card game, and the part of your glasses that rests on your nose.",
       "I join two sides, and boats sail under me.",
       "Something built across a river so you can cross it.",
     ] },
@@ -449,7 +449,7 @@ export default {
       "A strong shaking of the ground.",
     ] },
     { word: "seashell", clues: [
-      "Hold me to your ear and I'll play you the sound of the sea.",
+      "When a hermit crab outgrows its home, it moves into an empty one of me.",
       "You find me empty and pretty on the beach.",
       "The hard home of a small sea creature.",
     ] },
@@ -547,7 +547,7 @@ export default {
       "Someone who looks after a garden.",
     ] },
     { word: "magician", clues: [
-      "I make things disappear, and people clap for it.",
+      "My assistant gets sawn in half every night and still comes back smiling.",
       "I pull rabbits out of hats.",
       "Someone who does magic tricks.",
     ] },
@@ -590,7 +590,7 @@ export default {
       "A rough team sport with an egg-shaped ball.",
     ] },
     { word: "medal", clues: [
-      "I hang around the necks of champions.",
+      "Olympic winners like to bite me for the photo, but I'm not chocolate.",
       "I'm gold, silver or bronze.",
       "The prize you win at the Olympics.",
     ] },
@@ -600,7 +600,7 @@ export default {
       "The sport played at Wimbledon.",
     ] },
     { word: "puzzle", clues: [
-      "I come in a thousand pieces, and you're happy to put me together.",
+      "My last piece is always missing, and usually it's under the sofa.",
       "You fit my pieces into one picture.",
       "A game of pieces that fit together.",
     ] },
@@ -678,7 +678,7 @@ export default {
       "A large keyboard instrument.",
     ] },
     { word: "flute", clues: [
-      "I'm a pipe with holes, and I only sing when you blow across me.",
+      "I'm a tall glass for bubbly, and also something you can play a tune on.",
       "I'm a silver instrument you hold sideways.",
       "A thin wind instrument.",
     ] },
@@ -753,7 +753,7 @@ export default {
       "A jazz instrument named after Mr Sax.",
     ] },
     { word: "headphones", clues: [
-      "I let you listen to music without sharing it with anyone.",
+      "Teenagers wear me so they can pretend they didn't hear you.",
       "You wear me over your ears.",
       "Little speakers for your ears.",
     ] },
@@ -791,7 +791,7 @@ export default {
       "A long piece of cloth for your neck.",
     ] },
     { word: "boots", clues: [
-      "When your computer starts, it does what I'm called.",
+      "A famous cat wore us to become rich, and cowboys never take us off.",
       "We're high shoes for rain or snow.",
       "Tall shoes for winter.",
     ] },
@@ -866,7 +866,7 @@ export default {
       "Trainers for running.",
     ] },
     { word: "sunglasses", clues: [
-      "I make the world darker, and you look cooler.",
+      "Film stars wear me indoors so nobody recognises them.",
       "You wear me on your nose on bright days.",
       "Dark glasses against the sun.",
     ] },
@@ -939,7 +939,7 @@ export default {
       "A space vehicle with engines.",
     ] },
     { word: "gravity", clues: [
-      "A falling apple taught a famous scientist all about me.",
+      "Every time you trip, I'm the one who takes you down.",
       "I pull everything towards the Earth.",
       "The force that makes things fall.",
     ] },
@@ -954,7 +954,7 @@ export default {
       "Remains of an ancient animal in stone.",
     ] },
     { word: "oxygen", clues: [
-      "You can't see me or smell me, but you can't live without me.",
+      "I'm the O in H2O.",
       "Trees make me and you breathe me in.",
       "The gas we need to breathe.",
     ] },
@@ -1042,7 +1042,7 @@ export default {
       "A European country, capital Rome.",
     ] },
     { word: "egypt", clues: [
-      "My old kings were buried under huge triangles.",
+      "Cleopatra was my queen, and my mummies aren't anybody's mum.",
       "The Nile flows through me.",
       "The African country with the pyramids.",
     ] },
@@ -1062,7 +1062,7 @@ export default {
       "A European country, capital Budapest.",
     ] },
     { word: "france", clues: [
-      "My capital has an iron lady who is over 300 metres tall.",
+      "My people say 'oh là là', and my snails end up on the menu.",
       "Croissants and baguettes come from me.",
       "The country with Paris as its capital.",
     ] },
@@ -1140,7 +1140,7 @@ export default {
       "A new plan or thought.",
     ] },
     { word: "time", clues: [
-      "I fly when you're having fun and crawl when you're waiting.",
+      "You can kill me, waste me or save me, but you can never see me.",
       "Clocks measure me.",
       "Hours, minutes and seconds.",
     ] },
@@ -1220,7 +1220,7 @@ export default {
       "Something you didn't expect.",
     ] },
     { word: "treasure", clues: [
-      "X marks the spot where I'm hiding.",
+      "Pirates draw maps to me, and parents call their favourite child by my name.",
       "Pirates bury me in a chest.",
       "Gold and jewels that are hidden.",
     ] },
